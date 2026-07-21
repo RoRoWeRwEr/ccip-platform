@@ -30,6 +30,8 @@ BEFORE UPDATE
 ON public.countries
 FOR EACH ROW
 EXECUTE FUNCTION public.set_updated_at();
+
+
 CREATE TABLE public.currencies (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
@@ -68,6 +70,8 @@ BEFORE UPDATE
 ON public.currencies
 FOR EACH ROW
 EXECUTE FUNCTION public.set_updated_at();
+
+
 CREATE TABLE public.merchant_categories (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
@@ -103,6 +107,8 @@ BEFORE UPDATE
 ON public.merchant_categories
 FOR EACH ROW
 EXECUTE FUNCTION public.set_updated_at();
+
+
 CREATE TABLE public.reward_categories (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
@@ -135,6 +141,8 @@ BEFORE UPDATE
 ON public.reward_categories
 FOR EACH ROW
 EXECUTE FUNCTION public.set_updated_at();
+
+
 CREATE TABLE public.card_networks (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
@@ -163,7 +171,10 @@ CREATE TRIGGER trg_card_networks_updated_at
 BEFORE UPDATE
 ON public.card_networks
 FOR EACH ROW
-    CREATE TABLE public.loyalty_programs (
+EXECUTE FUNCTION public.set_updated_at();
+
+
+CREATE TABLE public.loyalty_programs (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
     slug TEXT NOT NULL,
@@ -197,5 +208,4 @@ CREATE TRIGGER trg_loyalty_programs_updated_at
 BEFORE UPDATE
 ON public.loyalty_programs
 FOR EACH ROW
-EXECUTE FUNCTION public.set_updated_at();
 EXECUTE FUNCTION public.set_updated_at();
