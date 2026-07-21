@@ -31,6 +31,12 @@ CREATE TABLE public.reward_targets (
                 AND merchant_category_id IS NULL
                 AND category_slug IS NOT NULL
             )
+        ),
+
+    CONSTRAINT chk_reward_targets_category_slug
+        CHECK (
+            category_slug IS NULL
+            OR category_slug ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$'
         )
 );
 
@@ -38,18 +44,26 @@ CREATE INDEX idx_reward_targets_rule
 ON public.reward_targets(reward_rule_id);
 
 CREATE INDEX idx_reward_targets_mcc
-ON public.reward_targets(merchant_category_id);
+ON public.reward_targets(merchant_category_id)
+WHERE merchant_category_id IS NOT NULL;
 
 CREATE INDEX idx_reward_targets_category
-ON public.reward_targets(category_slug);
+ON public.reward_targets(category_slug)
+WHERE category_slug IS NOT NULL;
 
-CREATE UNIQUE INDEX uq_reward_targets
+CREATE UNIQUE INDEX uq_reward_targets_mcc
 ON public.reward_targets(
     reward_rule_id,
-    target_type,
-    merchant_category_id,
+    merchant_category_id
+)
+WHERE target_type = 'MCC';
+
+CREATE UNIQUE INDEX uq_reward_targets_category
+ON public.reward_targets(
+    reward_rule_id,
     category_slug
-);
+)
+WHERE target_type = 'CATEGORY';
 
 CREATE TRIGGER trg_reward_targets_updated_at
 BEFORE UPDATE
