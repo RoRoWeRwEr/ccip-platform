@@ -143,6 +143,14 @@ FOR EACH ROW
 EXECUTE FUNCTION public.set_updated_at();
 
 
+CREATE TYPE public.payment_network AS ENUM (
+    'VISA',
+    'MASTERCARD',
+    'AMERICAN_EXPRESS',
+    'MADA'
+);
+
+
 CREATE TABLE public.card_networks (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
