@@ -1,0 +1,14 @@
+card_availability_status
+target_user_type
+loyalty_program_type
+reward_type
+reward_calculation_method
+reward_cap_period
+minimum_spend_period
+reward_rounding_method
+reward_target_type
+reward_exclusion_type
+fee_type
+billing_period
+fee_waiver_type
+threshold_period
