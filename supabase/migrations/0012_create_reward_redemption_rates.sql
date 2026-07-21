@@ -8,6 +8,8 @@ CREATE TABLE public.reward_redemption_rates (
 
     redemption_type TEXT NOT NULL,
 
+    slug TEXT NOT NULL,
+
     name_en TEXT NOT NULL,
     name_ar TEXT NOT NULL,
 
@@ -16,9 +18,9 @@ CREATE TABLE public.reward_redemption_rates (
 
     points_required NUMERIC(18, 4) NOT NULL,
 
-    monetary_value NUMERIC(18, 4) NOT NULL,
+    monetary_value NUMERIC(18, 4),
 
-    currency_id UUID NOT NULL
+    currency_id UUID
         REFERENCES public.currencies(id)
         ON UPDATE CASCADE
         ON DELETE RESTRICT,
@@ -52,6 +54,17 @@ CREATE TABLE public.reward_redemption_rates (
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
 
+    CONSTRAINT uq_reward_redemption_rates_program_slug
+        UNIQUE (
+            loyalty_program_id,
+            slug
+        ),
+
+    CONSTRAINT chk_reward_redemption_rates_slug
+        CHECK (
+            slug ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+        ),
+
     CONSTRAINT chk_reward_redemption_rates_type
         CHECK (
             redemption_type IN (
@@ -68,10 +81,15 @@ CREATE TABLE public.reward_redemption_rates (
         ),
 
     CONSTRAINT chk_reward_redemption_rates_points_required
-        CHECK (points_required > 0),
+        CHECK (
+            points_required > 0
+        ),
 
     CONSTRAINT chk_reward_redemption_rates_monetary_value
-        CHECK (monetary_value > 0),
+        CHECK (
+            monetary_value IS NULL
+            OR monetary_value > 0
+        ),
 
     CONSTRAINT chk_reward_redemption_rates_minimum_points
         CHECK (
@@ -110,8 +128,16 @@ CREATE TABLE public.reward_redemption_rates (
             OR processing_fee_percentage BETWEEN 0 AND 100
         ),
 
+    CONSTRAINT chk_reward_redemption_rates_processing_fee_currency
+        CHECK (
+            processing_fee_amount IS NULL
+            OR currency_id IS NOT NULL
+        ),
+
     CONSTRAINT chk_reward_redemption_rates_priority
-        CHECK (priority > 0),
+        CHECK (
+            priority > 0
+        ),
 
     CONSTRAINT chk_reward_redemption_rates_validity
         CHECK (
@@ -120,22 +146,28 @@ CREATE TABLE public.reward_redemption_rates (
             OR valid_to >= valid_from
         ),
 
+    CONSTRAINT chk_reward_redemption_rates_standard_configuration
+        CHECK (
+            redemption_type = 'POINT_TRANSFER'
+            OR (
+                monetary_value IS NOT NULL
+                AND currency_id IS NOT NULL
+                AND partner_program_id IS NULL
+                AND transfer_ratio_from IS NULL
+                AND transfer_ratio_to IS NULL
+            )
+        ),
+
     CONSTRAINT chk_reward_redemption_rates_transfer_configuration
         CHECK (
-            (
-                redemption_type = 'POINT_TRANSFER'
+            redemption_type <> 'POINT_TRANSFER'
+            OR (
+                monetary_value IS NULL
                 AND partner_program_id IS NOT NULL
                 AND transfer_ratio_from IS NOT NULL
                 AND transfer_ratio_to IS NOT NULL
                 AND transfer_ratio_from > 0
                 AND transfer_ratio_to > 0
-            )
-            OR
-            (
-                redemption_type <> 'POINT_TRANSFER'
-                AND partner_program_id IS NULL
-                AND transfer_ratio_from IS NULL
-                AND transfer_ratio_to IS NULL
             )
         ),
 
@@ -150,7 +182,8 @@ CREATE INDEX idx_reward_redemption_rates_program
 ON public.reward_redemption_rates(loyalty_program_id);
 
 CREATE INDEX idx_reward_redemption_rates_currency
-ON public.reward_redemption_rates(currency_id);
+ON public.reward_redemption_rates(currency_id)
+WHERE currency_id IS NOT NULL;
 
 CREATE INDEX idx_reward_redemption_rates_partner_program
 ON public.reward_redemption_rates(partner_program_id)
