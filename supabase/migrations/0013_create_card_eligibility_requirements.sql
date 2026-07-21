@@ -27,6 +27,11 @@ CREATE TABLE public.card_eligibility_requirements (
 
     minimum_employment_months SMALLINT,
 
+    minimum_credit_score NUMERIC(10, 2),
+    maximum_credit_score NUMERIC(10, 2),
+
+    credit_scoring_system TEXT,
+
     required_boolean_value BOOLEAN,
 
     allowed_values JSONB,
@@ -118,13 +123,43 @@ CREATE TABLE public.card_eligibility_requirements (
             OR minimum_employment_months >= 0
         ),
 
+    CONSTRAINT chk_card_eligibility_minimum_credit_score
+        CHECK (
+            minimum_credit_score IS NULL
+            OR minimum_credit_score >= 0
+        ),
+
+    CONSTRAINT chk_card_eligibility_maximum_credit_score
+        CHECK (
+            maximum_credit_score IS NULL
+            OR maximum_credit_score >= 0
+        ),
+
+    CONSTRAINT chk_card_eligibility_credit_score_range
+        CHECK (
+            minimum_credit_score IS NULL
+            OR maximum_credit_score IS NULL
+            OR maximum_credit_score >= minimum_credit_score
+        ),
+
+    CONSTRAINT chk_card_eligibility_credit_scoring_system
+        CHECK (
+            credit_scoring_system IS NULL
+            OR length(trim(credit_scoring_system)) > 0
+        ),
+
     CONSTRAINT chk_card_eligibility_priority
-        CHECK (priority > 0),
+        CHECK (
+            priority > 0
+        ),
 
     CONSTRAINT chk_card_eligibility_allowed_values
         CHECK (
             allowed_values IS NULL
-            OR jsonb_typeof(allowed_values) = 'array'
+            OR (
+                jsonb_typeof(allowed_values) = 'array'
+                AND jsonb_array_length(allowed_values) > 0
+            )
         ),
 
     CONSTRAINT chk_card_eligibility_validity
@@ -139,13 +174,16 @@ CREATE TABLE public.card_eligibility_requirements (
             (
                 requirement_type IN (
                     'MINIMUM_SALARY',
-                    'MINIMUM_INCOME',
-                    'CREDIT_SCORE'
+                    'MINIMUM_INCOME'
                 )
                 AND minimum_amount IS NOT NULL
+                AND currency_id IS NOT NULL
                 AND minimum_age IS NULL
                 AND maximum_age IS NULL
                 AND minimum_employment_months IS NULL
+                AND minimum_credit_score IS NULL
+                AND maximum_credit_score IS NULL
+                AND credit_scoring_system IS NULL
                 AND required_boolean_value IS NULL
                 AND allowed_values IS NULL
             )
@@ -160,6 +198,9 @@ CREATE TABLE public.card_eligibility_requirements (
                 AND maximum_amount IS NULL
                 AND currency_id IS NULL
                 AND minimum_employment_months IS NULL
+                AND minimum_credit_score IS NULL
+                AND maximum_credit_score IS NULL
+                AND credit_scoring_system IS NULL
                 AND required_boolean_value IS NULL
                 AND allowed_values IS NULL
             )
@@ -172,6 +213,25 @@ CREATE TABLE public.card_eligibility_requirements (
                 AND currency_id IS NULL
                 AND minimum_age IS NULL
                 AND maximum_age IS NULL
+                AND minimum_credit_score IS NULL
+                AND maximum_credit_score IS NULL
+                AND credit_scoring_system IS NULL
+                AND required_boolean_value IS NULL
+                AND allowed_values IS NULL
+            )
+            OR
+            (
+                requirement_type = 'CREDIT_SCORE'
+                AND (
+                    minimum_credit_score IS NOT NULL
+                    OR maximum_credit_score IS NOT NULL
+                )
+                AND minimum_amount IS NULL
+                AND maximum_amount IS NULL
+                AND currency_id IS NULL
+                AND minimum_age IS NULL
+                AND maximum_age IS NULL
+                AND minimum_employment_months IS NULL
                 AND required_boolean_value IS NULL
                 AND allowed_values IS NULL
             )
@@ -188,6 +248,9 @@ CREATE TABLE public.card_eligibility_requirements (
                 AND minimum_age IS NULL
                 AND maximum_age IS NULL
                 AND minimum_employment_months IS NULL
+                AND minimum_credit_score IS NULL
+                AND maximum_credit_score IS NULL
+                AND credit_scoring_system IS NULL
                 AND allowed_values IS NULL
             )
             OR
@@ -201,13 +264,15 @@ CREATE TABLE public.card_eligibility_requirements (
                     'DOCUMENTATION'
                 )
                 AND allowed_values IS NOT NULL
-                AND jsonb_array_length(allowed_values) > 0
                 AND minimum_amount IS NULL
                 AND maximum_amount IS NULL
                 AND currency_id IS NULL
                 AND minimum_age IS NULL
                 AND maximum_age IS NULL
                 AND minimum_employment_months IS NULL
+                AND minimum_credit_score IS NULL
+                AND maximum_credit_score IS NULL
+                AND credit_scoring_system IS NULL
                 AND required_boolean_value IS NULL
             )
             OR
@@ -219,6 +284,9 @@ CREATE TABLE public.card_eligibility_requirements (
                 AND minimum_age IS NULL
                 AND maximum_age IS NULL
                 AND minimum_employment_months IS NULL
+                AND minimum_credit_score IS NULL
+                AND maximum_credit_score IS NULL
+                AND credit_scoring_system IS NULL
                 AND required_boolean_value IS NULL
                 AND allowed_values IS NULL
             )
@@ -237,6 +305,13 @@ ON public.card_eligibility_requirements(
 CREATE INDEX idx_card_eligibility_requirements_currency
 ON public.card_eligibility_requirements(currency_id)
 WHERE currency_id IS NOT NULL;
+
+CREATE INDEX idx_card_eligibility_requirements_credit_score
+ON public.card_eligibility_requirements(
+    minimum_credit_score,
+    maximum_credit_score
+)
+WHERE requirement_type = 'CREDIT_SCORE';
 
 CREATE INDEX idx_card_eligibility_requirements_active
 ON public.card_eligibility_requirements(
