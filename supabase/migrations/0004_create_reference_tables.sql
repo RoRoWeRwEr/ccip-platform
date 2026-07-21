@@ -1,0 +1,6 @@
+countries
+currencies
+card_types
+card_levels
+card_networks
+spending_categories
