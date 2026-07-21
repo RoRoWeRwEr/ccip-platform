@@ -30,7 +30,10 @@ CREATE TABLE public.cards (
     description_ar TEXT,
 
     card_tier TEXT,
-    target_user target_user_type NOT NULL DEFAULT 'GENERAL',
+
+    target_user target_user_type
+        NOT NULL
+        DEFAULT 'GENERAL',
 
     availability_status card_availability_status
         NOT NULL
@@ -38,6 +41,7 @@ CREATE TABLE public.cards (
 
     annual_fee NUMERIC(12, 2) NOT NULL DEFAULT 0,
     minimum_salary NUMERIC(12, 2),
+
     credit_limit_min NUMERIC(14, 2),
     credit_limit_max NUMERIC(14, 2),
 
@@ -54,8 +58,8 @@ CREATE TABLE public.cards (
 
     published_at TIMESTAMPTZ,
 
-    created_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc', now()),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc', now()),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
 
     CONSTRAINT uq_cards_slug UNIQUE (slug),
 
@@ -127,14 +131,13 @@ ON public.cards(target_user);
 CREATE INDEX idx_cards_availability_status
 ON public.cards(availability_status);
 
-CREATE INDEX idx_cards_is_active
-ON public.cards(is_active);
-
-CREATE INDEX idx_cards_is_featured
-ON public.cards(is_featured);
-
 CREATE INDEX idx_cards_bank_active
 ON public.cards(bank_id, is_active);
+
+CREATE INDEX idx_cards_featured_active
+ON public.cards(is_featured)
+WHERE is_featured = TRUE
+  AND is_active = TRUE;
 
 CREATE TRIGGER trg_cards_updated_at
 BEFORE UPDATE
