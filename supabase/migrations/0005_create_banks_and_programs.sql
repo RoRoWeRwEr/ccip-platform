@@ -19,8 +19,8 @@ CREATE TABLE public.banks (
 
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
 
-    created_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc', now()),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc', now()),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
 
     CONSTRAINT uq_banks_slug UNIQUE (slug),
 
@@ -56,15 +56,12 @@ CREATE TABLE public.bank_loyalty_programs (
 
     is_primary BOOLEAN NOT NULL DEFAULT FALSE,
 
-    created_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc', now()),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc', now()),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
 
     CONSTRAINT uq_bank_loyalty_programs
         UNIQUE (bank_id, loyalty_program_id)
 );
-
-CREATE INDEX idx_bank_loyalty_programs_bank_id
-ON public.bank_loyalty_programs(bank_id);
 
 CREATE INDEX idx_bank_loyalty_programs_loyalty_program_id
 ON public.bank_loyalty_programs(loyalty_program_id);
