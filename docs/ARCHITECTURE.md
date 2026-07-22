@@ -1,9 +1,10 @@
 # Database Architecture
 
 This describes the actual, current state of `supabase/migrations/` —
-merged (`0001`–`0041`) plus the under-review `0042`. It is derived
-directly from reading every migration file and from live-executing the
-full migration sequence against PostgreSQL 16; it is not aspirational.
+merged (`0001`–`0042`). It is derived directly from reading every
+migration file and from live-executing the full migration sequence
+against PostgreSQL 16 (and, since `0042` merged, against a real
+Supabase local stack via Database CI); it is not aspirational.
 See `docs/MIGRATION_INDEX.md` for the file-by-file inventory and
 `docs/SECURITY_MODEL.md` for the security-specific detail.
 
@@ -95,7 +96,7 @@ Security retrofit (no new tables)
   blanket anon/authenticated schema access, grants back narrowly by
   policy. See docs/SECURITY_MODEL.md for the full model.
 
-Identity & platform RBAC (0042 — under review, not merged)
+Identity & platform RBAC (0042 — merged via PR #2)
   user_profiles, platform_roles, platform_permissions,
   platform_role_permissions, user_platform_role_assignments
   — PLATFORM-scoped only as of the current revision; see
@@ -118,7 +119,7 @@ which one governs a given table:
    `customer_financial_profiles`. This is how a customer sees only
    their own data, with no role or permission system involved at all.
 
-2. **Platform administration** (`0042`, pending merge): a small,
+2. **Platform administration** (`0042`, merged via PR #2): a small,
    internal RBAC layer — `platform_roles` → `platform_permissions` via
    `platform_role_permissions`, assigned to Supabase auth users via
    `user_platform_role_assignments`. Two `SECURITY DEFINER` functions,
@@ -158,11 +159,15 @@ mechanism.
 ## Reproducibility
 
 The full sequence `0001`→`0042` has been verified to apply cleanly,
-in order, against an empty PostgreSQL 16 database with zero errors and
-zero warnings. This was done outside Supabase Local (no Docker
-available in the environment where this was verified) using a
-hand-built minimal stand-in for Supabase's `auth` schema and
-`anon`/`authenticated`/`service_role` roles — a real `supabase start`
-pass is still recommended before `0042` merges, specifically to confirm
-`auth.uid()` grant behavior for the `SECURITY INVOKER` trigger
-functions in `0042` (see `docs/SECURITY_MODEL.md`).
+in order, against an empty database with zero errors and zero
+warnings — both in the hand-built PostgreSQL 16 stand-in used for the
+original pre-merge review (no Docker available in that environment),
+and now automatically via **Database CI**
+(`.github/workflows/database-ci.yml`), which runs a real `supabase
+start` + `supabase db reset` + `supabase test db` + `supabase db lint`
+pass against the actual `supabase/postgres` image on every PR touching
+`supabase/migrations/**` or `supabase/tests/**`, and on every push to
+`main` touching `supabase/migrations/**`. This closes the gap
+previously flagged here around `auth.uid()` grant behavior for `0042`'s
+`SECURITY INVOKER` trigger functions — see `docs/SECURITY_MODEL.md`
+for exactly what CI validates and what remains a manual procedure.

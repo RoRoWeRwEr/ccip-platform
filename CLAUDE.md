@@ -12,6 +12,17 @@ loyalty programs. See `docs/PROJECT_CONTEXT.md` for the product vision
 and `docs/01-brd/BRD.md` for the original business requirements. No
 application, API, or frontend code exists in this repository yet.
 
+## Repository source-of-truth rule
+
+**This repository is the single source of truth.**
+
+Do not use assumptions from previous Claude Projects, previous ChatGPT
+conversations, other repositories, other Supabase projects, or model
+memory unless those assumptions are explicitly documented inside this
+repository. Verify current state directly from `main`, merged PRs, and
+`docs/` before acting on it — do not carry forward what was true in a
+prior session without re-checking.
+
 ## Where things stand right now
 
 - **Merged into `main`:** migrations `0001` through `0041` — 85 tables
@@ -30,6 +41,21 @@ application, API, or frontend code exists in this repository yet.
   needs adjustment before you build it.
 - Full inventory with line counts and tables created per migration:
   `docs/MIGRATION_INDEX.md`.
+- **Verified current status:**
+  - Migrations `0001`–`0042` are merged into `main`.
+  - Migration `0042` ships with pgTAP test coverage (`supabase/tests/
+    database/0042_*_test.sql`, 23 assertions).
+  - **Database CI exists** (`.github/workflows/database-ci.yml`). It
+    runs on every PR touching `supabase/migrations/**` or `supabase/
+    tests/**`, and on every push to `main` touching `supabase/
+    migrations/**`.
+  - CI performs **real Supabase validation**, not a static check: it
+    starts an actual Supabase local stack (`supabase start`) against
+    the `supabase/postgres` image, replays every migration from empty
+    (`supabase db reset`), runs the full pgTAP suite (`supabase test
+    db`), and runs `supabase db lint` at `warning` and `error` level.
+    The CI run against the `0042` merge commit passed.
+  - Migration `0043` has not started.
 
 ## Non-negotiable engineering rules
 
@@ -101,11 +127,14 @@ codebase (see `docs/SECURITY_MODEL.md` for the evidence behind each):
 | Every migration, in order, with what it created | `docs/MIGRATION_INDEX.md` |
 | How to safely assign the first platform administrator | `docs/BOOTSTRAP_PLATFORM_ADMIN.md` |
 | Codex-specific operating rules (same substance as this file) | `AGENTS.md` |
+| Factual, current status of every layer (DB, tests, CI, security, API, frontend, AI, deployment) | `docs/PROJECT_STATUS.md` |
 
 ## What this repository does not yet have
 
-No CI (`.github/workflows/` does not exist yet), no `decisions/` ADRs,
-no `glossary/`, no application/API/frontend layer, and no confirmed
-relationship to any other product effort — do not assume one. If a
-task requires information this repository doesn't contain, say so and
-ask, rather than inventing it.
+No populated `decisions/` ADRs or `glossary/` content (both directories
+exist but hold only a `.gitkeep`), no application/API/frontend layer,
+and no confirmed relationship to any other product effort — do not
+assume one. **Database CI does exist** (`.github/workflows/
+database-ci.yml`, see above) — do not repeat the earlier assumption
+that it doesn't. If a task requires information this repository
+doesn't contain, say so and ask, rather than inventing it.

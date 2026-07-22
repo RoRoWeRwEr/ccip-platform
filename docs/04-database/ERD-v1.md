@@ -1,5 +1,13 @@
 # Database ERD v1
 
+> **⚠ Superseded historical design document.** This ERD is a
+> pre-implementation draft and does not match the schema actually
+> built in `supabase/migrations/` (`0001`–`0042`, merged). It is kept
+> for historical reference only and is not maintained against the
+> implemented schema. For the current, implemented database design,
+> see [`docs/ARCHITECTURE.md`](../ARCHITECTURE.md) and
+> [`docs/MIGRATION_INDEX.md`](../MIGRATION_INDEX.md).
+
 ## Document Information
 
 | Field              | Value                                    |
