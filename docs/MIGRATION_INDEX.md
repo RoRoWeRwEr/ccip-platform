@@ -50,22 +50,21 @@ out of sync with reality.
 | 0039 | `create_bank_partnerships_and_referrals` | 2853 | merged | bank_partnerships, bank_partner_products, referral_links, referral_attributions, commission_rules, commission_accruals, commission_settlements, commission_settlement_items |
 | 0040 | `create_audit_governance_and_compliance` | 4250 | merged | governance_controls, governance_control_assessments, audit_events, approval_requests, approval_decisions, consent_records, data_classification_rules, data_retention_policies, data_retention_executions, legal_holds, legal_hold_items, data_access_logs, data_export_requests, compliance_cases, compliance_case_events |
 | 0041 | `create_security_and_access_control` | 961 | merged | — (0 new tables; enables RLS + grants across all 85 prior tables) |
-| 0042 | `create_user_profiles_and_platform_roles` | 921 | **under review** — branch `codex/0042-user-profiles-platform-roles`, not merged | user_profiles, platform_roles, platform_permissions, platform_role_permissions, user_platform_role_assignments |
+| 0042 | `create_user_profiles_and_platform_roles` | 921 | merged | user_profiles, platform_roles, platform_permissions, platform_role_permissions, user_platform_role_assignments |
 
-**Merged total:** 41 migrations, 85 tables, 29,265 lines.
-**Including pending `0042`:** 42 migrations, 90 tables, 30,186 lines.
+**Merged total:** 42 migrations, 90 tables, 30,186 lines.
 
 ## `0042` revision note
 
-The version of `0042` currently on `codex/0042-user-profiles-platform-
-roles` has been corrected from its original draft: `user_platform_
-role_assignments.scope_type` now accepts `PLATFORM` only (enforced by
-`chk_user_platform_role_assignments_scope`), where the original draft
-also accepted `COUNTRY`/`BANK`/`FUNCTIONAL_AREA` values that the
-authorization functions never evaluated. See `docs/DATABASE_ROADMAP.md`
-for why, and `docs/SECURITY_MODEL.md` for the verification. `0042` also
-now ships with test coverage (`supabase/tests/database/0042_*_test.sql`,
-23 pgTAP assertions) and an operational runbook
+The version of `0042` merged into `main` (PR #2) was corrected from its
+original draft: `user_platform_role_assignments.scope_type` accepts
+`PLATFORM` only (enforced by `chk_user_platform_role_assignments_scope`),
+where the original draft also accepted `COUNTRY`/`BANK`/
+`FUNCTIONAL_AREA` values that the authorization functions never
+evaluated. See `docs/DATABASE_ROADMAP.md` for why, and
+`docs/SECURITY_MODEL.md` for the verification. `0042` also ships with
+test coverage (`supabase/tests/database/0042_*_test.sql`, 23 pgTAP
+assertions) and an operational runbook
 (`docs/BOOTSTRAP_PLATFORM_ADMIN.md`) — neither existed when the
 migration was first drafted.
 

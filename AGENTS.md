@@ -8,14 +8,10 @@ The database is PostgreSQL.
 
 ## Migration sequence
 
-Migrations 0001 through 0041 are merged into `main`.
+Migrations 0001 through 0042 are merged into `main`.
 
-Migration 0042 (`0042_create_user_profiles_and_platform_roles.sql`) exists
-on its own dedicated branch, `codex/0042-user-profiles-platform-roles`,
-and is **under review**. It is not merged into `main`.
-
-**Migration 0043 must not be started until 0042 has been reviewed,
-tested, and merged into `main`.**
+**Migration 0043 must not be started until the prerequisites in
+`docs/DATABASE_ROADMAP.md` are met.**
 
 ### Historical migrations are immutable once merged
 
@@ -27,11 +23,8 @@ migration already did. This rule protects reproducibility: anyone
 re-running the migration history from empty must get the same result
 every time.
 
-Migration 0042 is the one exception to "don't touch it," precisely
-because it is **not yet merged**. While it lives only on
-`codex/0042-user-profiles-platform-roles`, it may still be corrected in
-place in response to review findings — once merged into `main`, it
-becomes subject to the same immutability rule as 0001–0041.
+Migration 0042 has merged into `main` and is now subject to the same
+immutability rule as 0001–0041.
 
 Before creating any new migration:
 
@@ -77,6 +70,6 @@ A migration without accompanying tests is not ready for review.
 
 ## Current task
 
-Migration 0042 is under review on `codex/0042-user-profiles-platform-roles`.
-Do not begin migration 0043 until 0042 is reviewed, tested, and merged
-into `main`.
+Migration 0042 is merged into `main`. Migration 0043 has not started —
+see `docs/DATABASE_ROADMAP.md` for prerequisites and the validated
+0043 onward sequence.

@@ -8,20 +8,20 @@ for the next planning decision, not a backlog.
 
 ## Current status
 
-- `0001`–`0041`: merged into `main`.
-- `0042` (`create_user_profiles_and_platform_roles`): committed on
-  `codex/0042-user-profiles-platform-roles`, **under review, not
-  merged**. Originally drafted with `PLATFORM`/`COUNTRY`/`BANK`/
+- `0001`–`0042`: merged into `main`. `0042`
+  (`create_user_profiles_and_platform_roles`) merged via PR #2.
+  Originally drafted with `PLATFORM`/`COUNTRY`/`BANK`/
   `FUNCTIONAL_AREA` scope values on `user_platform_role_assignments`,
   but the authorization functions (`has_active_platform_role`,
   `has_active_platform_permission`) only ever evaluated `PLATFORM`
   scope — meaning a `COUNTRY`/`BANK`/`FUNCTIONAL_AREA`-scoped
   assignment was accepted by the schema but silently granted nothing.
-  This has been corrected: the migration now enforces `PLATFORM` scope
-  only at the constraint level (`chk_user_platform_role_assignments_
+  This was corrected before merge: the migration enforces `PLATFORM`
+  scope only at the constraint level (`chk_user_platform_role_assignments_
   scope`), and the removed scope values are explicitly deferred to a
   future migration rather than left half-modeled.
-- `0043` onward: **not started.** Do not begin until `0042` is merged.
+- `0043` onward: **not started.** See "Prerequisites before 0043
+  begins" below.
 
 ## Why scoped authorization was deferred, not half-built
 
@@ -80,11 +80,13 @@ contains only a placeholder. Validated against what's actually built:
 
 ## Prerequisites before 0043 begins
 
-- `0042` reviewed, tested against real Supabase Local (not just the
-  PostgreSQL-16 stand-in used during remediation — see
-  `docs/ARCHITECTURE.md`), and merged.
-- CI (`.github/workflows/`) and the `supabase/tests/database/`
-  convention established in `0042`'s remediation extended as the
-  default going forward — every migration from `0043` onward should
-  ship with tests in the same PR, not retrofitted later the way RLS had
-  to be retrofitted in `0041`.
+- `0042` reviewed, tested, and merged — **done** (PR #2). CI
+  (`.github/workflows/database-ci.yml`) now runs the full migration
+  sequence and pgTAP suite against the real `supabase/postgres` image
+  on every PR touching `supabase/migrations/**` or
+  `supabase/tests/**`, and on every push to `main` touching
+  `supabase/migrations/**`.
+- The `supabase/tests/database/` convention established in `0042`'s
+  remediation should extend as the default going forward — every
+  migration from `0043` onward should ship with tests in the same PR,
+  not retrofitted later the way RLS had to be retrofitted in `0041`.

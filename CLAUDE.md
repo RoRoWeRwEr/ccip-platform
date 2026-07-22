@@ -19,16 +19,14 @@ application, API, or frontend code exists in this repository yet.
   spending profiles, the recommendation engine, comparisons,
   notifications, bank applications, partnerships/commissions, and a
   full governance/audit/compliance layer, with row-level security and
-  least-privilege grants retrofitted across all 85 tables in `0041`.
-- **Under review, not merged:** migration `0042`
-  (`0042_create_user_profiles_and_platform_roles.sql`), on branch
-  `codex/0042-user-profiles-platform-roles`. It adds `user_profiles`
-  and a platform RBAC model (`platform_roles`, `platform_permissions`,
-  `platform_role_permissions`, `user_platform_role_assignments`),
-  scoped to `PLATFORM`-wide authorization only.
-- **Not started:** migration `0043` onward. Do not begin it until 0042
-  is reviewed, tested, and merged — see `docs/DATABASE_ROADMAP.md` for
-  what comes after and why the originally proposed 0043–0050 sequence
+  least-privilege grants retrofitted across all 85 tables in `0041` —
+  plus migration `0042` (`0042_create_user_profiles_and_platform_roles.sql`),
+  merged via PR #2. It adds `user_profiles` and a platform RBAC model
+  (`platform_roles`, `platform_permissions`, `platform_role_permissions`,
+  `user_platform_role_assignments`), scoped to `PLATFORM`-wide
+  authorization only.
+- **Not started:** migration `0043` onward. See `docs/DATABASE_ROADMAP.md`
+  for what comes after and why the originally proposed 0043–0050 sequence
   needs adjustment before you build it.
 - Full inventory with line counts and tables created per migration:
   `docs/MIGRATION_INDEX.md`.
@@ -38,11 +36,10 @@ application, API, or frontend code exists in this repository yet.
 These come directly from what has already been verified true of this
 codebase (see `docs/SECURITY_MODEL.md` for the evidence behind each):
 
-1. **Merged migrations are immutable.** `0001`–`0041` are deployed from
+1. **Merged migrations are immutable.** `0001`–`0042` are deployed from
    `main` and must never be rewritten, renamed, reordered, or
    retroactively edited. A documented corrective migration is the only
-   way to change something a merged migration already did. `0042` is
-   the sole exception, and only until it merges.
+   way to change something a merged migration already did.
 2. **One migration, one cohesive capability.** Do not bundle unrelated
    platform capabilities into a single migration file.
 3. **No placeholders.** No TODOs, no pseudocode, no partially-modeled
@@ -51,8 +48,8 @@ codebase (see `docs/SECURITY_MODEL.md` for the evidence behind each):
    enforced in the same migration — this is exactly what had to be
    corrected in `0042`; see `docs/DATABASE_ROADMAP.md`).
 4. **RLS is mandatory on every table holding user or tenant data**, and
-   as of `0041` it is enabled on all 90 (85 merged + 5 pending in
-   `0042`) tables in this schema — do not add a table without it.
+   as of `0042` it is enabled on all 90 tables in this schema — do not
+   add a table without it.
 5. **`SECURITY DEFINER` requires justification and a pinned
    `search_path`.** Every function in this codebase that uses it
    documents why in a `COMMENT ON FUNCTION`, and every function —
