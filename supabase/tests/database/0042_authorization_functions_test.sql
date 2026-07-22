@@ -38,7 +38,7 @@ WHERE user_id = 'a0000000-0000-4000-8000-000000000013'::uuid;
 
 -- Active-assignment holder: both functions return true for the held role/permission,
 -- and has_active_platform_role correctly returns false for a role not held.
-SET LOCAL app.current_uid = 'a0000000-0000-4000-8000-000000000011';
+SET LOCAL request.jwt.claim.sub = 'a0000000-0000-4000-8000-000000000011';
 
 SELECT ok(
     public.has_active_platform_role('REPORTING_VIEWER'),
@@ -54,7 +54,7 @@ SELECT ok(
 );
 
 -- Expired assignment: treated as not active by both functions.
-SET LOCAL app.current_uid = 'a0000000-0000-4000-8000-000000000012';
+SET LOCAL request.jwt.claim.sub = 'a0000000-0000-4000-8000-000000000012';
 
 SELECT ok(
     NOT public.has_active_platform_role('REPORTING_VIEWER'),
@@ -67,7 +67,7 @@ SELECT ok(
 
 -- Revoked assignment: treated as not active by both functions even though valid_until
 -- has not yet been reached.
-SET LOCAL app.current_uid = 'a0000000-0000-4000-8000-000000000013';
+SET LOCAL request.jwt.claim.sub = 'a0000000-0000-4000-8000-000000000013';
 
 SELECT ok(
     NOT public.has_active_platform_role('REPORTING_VIEWER'),
@@ -79,7 +79,7 @@ SELECT ok(
 );
 
 -- No assignment at all.
-SET LOCAL app.current_uid = 'a0000000-0000-4000-8000-000000000014';
+SET LOCAL request.jwt.claim.sub = 'a0000000-0000-4000-8000-000000000014';
 
 SELECT ok(
     NOT public.has_active_platform_role('REPORTING_VIEWER'),

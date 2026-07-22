@@ -24,7 +24,7 @@ VALUES ('a0000000-0000-4000-8000-000000000021'::uuid, '42000000-0000-4000-8000-0
 
 -- Positive path: the administrator can create a PLATFORM assignment for someone else.
 SET ROLE authenticated;
-SET LOCAL app.current_uid = 'a0000000-0000-4000-8000-000000000021';
+SET LOCAL request.jwt.claim.sub = 'a0000000-0000-4000-8000-000000000021';
 
 SELECT lives_ok(
     $$INSERT INTO public.user_platform_role_assignments (user_id, role_id)
@@ -46,7 +46,7 @@ SELECT ok(
 -- Negative path: an unprivileged authenticated user cannot self-assign a role,
 -- even with the role id supplied directly (not looked up through RLS-filtered reads).
 SET ROLE authenticated;
-SET LOCAL app.current_uid = 'a0000000-0000-4000-8000-000000000023';
+SET LOCAL request.jwt.claim.sub = 'a0000000-0000-4000-8000-000000000023';
 
 SELECT throws_ok(
     $$INSERT INTO public.user_platform_role_assignments (user_id, role_id)
@@ -64,7 +64,7 @@ INSERT INTO public.user_profiles (id, user_id)
 VALUES (gen_random_uuid(), 'a0000000-0000-4000-8000-000000000024'::uuid);
 
 SET ROLE authenticated;
-SET LOCAL app.current_uid = 'a0000000-0000-4000-8000-000000000024';
+SET LOCAL request.jwt.claim.sub = 'a0000000-0000-4000-8000-000000000024';
 
 SELECT throws_ok(
     $$UPDATE public.user_profiles SET account_status = 'SUSPENDED'
