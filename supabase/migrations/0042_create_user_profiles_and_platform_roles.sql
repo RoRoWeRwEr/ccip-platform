@@ -154,6 +154,11 @@ CREATE TABLE public.user_platform_role_assignments (
         REFERENCES public.platform_roles(id)
         ON UPDATE CASCADE
         ON DELETE RESTRICT,
+    -- PLATFORM is the only supported scope in this migration. Resource-scoped
+    -- authorization (COUNTRY, BANK, FUNCTIONAL_AREA) is deliberately deferred
+    -- to a dedicated future migration that defines its resources, identifiers,
+    -- inheritance rules, and permission-evaluation semantics; it is not
+    -- partially modeled here.
     scope_type TEXT NOT NULL DEFAULT 'PLATFORM',
     scope_reference TEXT,
     valid_from TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -174,14 +179,7 @@ CREATE TABLE public.user_platform_role_assignments (
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     CONSTRAINT chk_user_platform_role_assignments_scope
-        CHECK (
-            (scope_type = 'PLATFORM' AND scope_reference IS NULL)
-            OR (
-                scope_type IN ('COUNTRY', 'BANK', 'FUNCTIONAL_AREA')
-                AND scope_reference IS NOT NULL
-                AND scope_reference ~ '^[A-Za-z0-9][A-Za-z0-9._:-]*$'
-            )
-        ),
+        CHECK (scope_type = 'PLATFORM' AND scope_reference IS NULL),
     CONSTRAINT chk_user_platform_role_assignments_validity
         CHECK (valid_until IS NULL OR valid_until > valid_from),
     CONSTRAINT chk_user_platform_role_assignments_assignment_time
@@ -899,9 +897,9 @@ COMMENT ON COLUMN public.platform_role_permissions.revoked_at IS
 'Non-null when the grant is revoked; historical mappings are retained instead of deleted.';
 
 COMMENT ON TABLE public.user_platform_role_assignments IS
-'History-preserving, optionally scoped and time-bounded assignments of platform roles to Supabase authentication users.';
+'History-preserving, time-bounded, platform-wide assignments of platform roles to Supabase authentication users; resource-scoped authorization is intentionally not modeled in this migration.';
 COMMENT ON COLUMN public.user_platform_role_assignments.scope_type IS
-'PLATFORM for global authorization or a constrained COUNTRY, BANK, or FUNCTIONAL_AREA scope interpreted by consuming policies.';
+'Fixed at PLATFORM by chk_user_platform_role_assignments_scope; COUNTRY, BANK, and FUNCTIONAL_AREA scopes are rejected until a dedicated future migration defines their resources, identifiers, inheritance rules, and permission-evaluation semantics.';
 COMMENT ON COLUMN public.user_platform_role_assignments.revoked_at IS
 'Non-null when the assignment is revoked; historical assignments are retained instead of deleted.';
 
