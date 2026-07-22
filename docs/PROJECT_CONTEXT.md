@@ -60,9 +60,9 @@ future releases. This is consistent with what's been built at the
 database layer: catalog tables (`0004`–`0021`) are readable by `anon`
 without authentication (`0041`'s `catalog_read_*` policies), while
 anything user-specific (financial profiles, saved cards, applications,
-and — pending merge — role-based platform administration in `0042`)
-requires an authenticated Supabase user and is isolated per-user by row
--level security.
+and role-based platform administration in `0042`, merged) requires an
+authenticated Supabase user and is isolated per-user by row-level
+security.
 
 ## Revenue model (BRD §7)
 
@@ -99,8 +99,8 @@ Premium analytics, advanced recommendation models, user profiles,
 saved cards, saved calculations, mobile applications, an AI-powered
 card advisor. Of these, "user profiles" and "saved cards" are already
 substantially built: `user_card_collections` / `user_saved_cards`
-(`0035`) and, pending merge, `user_profiles` (`0042`). The rest are not
-yet reflected in any migration or roadmap item — see
+(`0035`) and `user_profiles` (`0042`, merged). The rest are not yet
+reflected in any migration or roadmap item — see
 `docs/DATABASE_ROADMAP.md` before assuming any of them are scheduled.
 
 ## What exists today vs. what's aspirational

@@ -193,8 +193,11 @@ no further action required.
 
 Perform this bootstrap procedure in a **local or staging** Supabase
 project first, and confirm Steps 3 and 4 both behave as expected there,
-before performing it against production. Migration 0042 has not yet
-been exercised against a real Supabase Local stack from this repository
-(see the audit notes for why) — treat the first local/staging bootstrap
-as part of validating the migration itself, not just as an operational
-formality.
+before performing it against production. Migration 0042's schema, RLS
+policies, and trigger functions are validated against a real Supabase
+local stack automatically by Database CI
+(`.github/workflows/database-ci.yml`) on every relevant PR and push to
+`main` — but CI does not run this bootstrap procedure itself, since it
+is a one-time operational action, not a schema or test assertion. Treat
+the first local/staging bootstrap as the first time this specific
+procedure is exercised end-to-end, not just as a formality.

@@ -1,25 +1,32 @@
 # Security Model
 
-Everything in this document was verified, not just read. The
+Everything in this document was verified, not just read. The original
 verification method: applying `0001`–`0042` sequentially against a
 real PostgreSQL 16 instance (roles, an `auth.users` stand-in, and a
 session-settable `auth.uid()` mimicking Supabase's contract) and
 running adversarial queries against the result, plus the pgTAP suite
-under `supabase/tests/database/`. Where something could not be
-verified in that environment, it's marked explicitly rather than
-asserted.
+under `supabase/tests/database/`. Since `0042` merged, `.github/
+workflows/database-ci.yml` (Database CI) additionally re-verifies
+migration replay, the pgTAP suite, and database linting against the
+real `supabase/postgres` image on every PR touching `supabase/
+migrations/**` or `supabase/tests/**`, and on every push to `main`
+touching `supabase/migrations/**`. Where something could not be
+verified in either environment, it's marked explicitly rather than
+asserted — see "What CI validates vs. what remains a manual procedure"
+below.
 
 ## RLS coverage
 
-Row-level security is enabled on **every table in the schema** — 85
-tables as of `0041` (merged), 90 including the 5 tables `0042` adds
-(pending merge). This is enforced in one disciplined pass in `0041` for
-everything that existed at that point, and per-table in `0042` for
-what it adds. There is no table in this schema, merged or pending,
-without RLS enabled. If a future migration adds a table and forgets
-RLS, that is a regression from an otherwise perfect record — the
-`01_rls_enabled`-style check pgTAP tests should include this as a
-standing assertion once CI exists (see `docs/DATABASE_ROADMAP.md`).
+Row-level security is enabled on **every table in the schema** — 90
+tables total: 85 as of `0041`, plus the 5 tables `0042` adds (both
+merged into `main`). This is enforced in one disciplined pass in `0041`
+for everything that existed at that point, and per-table in `0042` for
+what it adds. There is no table in this schema without RLS enabled. If
+a future migration adds a table and forgets RLS, that is a regression
+from an otherwise perfect record — the `01_rls_enabled`-style check
+pgTAP tests should include this as a standing assertion in the pgTAP
+suite that Database CI now runs on every relevant PR and push to
+`main` (see `docs/DATABASE_ROADMAP.md`).
 
 ## Grants
 
@@ -134,26 +141,43 @@ ADMIN.md` for the exact procedure, verification, and revocation steps.
 This is intentional secure-by-default behavior, not a gap — the gap
 that existed (no documented procedure) is what that file closes.
 
-## What has not been verified against real Supabase
+## What CI validates vs. what remains a manual procedure
 
-Everything above was verified against a hand-built PostgreSQL 16
-stand-in for Supabase's platform scaffolding (a minimal `auth` schema,
-`anon`/`authenticated`/`service_role` roles, a session-settable
-`auth.uid()`), because no Docker daemon was available to run `supabase
-start` in the environment where this was done. The one place this
-matters: `0042`'s `SECURITY INVOKER` trigger functions (`manage_role_
-permission_change`, `manage_user_role_assignment_change`, `manage_
-user_profile_update`) call `auth.uid()` directly, which requires
-`authenticated` to hold `EXECUTE` on `auth.uid()` and `USAGE` on the
-`auth` schema — a grant that Supabase's platform bootstrap provides,
-not something any migration in this repository sets up itself. This
-was replicated in the stand-in based on documented Supabase behavior
-and behaves correctly there, but **a real `supabase start` + `supabase
-test db` pass is the recommended final check before `0042` merges** to
-close this specific gap. Everything else in this document — schema
-structure, constraint logic, RLS policy logic, grant logic — does not
-depend on Supabase-specific runtime behavior and carries high
-confidence without that additional check.
+Everything above was originally verified against a hand-built
+PostgreSQL 16 stand-in for Supabase's platform scaffolding (a minimal
+`auth` schema, `anon`/`authenticated`/`service_role` roles, a
+session-settable `auth.uid()`), because no Docker daemon was available
+in the environment where the pre-merge review was done. The one place
+this mattered: `0042`'s `SECURITY INVOKER` trigger functions
+(`manage_role_permission_change`, `manage_user_role_assignment_change`,
+`manage_user_profile_update`) call `auth.uid()` directly, which
+requires `authenticated` to hold `EXECUTE` on `auth.uid()` and `USAGE`
+on the `auth` schema — a grant that Supabase's platform bootstrap
+provides, not something any migration in this repository sets up
+itself.
+
+**This gap is now closed.** `.github/workflows/database-ci.yml`
+(Database CI) runs on every PR touching `supabase/migrations/**` or
+`supabase/tests/**`, and on every push to `main` touching `supabase/
+migrations/**`. It starts the real `supabase/postgres` image
+(`supabase start`), replays every migration from empty (`supabase db
+reset`), runs the full pgTAP suite (`supabase test db`), and runs
+`supabase db lint` at `warning` and `error` level. The CI run against
+the `0042` merge commit passed all four steps — migration replay,
+pgTAP assertions, and both lint levels — against the real Supabase
+local stack, not the hand-built stand-in.
+
+**What CI does not cover, because it is an operational procedure
+rather than a schema or test assertion:** the first-platform-
+administrator bootstrap procedure documented in
+`docs/BOOTSTRAP_PLATFORM_ADMIN.md` has not been manually exercised
+end-to-end against a live Supabase project (local, staging, or
+production). CI proves the schema, RLS policies, and trigger functions
+behave correctly against a real Supabase instance in the abstract; it
+does not substitute for a human actually running the bootstrap SQL
+against a real project and confirming the result — `docs/
+BOOTSTRAP_PLATFORM_ADMIN.md` still recommends doing that in a
+local/staging environment before production.
 
 ## Standing rule for future changes
 
