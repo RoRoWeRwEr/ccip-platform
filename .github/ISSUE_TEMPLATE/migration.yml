@@ -1,0 +1,57 @@
+name: Database migration
+description: Propose one cohesive PostgreSQL capability.
+title: "migration: "
+labels: [database]
+body:
+  - type: markdown
+    attributes:
+      value: One issue and PR may contain only one cohesive migration. Never edit a merged migration.
+  - type: input
+    id: migration
+    attributes:
+      label: Migration number and filename
+      placeholder: 0044_create_bounded_capability.sql
+    validations: {required: true}
+  - type: textarea
+    id: capability
+    attributes: {label: Business capability, description: Describe the single user or operational outcome.}
+    validations: {required: true}
+  - type: textarea
+    id: dependencies
+    attributes: {label: Dependencies, description: List prerequisite migrations, objects, decisions, and external dependencies.}
+    validations: {required: true}
+  - type: textarea
+    id: objects
+    attributes: {label: Schema objects, description: List tables, columns, constraints, indexes, functions, triggers, grants, and policies.}
+    validations: {required: true}
+  - type: textarea
+    id: rls
+    attributes: {label: RLS and security requirements, description: Include roles, grants, positive/negative paths, SECURITY DEFINER justification, and threat cases.}
+    validations: {required: true}
+  - type: textarea
+    id: audit
+    attributes: {label: Audit requirements, description: State events, actor identity, before/after values, classification, and retention needs.}
+    validations: {required: true}
+  - type: textarea
+    id: testing
+    attributes: {label: Testing requirements, description: Specify pgTAP, migration replay, lint, RLS, function, and failure-path coverage.}
+    validations: {required: true}
+  - type: textarea
+    id: exclusions
+    attributes: {label: Deliberate exclusions, description: Name adjacent capabilities that must not enter this migration.}
+    validations: {required: true}
+  - type: textarea
+    id: acceptance
+    attributes: {label: Acceptance criteria, description: Provide objective and verifiable checklist items.}
+    validations: {required: true}
+  - type: textarea
+    id: documentation
+    attributes: {label: Documentation updates, description: List every authoritative document that must change.}
+    validations: {required: true}
+  - type: checkboxes
+    id: integrity
+    attributes:
+      label: Migration integrity
+      options:
+        - label: I confirmed all merged migrations remain unchanged and no subsequent migration will start in this task.
+          required: true

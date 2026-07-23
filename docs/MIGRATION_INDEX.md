@@ -51,10 +51,9 @@ out of sync with reality.
 | 0040 | `create_audit_governance_and_compliance` | 4250 | merged | governance_controls, governance_control_assessments, audit_events, approval_requests, approval_decisions, consent_records, data_classification_rules, data_retention_policies, data_retention_executions, legal_holds, legal_hold_items, data_access_logs, data_export_requests, compliance_cases, compliance_case_events |
 | 0041 | `create_security_and_access_control` | 961 | merged | — (0 new tables; enables RLS + grants across all 85 prior tables) |
 | 0042 | `create_user_profiles_and_platform_roles` | 921 | merged | user_profiles, platform_roles, platform_permissions, platform_role_permissions, user_platform_role_assignments |
-| 0043 | `create_feature_flags` | 275 | Draft PR #4 | feature_flags |
+| 0043 | `create_feature_flags` | 275 | merged (PR #4) | feature_flags |
 
-**Merged total:** 42 migrations, 90 tables, 30,186 lines. Migration
-`0043` is committed in Draft PR #4 and is not included in the merged total.
+**Merged total:** 43 migrations, 91 tables, 30,461 lines.
 
 ## `0042` revision note
 
@@ -70,7 +69,7 @@ assertions) and an operational runbook
 (`docs/BOOTSTRAP_PLATFORM_ADMIN.md`) — neither existed when the
 migration was first drafted.
 
-## Dependency notes worth knowing before adding `0043`
+## Dependency notes for future migrations
 
 - Every migration through `0041` applies cleanly and in strict numeric
   order against an empty database — verified by live execution, not
@@ -81,7 +80,7 @@ migration was first drafted.
 - `0042` depends on `auth.users` (Supabase-provided, not created by any
   migration in this repository) and on `audit_events` (`0040`) for its
   audit trigger.
-- No migration in `0001`–`0042` uses `DROP TABLE`, `DROP COLUMN`, or
+- No migration in `0001`–`0043` uses `DROP TABLE`, `DROP COLUMN`, or
   `TRUNCATE`. If a future corrective migration needs to remove
   something, that would be the first destructive operation in this
   repository's history — treat it with proportionate caution and

@@ -1,0 +1,25 @@
+name: Infrastructure
+description: Propose CI, development-platform, deployment, or operational work.
+title: "infrastructure: "
+labels: [infrastructure]
+body:
+  - type: textarea
+    id: objective
+    attributes: {label: Objective and current limitation}
+    validations: {required: true}
+  - type: textarea
+    id: change
+    attributes: {label: Proposed change and deliberate exclusions}
+    validations: {required: true}
+  - type: textarea
+    id: security
+    attributes: {label: Permissions, secrets, cost, and security impact}
+    validations: {required: true}
+  - type: textarea
+    id: rollout
+    attributes: {label: Activation, rollback, and owner steps}
+    validations: {required: true}
+  - type: textarea
+    id: acceptance
+    attributes: {label: Acceptance criteria and validation}
+    validations: {required: true}

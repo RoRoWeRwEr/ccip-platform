@@ -1,8 +1,7 @@
 # Database Architecture
 
 This describes the actual, current state of `supabase/migrations/` —
-merged through `0042`, plus the in-development `0043` feature-flag
-migration where explicitly labeled. It is derived directly from reading
+merged through `0043`. It is derived directly from reading
 every migration file and from live-executing the full migration sequence
 against PostgreSQL 16 (and, since `0042` merged, against a real
 Supabase local stack via Database CI); it is not aspirational.
@@ -105,7 +104,7 @@ Identity & platform RBAC (0042 — merged via PR #2)
     (originally drafted as COUNTRY/BANK/FUNCTIONAL_AREA) was removed
     rather than half-implemented.
 
-Platform feature flags (0043 — in development, not merged)
+Platform feature flags (0043 — merged via PR #4)
   feature_flags — PLATFORM-wide definitions with lifecycle and schedule
   controls, optional deterministic percentage rollout, administrator-only
   RLS management, boolean-only runtime evaluation, and audit_events
@@ -162,13 +161,13 @@ database/0042_audit_trigger_test.sql`). Any future migration that adds
 administrative or sensitive-data mutation should write to this same
 table via the same pattern rather than inventing a parallel audit
 mechanism.
-The in-development `0043` migration follows that same design through
+Migration `0043` follows that same design through
 `audit_feature_flag_change()`, recording each definition mutation as an
 `ADMINISTRATION` event.
 
 ## Reproducibility
 
-The full sequence `0001`→`0042` has been verified to apply cleanly,
+The full sequence `0001`→`0043` has been verified to apply cleanly,
 in order, against an empty database with zero errors and zero
 warnings — both in the hand-built PostgreSQL 16 stand-in used for the
 original pre-merge review (no Docker available in that environment),

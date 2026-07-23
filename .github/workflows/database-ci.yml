@@ -1,4 +1,6 @@
 name: Database CI
+permissions:
+  contents: read
 on:
   pull_request:
     paths: ["supabase/migrations/**", "supabase/tests/**"]

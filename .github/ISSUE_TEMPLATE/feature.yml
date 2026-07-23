@@ -1,0 +1,25 @@
+name: Feature
+description: Propose a bounded product capability.
+title: "feature: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: outcome
+    attributes: {label: User outcome, description: "Who needs what outcome and why?"}
+    validations: {required: true}
+  - type: textarea
+    id: scope
+    attributes: {label: Scope, description: List included behavior and deliberate exclusions.}
+    validations: {required: true}
+  - type: textarea
+    id: design
+    attributes: {label: Design and dependencies, description: Describe interfaces, data, security, compatibility, and prerequisites.}
+    validations: {required: true}
+  - type: textarea
+    id: tests
+    attributes: {label: Acceptance and testing, description: Provide verifiable criteria and required tests.}
+    validations: {required: true}
+  - type: textarea
+    id: docs
+    attributes: {label: Documentation updates}
+    validations: {required: true}

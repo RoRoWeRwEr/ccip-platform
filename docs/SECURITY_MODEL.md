@@ -18,8 +18,8 @@ below.
 ## RLS coverage
 
 Row-level security is enabled on **every merged table in the schema** —
-90 tables total: 85 as of `0041`, plus the 5 tables `0042` adds. The
-in-development `0043` migration enables RLS on its one new
+91 tables total: 85 as of `0041`, plus the 5 tables `0042` adds and the
+one table added by merged migration `0043`. Migration `0043` enables RLS on its
 `feature_flags` table in the same migration. This is enforced in one
 disciplined pass in `0041`
 for everything that existed at that point, and per-table in `0042` for
@@ -69,7 +69,7 @@ schema, all in `0042`:
   access to the audit log to have their actions logged). Also pinned
   `search_path`.
 
-The in-development `0043` migration adds two narrowly scoped
+Migration `0043` adds two narrowly scoped
 `SECURITY DEFINER` functions: `is_feature_enabled(text, text)` exposes
 only a boolean decision to runtime callers while RLS hides flag
 administrative metadata, and `audit_feature_flag_change()` writes to
@@ -78,16 +78,16 @@ Both schema-qualify references, pin `search_path = pg_catalog`, and
 document their justification. Its management trigger remains
 `SECURITY INVOKER`.
 
-**Every function in the codebase — all 42 merged migrations plus the
-`0043` draft, `SECURITY DEFINER` or not — sets
+**Every function in the codebase — all 43 merged migrations,
+`SECURITY DEFINER` or not — sets
 `SET search_path = pg_catalog`.** No exceptions
 found. This is an unusually disciplined baseline; keep it that way. Any
 new function that omits this should be treated as a defect, not a
 style nit.
 
-## Feature flag administration (0043 in development)
+## Feature flag administration (0043 merged)
 
-The draft `feature_flags` table is PLATFORM-only. Authenticated callers
+The `feature_flags` table is PLATFORM-only. Authenticated callers
 must hold an active `PLATFORM_ADMINISTRATOR` assignment to read, insert,
 or update definitions; expired and revoked assignments fail the same
 existing role predicate. `anon` receives no table privileges and no
