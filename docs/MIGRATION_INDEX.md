@@ -52,7 +52,7 @@ out of sync with reality.
 | 0041 | `create_security_and_access_control` | 961 | merged | — (0 new tables; enables RLS + grants across all 85 prior tables) |
 | 0042 | `create_user_profiles_and_platform_roles` | 921 | merged | user_profiles, platform_roles, platform_permissions, platform_role_permissions, user_platform_role_assignments |
 | 0043 | `create_feature_flags` | 275 | merged (PR #4) | feature_flags |
-| 0044 | `create_api_management` | 345 | draft (Issue #11) | api_clients, api_keys, api_scopes, api_client_scope_assignments, api_rate_limit_policies, api_client_rate_limit_assignments |
+| 0044 | `create_api_management` | 373 | draft (Issue #11) | api_clients, api_keys, api_scopes, api_client_scope_assignments, api_rate_limit_policies, api_client_rate_limit_assignments |
 
 **Merged total:** 43 migrations, 91 tables, 30,461 lines. Migration 0044
 is proposed and is not included in the merged total.

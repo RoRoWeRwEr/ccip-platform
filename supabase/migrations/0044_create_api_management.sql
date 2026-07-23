@@ -273,14 +273,42 @@ CREATE OR REPLACE FUNCTION public.audit_api_management_change()
 RETURNS TRIGGER LANGUAGE plpgsql SECURITY DEFINER SET search_path = pg_catalog AS $$
 DECLARE before_record JSONB; after_record JSONB; record_id UUID; action TEXT;
 BEGIN
-    before_record := CASE WHEN TG_OP = 'INSERT' THEN NULL ELSE to_jsonb(OLD) - 'secret_hash' END;
-    after_record := CASE WHEN TG_OP = 'DELETE' THEN NULL ELSE to_jsonb(NEW) - 'secret_hash' END;
-    record_id := CASE WHEN TG_OP = 'DELETE' THEN OLD.id ELSE NEW.id END;
-    action := CASE
-        WHEN TG_TABLE_NAME = 'api_keys' AND TG_OP = 'UPDATE' AND NEW.lifecycle_status = 'REVOKED' AND OLD.lifecycle_status <> 'REVOKED' THEN 'REVOKE'
-        WHEN TG_TABLE_NAME = 'api_clients' AND TG_OP = 'UPDATE' AND NEW.lifecycle_status = 'ACTIVE' AND OLD.lifecycle_status <> 'ACTIVE' THEN 'ACTIVATE'
-        WHEN TG_TABLE_NAME = 'api_clients' AND TG_OP = 'UPDATE' AND NEW.lifecycle_status = 'DEACTIVATED' AND OLD.lifecycle_status <> 'DEACTIVATED' THEN 'DEACTIVATE'
-        WHEN TG_OP = 'INSERT' THEN 'CREATE' WHEN TG_OP = 'DELETE' THEN 'DELETE' ELSE 'UPDATE' END;
+    IF TG_OP = 'DELETE' THEN
+        before_record := to_jsonb(OLD) - 'secret_hash';
+        after_record := NULL;
+        record_id := OLD.id;
+        action := 'DELETE';
+    ELSE
+        before_record := CASE
+            WHEN TG_OP = 'INSERT' THEN NULL
+            ELSE to_jsonb(OLD) - 'secret_hash'
+        END;
+        after_record := to_jsonb(NEW) - 'secret_hash';
+        record_id := NEW.id;
+
+        IF TG_OP = 'INSERT' THEN
+            action := 'CREATE';
+        ELSIF TG_TABLE_NAME = 'api_keys' THEN
+            IF NEW.lifecycle_status = 'REVOKED'
+               AND OLD.lifecycle_status <> 'REVOKED' THEN
+                action := 'REVOKE';
+            ELSE
+                action := 'UPDATE';
+            END IF;
+        ELSIF TG_TABLE_NAME = 'api_clients' THEN
+            IF NEW.lifecycle_status = 'ACTIVE'
+               AND OLD.lifecycle_status <> 'ACTIVE' THEN
+                action := 'ACTIVATE';
+            ELSIF NEW.lifecycle_status = 'DEACTIVATED'
+                  AND OLD.lifecycle_status <> 'DEACTIVATED' THEN
+                action := 'DEACTIVATE';
+            ELSE
+                action := 'UPDATE';
+            END IF;
+        ELSE
+            action := 'UPDATE';
+        END IF;
+    END IF;
     INSERT INTO public.audit_events (
         audit_reference, event_category, event_type, event_action, actor_type,
         actor_user_id, source_component, entity_type, entity_id, operation_name,

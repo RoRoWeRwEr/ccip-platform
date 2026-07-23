@@ -1,6 +1,6 @@
 -- Migration 0044 — schema, lifecycle, assignment, audit, and RLS coverage.
 BEGIN;
-SELECT plan(27);
+SELECT plan(31);
 
 SELECT has_table('public', 'api_clients', 'api_clients exists');
 SELECT has_table('public', 'api_keys', 'api_keys exists');
@@ -25,6 +25,13 @@ INSERT INTO public.api_keys (id, client_id, key_name, key_prefix, secret_hash) V
  ('44000000-0000-4000-8000-000000000002', '44000000-0000-4000-8000-000000000001', 'Primary', 'ccip_ab1', repeat('a', 64));
 INSERT INTO public.api_scopes (id, scope_code, display_name, description) VALUES
  ('44000000-0000-4000-8000-000000000003', 'cards:read', 'Read cards', 'Read approved card catalog data.');
+SELECT ok(EXISTS (SELECT 1 FROM public.audit_events WHERE entity_type='api_scopes' AND entity_id='44000000-0000-4000-8000-000000000003' AND event_action='CREATE'), 'scope creation uses the generic CREATE audit action');
+UPDATE public.api_scopes SET display_name='Read card catalog' WHERE id='44000000-0000-4000-8000-000000000003';
+SELECT ok(EXISTS (SELECT 1 FROM public.audit_events WHERE entity_type='api_scopes' AND entity_id='44000000-0000-4000-8000-000000000003' AND event_action='UPDATE'), 'scope changes use the generic UPDATE audit action');
+INSERT INTO public.api_scopes (id, scope_code, display_name, description) VALUES
+ ('44000000-0000-4000-8000-000000000007', 'tests:delete', 'Delete test', 'Exercises DELETE audit handling.');
+DELETE FROM public.api_scopes WHERE id='44000000-0000-4000-8000-000000000007';
+SELECT ok(EXISTS (SELECT 1 FROM public.audit_events WHERE entity_type='api_scopes' AND entity_id='44000000-0000-4000-8000-000000000007' AND event_action='DELETE' AND before_values IS NOT NULL AND after_values IS NULL), 'DELETE auditing uses OLD without accessing NEW');
 INSERT INTO public.api_client_scope_assignments (id, client_id, scope_id, grant_reason) VALUES
  ('44000000-0000-4000-8000-000000000004', '44000000-0000-4000-8000-000000000001', '44000000-0000-4000-8000-000000000003', 'Contractual API access');
 INSERT INTO public.api_rate_limit_policies (id, policy_code, display_name, window_seconds, request_limit, burst_limit, lifecycle_status, activated_at) VALUES
@@ -65,6 +72,8 @@ SET LOCAL request.jwt.claim.sub = 'a4400000-0000-4000-8000-000000000001';
 SELECT is((SELECT count(*)::integer FROM public.api_clients), 1, 'active platform administrators can read clients');
 SELECT lives_ok($$INSERT INTO public.api_clients(client_code,display_name) VALUES ('admin.created','Admin-created')$$, 'active platform administrators can create clients');
 RESET ROLE;
+UPDATE public.api_clients SET lifecycle_status='ACTIVE', activated_at=now() WHERE client_code='admin.created';
+SELECT ok(EXISTS (SELECT 1 FROM public.audit_events WHERE entity_type='api_clients' AND entity_id=(SELECT id FROM public.api_clients WHERE client_code='admin.created') AND event_action='ACTIVATE'), 'client activation uses the ACTIVATE audit action');
 
 UPDATE public.api_client_scope_assignments SET revoked_at=now(), revocation_reason='contract ended' WHERE id='44000000-0000-4000-8000-000000000004';
 SELECT ok(NOT public.api_client_has_scope('44000000-0000-4000-8000-000000000001','cards:read'), 'revoked scopes are inactive');
