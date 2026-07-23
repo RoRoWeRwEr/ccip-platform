@@ -1,7 +1,7 @@
 # Database Architecture
 
 This describes the actual, current state of `supabase/migrations/` —
-merged through `0043`. It is derived directly from reading
+merged through `0044`. It is derived directly from reading
 every migration file and from live-executing the full migration sequence
 against PostgreSQL 16 (and, since `0042` merged, against a real
 Supabase local stack via Database CI); it is not aspirational.
@@ -109,6 +109,19 @@ Platform feature flags (0043 — merged via PR #4)
   controls, optional deterministic percentage rollout, administrator-only
   RLS management, boolean-only runtime evaluation, and audit_events
   integration. No resource or customer targeting is represented.
+
+API management (0044 — merged via PR #12)
+  API clients, hashed API-key lifecycle metadata, scopes, scope
+  assignments, and rate-limit policy assignments. Plaintext API
+  secrets, webhooks, and gateway execution remain outside PostgreSQL.
+
+Background jobs (0045 — in development under Issue #13)
+  job definitions, one-time/interval schedules, and durable executions
+  for data_retention_executions and commission_settlements, with
+  service-role-only enqueueing and worker lifecycle functions, atomic
+  SKIP LOCKED leasing, fencing tokens, heartbeats, retries,
+  cancellation, result/failure metadata, audit events, and
+  administrator-readable RLS.
 ```
 
 ## The RLS and authorization model

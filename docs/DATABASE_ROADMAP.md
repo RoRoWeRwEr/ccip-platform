@@ -25,11 +25,14 @@ for the next planning decision, not a backlog.
   `PLATFORM_ADMINISTRATOR` role for management. It does not introduce
   bank, country, tenant, customer, organization, or functional-area
   targeting.
-- `0044` (`create_api_management`): **in development under Issue #11.**
-  Sprint 0 is merged and the approved scope is limited to API clients,
-  hashed-key lifecycle metadata, scopes, and rate-limit assignments. Webhooks,
-  gateway middleware, and background processing remain excluded.
-- `0045` onward: **not started.**
+- `0044` (`create_api_management`): **merged through PR #12.** Its
+  scope is limited to API clients, hashed-key lifecycle metadata,
+  scopes, and rate-limit assignments.
+- `0045` (`create_background_jobs`): **in development under Issue #13.**
+  Its bounded scope is durable PostgreSQL scheduling, execution,
+  retry, leasing, heartbeat, cancellation, result, and failure metadata
+  for retention executions and commission settlements.
+- `0046` onward: **not started.**
 
 ## Why scoped authorization was deferred, not half-built
 
@@ -73,11 +76,10 @@ contains only a placeholder. Validated against what's actually built:
 
 1. `0043` (`feature_flags`) is complete and merged as a PLATFORM-only
    capability with pgTAP coverage and administrative auditing.
-2. Complete and review the bounded `0044` API-management foundation from
-   Issue #11 without adding webhook or gateway behavior.
-3. `0045` (`background_jobs`), explicitly targeting `data_retention_
-   executions` and `commission_settlements` as its first real
-   consumers.
+2. `0044` API management is complete and merged.
+3. Complete and review `0045` (`background_jobs`), explicitly targeting
+   `data_retention_executions` and `commission_settlements` as its first
+   real consumers.
 4. Hold `0046`–`0049` behind the first real application-layer release.
    Building warehouse, analytics, ML, and search infrastructure against
    a database with no production traffic spends migration-review

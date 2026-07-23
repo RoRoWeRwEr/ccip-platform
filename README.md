@@ -11,12 +11,13 @@ and business requirements.
 ## Current implementation status: database-first platform foundation
 
 This repository currently contains **only the database layer**.
-Migrations `0001`–`0043` are merged into `main`: 91 tables covering the
+Migrations `0001`–`0044` are merged into `main`: 97 tables covering the
 card/bank/reward catalog, customer financial and spending profiles, the
 recommendation engine, comparisons, notifications, bank applications,
 partnerships/commissions, a full governance/audit/compliance layer, and
-a platform RBAC/identity model — with row-level security enabled on
-every table. Migration `0044` has not started and is blocked until Sprint 0 is complete.
+a platform RBAC/identity model, feature flags, and API-management
+metadata — with row-level security enabled on every table. Migration
+`0045` is in development under Issue #13.
 
 **No application, API, or frontend code exists in this repository yet.**
 Anything above that sounds like a user-facing feature (recommendations,
@@ -52,8 +53,8 @@ docs/
 decisions/                  Reserved for architecture decision records; currently empty
 glossary/                   Reserved for a project glossary; currently empty
 supabase/
-  migrations/                43 merged SQL migrations (0001–0043)
-  tests/database/            pgTAP test suite (currently covers migrations 0042–0043)
+  migrations/                44 merged SQL migrations (0001–0044)
+  tests/database/            pgTAP test suite (currently covers migrations 0042–0044)
 .github/workflows/
   database-ci.yml            Database CI — see below
 ```
