@@ -596,11 +596,9 @@ DECLARE definition public.background_job_definitions%ROWTYPE;
 DECLARE delay_seconds NUMERIC;
 DECLARE next_status TEXT;
 BEGIN
-    SELECT execution, job_definition
-      INTO execution_record, definition
+    SELECT execution.*
+      INTO execution_record
       FROM public.background_job_executions AS execution
-      JOIN public.background_job_definitions AS job_definition
-        ON job_definition.id = execution.job_definition_id
      WHERE execution.id = requested_execution_id
        AND execution.lease_token = requested_lease_token
        AND execution.execution_status IN ('LEASED', 'RUNNING')
@@ -609,6 +607,11 @@ BEGIN
     IF NOT FOUND THEN
         RETURN NULL;
     END IF;
+
+    SELECT job_definition.*
+      INTO STRICT definition
+      FROM public.background_job_definitions AS job_definition
+     WHERE job_definition.id = execution_record.job_definition_id;
 
     IF requested_retryable AND execution_record.attempt_count < definition.maximum_attempts THEN
         delay_seconds := CASE definition.retry_backoff_strategy
