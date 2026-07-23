@@ -104,14 +104,16 @@ SELECT throws_ok(
 
 SELECT is(
  public.enqueue_background_job(
-   'retention.execute',
-   '45000000-0000-4000-8000-000000000007',
-   NULL, '{"source":"manual"}', now(), 50, 'retention-idempotent'
+   'retention.execute'::TEXT,
+   '45000000-0000-4000-8000-000000000007'::UUID,
+   NULL::UUID, '{"source":"manual"}'::JSONB, now()::TIMESTAMPTZ,
+   50::SMALLINT, 'retention-idempotent'::TEXT
  ),
  public.enqueue_background_job(
-   'retention.execute',
-   '45000000-0000-4000-8000-000000000007',
-   NULL, '{"source":"ignored-duplicate"}', now(), 50, 'retention-idempotent'
+   'retention.execute'::TEXT,
+   '45000000-0000-4000-8000-000000000007'::UUID,
+   NULL::UUID, '{"source":"ignored-duplicate"}'::JSONB, now()::TIMESTAMPTZ,
+   50::SMALLINT, 'retention-idempotent'::TEXT
  ),
  'enqueueing with the same scoped idempotency key returns the same execution');
 SELECT is((
@@ -137,10 +139,12 @@ SELECT ok(EXISTS (
        AND event_action = 'CREATE'
 ), 'job-schedule creation exercises the shared audit trigger safely');
 SELECT is((
-    SELECT count(*)::INTEGER FROM public.materialize_due_background_jobs(10)
+    SELECT count(*)::INTEGER
+      FROM public.materialize_due_background_jobs(10::INTEGER)
 ), 1, 'a due schedule materializes one execution');
 SELECT is((
-    SELECT count(*)::INTEGER FROM public.materialize_due_background_jobs(10)
+    SELECT count(*)::INTEGER
+      FROM public.materialize_due_background_jobs(10::INTEGER)
 ), 0, 'the same schedule occurrence is not materialized twice');
 SELECT ok((
     SELECT next_run_at > last_materialized_at
@@ -155,7 +159,7 @@ SELECT ok(EXISTS (
 
 CREATE TEMP TABLE leased_execution AS
 SELECT id, lease_token, execution_status, attempt_count, worker_id
-  FROM public.lease_background_jobs('worker-a', 1);
+  FROM public.lease_background_jobs('worker-a'::TEXT, 1::INTEGER);
 SELECT is((SELECT execution_status FROM leased_execution), 'LEASED',
     'an eligible execution is atomically leased');
 SELECT is((SELECT attempt_count FROM leased_execution), 1,
@@ -165,21 +169,22 @@ SELECT is((SELECT worker_id FROM leased_execution), 'worker-a',
 SELECT ok((SELECT lease_token IS NOT NULL FROM leased_execution),
     'the lease returns an unpredictable fencing token');
 SELECT ok(NOT public.start_background_job_execution(
-    (SELECT id FROM leased_execution),
-    'ffffffff-ffff-4fff-8fff-ffffffffffff'
+    (SELECT id FROM leased_execution)::UUID,
+    'ffffffff-ffff-4fff-8fff-ffffffffffff'::UUID
 ), 'an invalid fencing token cannot start execution');
 SELECT ok(public.start_background_job_execution(
-    (SELECT id FROM leased_execution),
-    (SELECT lease_token FROM leased_execution)
+    (SELECT id FROM leased_execution)::UUID,
+    (SELECT lease_token FROM leased_execution)::UUID
 ), 'the valid lease holder can start execution');
 SELECT ok(public.heartbeat_background_job_execution(
-    (SELECT id FROM leased_execution),
-    (SELECT lease_token FROM leased_execution)
+    (SELECT id FROM leased_execution)::UUID,
+    (SELECT lease_token FROM leased_execution)::UUID
 ), 'the valid lease holder can heartbeat');
 SELECT is(public.fail_background_job_execution(
-    (SELECT id FROM leased_execution),
-    (SELECT lease_token FROM leased_execution),
-    'TRANSIENT_FAILURE', 'Temporary failure', '{"retry":"safe"}', TRUE
+    (SELECT id FROM leased_execution)::UUID,
+    (SELECT lease_token FROM leased_execution)::UUID,
+    'TRANSIENT_FAILURE'::TEXT, 'Temporary failure'::TEXT,
+    '{"retry":"safe"}'::JSONB, TRUE::BOOLEAN
 ), 'QUEUED', 'a retryable failure is requeued below the attempt limit');
 SELECT is((
     SELECT execution_status FROM public.background_job_executions
@@ -192,11 +197,12 @@ UPDATE public.background_job_executions
 TRUNCATE leased_execution;
 INSERT INTO leased_execution
 SELECT id, lease_token, execution_status, attempt_count, worker_id
-  FROM public.lease_background_jobs('worker-b', 1);
+  FROM public.lease_background_jobs('worker-b'::TEXT, 1::INTEGER);
 SELECT is(public.fail_background_job_execution(
-    (SELECT id FROM leased_execution),
-    (SELECT lease_token FROM leased_execution),
-    'PERMANENT_FAILURE', 'Attempts exhausted', '{}', TRUE
+    (SELECT id FROM leased_execution)::UUID,
+    (SELECT lease_token FROM leased_execution)::UUID,
+    'PERMANENT_FAILURE'::TEXT, 'Attempts exhausted'::TEXT,
+    '{}'::JSONB, TRUE::BOOLEAN
 ), 'FAILED', 'a failure becomes terminal at the attempt limit');
 SELECT ok((
     SELECT failed_at IS NOT NULL AND failure_code = 'PERMANENT_FAILURE'
@@ -205,18 +211,19 @@ SELECT ok((
 ), 'terminal failure metadata is retained');
 
 SELECT public.enqueue_background_job(
-   'settlement.process', NULL,
-   '45000000-0000-4000-8000-000000000005',
-   '{"action":"complete"}', now(), 1, 'completion-test'
+   'settlement.process'::TEXT, NULL::UUID,
+   '45000000-0000-4000-8000-000000000005'::UUID,
+   '{"action":"complete"}'::JSONB, now()::TIMESTAMPTZ,
+   1::SMALLINT, 'completion-test'::TEXT
 );
 TRUNCATE leased_execution;
 INSERT INTO leased_execution
 SELECT id, lease_token, execution_status, attempt_count, worker_id
-  FROM public.lease_background_jobs('worker-c', 1);
+  FROM public.lease_background_jobs('worker-c'::TEXT, 1::INTEGER);
 SELECT ok(public.complete_background_job_execution(
-    (SELECT id FROM leased_execution),
-    (SELECT lease_token FROM leased_execution),
-    '{"settled":true}'
+    (SELECT id FROM leased_execution)::UUID,
+    (SELECT lease_token FROM leased_execution)::UUID,
+    '{"settled":true}'::JSONB
 ), 'the lease holder can complete an execution');
 SELECT results_eq(
  $$SELECT execution_status, result
@@ -226,9 +233,10 @@ SELECT results_eq(
  'successful execution retains structured result metadata');
 
 SELECT public.enqueue_background_job(
-   'settlement.process', NULL,
-   '45000000-0000-4000-8000-000000000005',
-   '{}', now(), 1, 'cancel-test'
+   'settlement.process'::TEXT, NULL::UUID,
+   '45000000-0000-4000-8000-000000000005'::UUID,
+   '{}'::JSONB, now()::TIMESTAMPTZ,
+   1::SMALLINT, 'cancel-test'::TEXT
 );
 SET ROLE authenticated;
 SET LOCAL request.jwt.claim.sub = 'a4500000-0000-4000-8000-000000000002';
@@ -236,8 +244,9 @@ SELECT is((SELECT count(*)::INTEGER FROM public.background_job_definitions), 0,
     'unprivileged authenticated users cannot read job metadata');
 SELECT throws_ok(
  $$SELECT public.request_background_job_cancellation(
-   (SELECT id FROM public.background_job_executions WHERE idempotency_key='cancel-test'),
-   'not authorized')$$,
+   (SELECT id FROM public.background_job_executions
+     WHERE idempotency_key = 'cancel-test')::UUID,
+   'not authorized'::TEXT)$$,
  '42501', 'active platform administrator role required',
  'unprivileged users cannot request cancellation');
 RESET ROLE;
@@ -246,8 +255,9 @@ SET LOCAL request.jwt.claim.sub = 'a4500000-0000-4000-8000-000000000001';
 SELECT is((SELECT count(*)::INTEGER FROM public.background_job_definitions), 2,
     'platform administrators can read job definitions');
 SELECT ok(public.request_background_job_cancellation(
-   (SELECT id FROM public.background_job_executions WHERE idempotency_key='cancel-test'),
-   'operator cancelled queued work'
+   (SELECT id FROM public.background_job_executions
+     WHERE idempotency_key = 'cancel-test')::UUID,
+   'operator cancelled queued work'::TEXT
 ), 'platform administrators can cancel queued work through the narrow helper');
 RESET ROLE;
 SELECT is((
