@@ -52,8 +52,10 @@ out of sync with reality.
 | 0041 | `create_security_and_access_control` | 961 | merged | — (0 new tables; enables RLS + grants across all 85 prior tables) |
 | 0042 | `create_user_profiles_and_platform_roles` | 921 | merged | user_profiles, platform_roles, platform_permissions, platform_role_permissions, user_platform_role_assignments |
 | 0043 | `create_feature_flags` | 275 | merged (PR #4) | feature_flags |
+| 0044 | `create_api_management` | 345 | draft (Issue #11) | api_clients, api_keys, api_scopes, api_client_scope_assignments, api_rate_limit_policies, api_client_rate_limit_assignments |
 
-**Merged total:** 43 migrations, 91 tables, 30,461 lines.
+**Merged total:** 43 migrations, 91 tables, 30,461 lines. Migration 0044
+is proposed and is not included in the merged total.
 
 ## `0042` revision note
 
@@ -89,3 +91,7 @@ migration was first drafted.
   `has_active_platform_role(text)` authorization function, and on
   `0040`'s `audit_events` table. It adds PLATFORM-wide feature flags
   only; no narrower targeting scope is represented.
+- `0044` depends on the same administrator authorization function,
+  `0040`'s `audit_events`, `auth.users`, and the `btree_gist` extension
+  enabled by `0001`. It stores only API-key SHA-256 digests and excludes
+  webhook and gateway implementation concerns.

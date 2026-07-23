@@ -25,8 +25,11 @@ for the next planning decision, not a backlog.
   `PLATFORM_ADMINISTRATOR` role for management. It does not introduce
   bank, country, tenant, customer, organization, or functional-area
   targeting.
-- `0044` onward: **not started.** Migration `0044` must not begin until
-  Sprint 0 is merged and a bounded capability is approved in a new issue.
+- `0044` (`create_api_management`): **in development under Issue #11.**
+  Sprint 0 is merged and the approved scope is limited to API clients,
+  hashed-key lifecycle metadata, scopes, and rate-limit assignments. Webhooks,
+  gateway middleware, and background processing remain excluded.
+- `0045` onward: **not started.**
 
 ## Why scoped authorization was deferred, not half-built
 
@@ -58,7 +61,7 @@ contains only a placeholder. Validated against what's actually built:
 | # | Proposed | Assessment |
 |---|---|---|
 | 0043 | `feature_flags` | No dependency conflicts with anything merged or pending. Reasonable to build as scoped. |
-| 0044 | `api_management` | Too broad as stated — could mean partner API keys (fits `0039`'s bank-partnership model), rate limiting, or webhook management for `0039`'s commission/settlement flows. Narrow the scope before writing SQL. |
+| 0044 | `api_management` | Narrowed and approved by Issue #11: client/key lifecycle, scopes, and rate-limit metadata only; webhooks and gateway behavior are excluded. |
 | 0045 | `background_jobs` | Reasonable, and there's already real demand for it: `data_retention_executions` (`0040`) and `commission_settlements` (`0039`) both look like they're meant to be driven by a scheduler, but nothing currently models a job/worker table. Scope this migration to explicitly serve those two consumers first, not built in the abstract. |
 | 0046 | `data_warehouse_views` | Premature — there is no application layer generating real query patterns yet. Defer until there's production traffic, or narrow to materialized views over `recommendation_*`/`bank_application_*` specifically. |
 | 0047 | `analytics_and_reporting` | Depends on `0046`; same premature-maturity concern. Note: the `REPORTING_VIEWER` role and `REPORTING_READ` permission already exist in `0042`'s seed data with nothing to gate yet — this is what would finally give that role a purpose. Sequence it here, not earlier. |
@@ -70,8 +73,8 @@ contains only a placeholder. Validated against what's actually built:
 
 1. `0043` (`feature_flags`) is complete and merged as a PLATFORM-only
    capability with pgTAP coverage and administrative auditing.
-2. Narrow `0044` (`api_management`) to a specific consumer before
-   building it.
+2. Complete and review the bounded `0044` API-management foundation from
+   Issue #11 without adding webhook or gateway behavior.
 3. `0045` (`background_jobs`), explicitly targeting `data_retention_
    executions` and `commission_settlements` as its first real
    consumers.
