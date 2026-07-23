@@ -17,9 +17,11 @@ below.
 
 ## RLS coverage
 
-Row-level security is enabled on **every table in the schema** — 90
-tables total: 85 as of `0041`, plus the 5 tables `0042` adds (both
-merged into `main`). This is enforced in one disciplined pass in `0041`
+Row-level security is enabled on **every merged table in the schema** —
+90 tables total: 85 as of `0041`, plus the 5 tables `0042` adds. The
+in-development `0043` migration enables RLS on its one new
+`feature_flags` table in the same migration. This is enforced in one
+disciplined pass in `0041`
 for everything that existed at that point, and per-table in `0042` for
 what it adds. There is no table in this schema without RLS enabled. If
 a future migration adds a table and forgets RLS, that is a regression
@@ -52,8 +54,8 @@ and succeeds updating `display_name`.
 
 ## `SECURITY DEFINER` usage
 
-There are exactly three `SECURITY DEFINER` functions in the entire
-codebase, all in `0042`:
+There are exactly three `SECURITY DEFINER` functions in the merged
+schema, all in `0042`:
 
 - `has_active_platform_role(text)` and `has_active_platform_permission
   (text)` — both `STABLE`, both schema-qualify every reference inside
@@ -67,11 +69,32 @@ codebase, all in `0042`:
   access to the audit log to have their actions logged). Also pinned
   `search_path`.
 
-**Every function in the codebase — all 42 migrations, `SECURITY
-DEFINER` or not — sets `SET search_path = pg_catalog`.** No exceptions
+The in-development `0043` migration adds two narrowly scoped
+`SECURITY DEFINER` functions: `is_feature_enabled(text, text)` exposes
+only a boolean decision to runtime callers while RLS hides flag
+administrative metadata, and `audit_feature_flag_change()` writes to
+`audit_events` without granting administrators direct audit-log writes.
+Both schema-qualify references, pin `search_path = pg_catalog`, and
+document their justification. Its management trigger remains
+`SECURITY INVOKER`.
+
+**Every function in the codebase — all 42 merged migrations plus the
+`0043` draft, `SECURITY DEFINER` or not — sets
+`SET search_path = pg_catalog`.** No exceptions
 found. This is an unusually disciplined baseline; keep it that way. Any
 new function that omits this should be treated as a defect, not a
 style nit.
+
+## Feature flag administration (0043 in development)
+
+The draft `feature_flags` table is PLATFORM-only. Authenticated callers
+must hold an active `PLATFORM_ADMINISTRATOR` assignment to read, insert,
+or update definitions; expired and revoked assignments fail the same
+existing role predicate. `anon` receives no table privileges and no
+authenticated caller receives `DELETE`. Runtime callers receive only
+execute access to the boolean evaluator. Creation identity and
+timestamps are protected and stamped by the database, while every
+administrative mutation is written to `audit_events`.
 
 ## Privilege escalation
 

@@ -20,8 +20,13 @@ for the next planning decision, not a backlog.
   scope only at the constraint level (`chk_user_platform_role_assignments_
   scope`), and the removed scope values are explicitly deferred to a
   future migration rather than left half-modeled.
-- `0043` onward: **not started.** See "Prerequisites before 0043
-  begins" below.
+- `0043` (`create_feature_flags`): **in development** on the dedicated
+  `codex/0043-feature-flags` branch. Its scope is intentionally limited
+  to PLATFORM-wide flag definitions and evaluation, using the existing
+  `PLATFORM_ADMINISTRATOR` role for management. It does not introduce
+  bank, country, tenant, customer, organization, or functional-area
+  targeting.
+- `0044` onward: **not started.**
 
 ## Why scoped authorization was deferred, not half-built
 
@@ -63,7 +68,8 @@ contains only a placeholder. Validated against what's actually built:
 
 ## Recommended sequencing
 
-1. `0043` (`feature_flags`) as originally scoped.
+1. Complete and review `0043` (`feature_flags`) as a PLATFORM-only
+   capability with pgTAP coverage and administrative auditing.
 2. Narrow `0044` (`api_management`) to a specific consumer before
    building it.
 3. `0045` (`background_jobs`), explicitly targeting `data_retention_
