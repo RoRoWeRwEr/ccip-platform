@@ -281,32 +281,63 @@ SET search_path = pg_catalog
 AS $$
 DECLARE expected_consumer TEXT;
 BEGIN
-    SELECT definition.consumer_type
-      INTO expected_consumer
-      FROM public.background_job_definitions AS definition
-     WHERE definition.id = NEW.job_definition_id;
+    IF TG_TABLE_NAME = 'background_job_executions' THEN
+        SELECT definition.consumer_type
+          INTO expected_consumer
+          FROM public.background_job_definitions AS definition
+         WHERE definition.id = NEW.job_definition_id;
 
-    IF expected_consumer = 'DATA_RETENTION_EXECUTION'
-       AND (NEW.data_retention_execution_id IS NULL OR NEW.commission_settlement_id IS NOT NULL) THEN
-        RAISE EXCEPTION 'data-retention jobs require a data_retention_execution_id'
-            USING ERRCODE = '23514';
-    ELSIF expected_consumer = 'COMMISSION_SETTLEMENT'
-       AND (NEW.commission_settlement_id IS NULL OR NEW.data_retention_execution_id IS NOT NULL) THEN
-        RAISE EXCEPTION 'commission-settlement jobs require a commission_settlement_id'
-            USING ERRCODE = '23514';
-    END IF;
+        IF expected_consumer = 'DATA_RETENTION_EXECUTION' THEN
+            IF NEW.data_retention_execution_id IS NULL
+               OR NEW.commission_settlement_id IS NOT NULL THEN
+                RAISE EXCEPTION 'data-retention jobs require a data_retention_execution_id'
+                    USING ERRCODE = '23514';
+            END IF;
+        ELSIF expected_consumer = 'COMMISSION_SETTLEMENT' THEN
+            IF NEW.commission_settlement_id IS NULL
+               OR NEW.data_retention_execution_id IS NOT NULL THEN
+                RAISE EXCEPTION 'commission-settlement jobs require a commission_settlement_id'
+                    USING ERRCODE = '23514';
+            END IF;
+        END IF;
 
-    IF TG_TABLE_NAME = 'background_job_executions' AND NEW.schedule_id IS NOT NULL
-       AND NOT EXISTS (
-           SELECT 1
-             FROM public.background_job_schedules AS schedule
-            WHERE schedule.id = NEW.schedule_id
-              AND schedule.job_definition_id = NEW.job_definition_id
-              AND schedule.data_retention_execution_id IS NOT DISTINCT FROM NEW.data_retention_execution_id
-              AND schedule.commission_settlement_id IS NOT DISTINCT FROM NEW.commission_settlement_id
-       ) THEN
-        RAISE EXCEPTION 'execution definition and target must match its schedule'
-            USING ERRCODE = '23514';
+        IF NEW.schedule_id IS NOT NULL THEN
+            IF NOT EXISTS (
+                SELECT 1
+                  FROM public.background_job_schedules AS schedule
+                 WHERE schedule.id = NEW.schedule_id
+                   AND schedule.job_definition_id = NEW.job_definition_id
+                   AND schedule.data_retention_execution_id
+                       IS NOT DISTINCT FROM NEW.data_retention_execution_id
+                   AND schedule.commission_settlement_id
+                       IS NOT DISTINCT FROM NEW.commission_settlement_id
+            ) THEN
+                RAISE EXCEPTION 'execution definition and target must match its schedule'
+                    USING ERRCODE = '23514';
+            END IF;
+        END IF;
+    ELSIF TG_TABLE_NAME = 'background_job_schedules' THEN
+        SELECT definition.consumer_type
+          INTO expected_consumer
+          FROM public.background_job_definitions AS definition
+         WHERE definition.id = NEW.job_definition_id;
+
+        IF expected_consumer = 'DATA_RETENTION_EXECUTION' THEN
+            IF NEW.data_retention_execution_id IS NULL
+               OR NEW.commission_settlement_id IS NOT NULL THEN
+                RAISE EXCEPTION 'data-retention jobs require a data_retention_execution_id'
+                    USING ERRCODE = '23514';
+            END IF;
+        ELSIF expected_consumer = 'COMMISSION_SETTLEMENT' THEN
+            IF NEW.commission_settlement_id IS NULL
+               OR NEW.data_retention_execution_id IS NOT NULL THEN
+                RAISE EXCEPTION 'commission-settlement jobs require a commission_settlement_id'
+                    USING ERRCODE = '23514';
+            END IF;
+        END IF;
+    ELSE
+        RAISE EXCEPTION 'validate_background_job_target is not valid for table %', TG_TABLE_NAME
+            USING ERRCODE = '55000';
     END IF;
 
     RETURN NEW;
@@ -320,33 +351,53 @@ SECURITY INVOKER
 SET search_path = pg_catalog
 AS $$
 BEGIN
-    IF current_user = 'authenticated' THEN
-        IF TG_OP = 'INSERT' THEN
-            NEW.created_by_user_id := auth.uid();
+    IF TG_TABLE_NAME = 'background_job_definitions' THEN
+        IF current_user = 'authenticated' THEN
+            IF TG_OP = 'INSERT' THEN
+                NEW.created_by_user_id := auth.uid();
+            END IF;
+            NEW.updated_by_user_id := auth.uid();
         END IF;
-        NEW.updated_by_user_id := auth.uid();
-    END IF;
 
-    IF TG_OP = 'UPDATE' THEN
-        IF NEW.id IS DISTINCT FROM OLD.id
-           OR NEW.created_at IS DISTINCT FROM OLD.created_at
-           OR NEW.created_by_user_id IS DISTINCT FROM OLD.created_by_user_id THEN
-            RAISE EXCEPTION 'background-job identity and creation audit fields may not be modified'
-                USING ERRCODE = '42501';
+        IF TG_OP = 'UPDATE' THEN
+            IF NEW.id IS DISTINCT FROM OLD.id
+               OR NEW.created_at IS DISTINCT FROM OLD.created_at
+               OR NEW.created_by_user_id IS DISTINCT FROM OLD.created_by_user_id THEN
+                RAISE EXCEPTION 'background-job identity and creation audit fields may not be modified'
+                    USING ERRCODE = '42501';
+            END IF;
+            IF NEW.job_code IS DISTINCT FROM OLD.job_code
+               OR NEW.consumer_type IS DISTINCT FROM OLD.consumer_type THEN
+                RAISE EXCEPTION 'job code and consumer type may not be modified'
+                    USING ERRCODE = '42501';
+            END IF;
         END IF;
-        IF TG_TABLE_NAME = 'background_job_definitions'
-           AND (NEW.job_code IS DISTINCT FROM OLD.job_code
-                OR NEW.consumer_type IS DISTINCT FROM OLD.consumer_type) THEN
-            RAISE EXCEPTION 'job code and consumer type may not be modified'
-                USING ERRCODE = '42501';
-        ELSIF TG_TABLE_NAME = 'background_job_schedules'
-           AND (NEW.schedule_code IS DISTINCT FROM OLD.schedule_code
-                OR NEW.job_definition_id IS DISTINCT FROM OLD.job_definition_id
-                OR NEW.data_retention_execution_id IS DISTINCT FROM OLD.data_retention_execution_id
-                OR NEW.commission_settlement_id IS DISTINCT FROM OLD.commission_settlement_id) THEN
-            RAISE EXCEPTION 'schedule identity, definition, and target may not be modified'
-                USING ERRCODE = '42501';
+    ELSIF TG_TABLE_NAME = 'background_job_schedules' THEN
+        IF current_user = 'authenticated' THEN
+            IF TG_OP = 'INSERT' THEN
+                NEW.created_by_user_id := auth.uid();
+            END IF;
+            NEW.updated_by_user_id := auth.uid();
         END IF;
+
+        IF TG_OP = 'UPDATE' THEN
+            IF NEW.id IS DISTINCT FROM OLD.id
+               OR NEW.created_at IS DISTINCT FROM OLD.created_at
+               OR NEW.created_by_user_id IS DISTINCT FROM OLD.created_by_user_id THEN
+                RAISE EXCEPTION 'background-job identity and creation audit fields may not be modified'
+                    USING ERRCODE = '42501';
+            END IF;
+            IF NEW.schedule_code IS DISTINCT FROM OLD.schedule_code
+               OR NEW.job_definition_id IS DISTINCT FROM OLD.job_definition_id
+               OR NEW.data_retention_execution_id IS DISTINCT FROM OLD.data_retention_execution_id
+               OR NEW.commission_settlement_id IS DISTINCT FROM OLD.commission_settlement_id THEN
+                RAISE EXCEPTION 'schedule identity, definition, and target may not be modified'
+                    USING ERRCODE = '42501';
+            END IF;
+        END IF;
+    ELSE
+        RAISE EXCEPTION 'manage_background_job_metadata is not valid for table %', TG_TABLE_NAME
+            USING ERRCODE = '55000';
     END IF;
     RETURN NEW;
 END;
@@ -828,11 +879,13 @@ BEGIN
         END IF;
     END IF;
 
-    IF TG_TABLE_NAME = 'background_job_executions'
-       AND TG_OP = 'UPDATE'
-       AND (after_record - ARRAY['heartbeat_at', 'lease_expires_at', 'updated_at'])
-           = (before_record - ARRAY['heartbeat_at', 'lease_expires_at', 'updated_at']) THEN
-        RETURN NEW;
+    IF TG_TABLE_NAME = 'background_job_executions' THEN
+        IF TG_OP = 'UPDATE' THEN
+            IF (after_record - ARRAY['heartbeat_at', 'lease_expires_at', 'updated_at'])
+               = (before_record - ARRAY['heartbeat_at', 'lease_expires_at', 'updated_at']) THEN
+                RETURN NEW;
+            END IF;
+        END IF;
     END IF;
 
     INSERT INTO public.audit_events (

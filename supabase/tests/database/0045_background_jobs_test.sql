@@ -1,6 +1,6 @@
 -- Migration 0045 — schema, scheduling, leasing, lifecycle, RLS, and audit coverage.
 BEGIN;
-SELECT plan(36);
+SELECT plan(38);
 
 SELECT has_table('public', 'background_job_definitions', 'job definitions exist');
 SELECT has_table('public', 'background_job_schedules', 'job schedules exist');
@@ -85,6 +85,34 @@ SELECT ok(EXISTS (
        AND entity_id = '45000000-0000-4000-8000-000000000010'
        AND event_action = 'CREATE'
 ), 'job-definition creation is audited');
+
+UPDATE public.background_job_definitions
+   SET display_name = 'Execute retention records'
+ WHERE id = '45000000-0000-4000-8000-000000000010';
+SELECT ok(EXISTS (
+    SELECT 1 FROM public.audit_events
+     WHERE entity_type = 'background_job_definitions'
+       AND entity_id = '45000000-0000-4000-8000-000000000010'
+       AND event_action = 'UPDATE'
+), 'job-definition update exercises metadata protection and UPDATE auditing');
+
+INSERT INTO public.background_job_definitions (
+    id, job_code, display_name, description, consumer_type
+) VALUES (
+    '45000000-0000-4000-8000-000000000013', 'retention.disposable',
+    'Disposable retention job', 'Exercises generic DELETE auditing.',
+    'DATA_RETENTION_EXECUTION'
+);
+DELETE FROM public.background_job_definitions
+ WHERE id = '45000000-0000-4000-8000-000000000013';
+SELECT ok(EXISTS (
+    SELECT 1 FROM public.audit_events
+     WHERE entity_type = 'background_job_definitions'
+       AND entity_id = '45000000-0000-4000-8000-000000000013'
+       AND event_action = 'DELETE'
+       AND before_values IS NOT NULL
+       AND after_values IS NULL
+), 'job-definition DELETE auditing uses OLD without accessing NEW');
 
 SELECT throws_ok(
  $$INSERT INTO public.background_job_definitions
