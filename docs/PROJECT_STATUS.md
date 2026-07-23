@@ -1,6 +1,6 @@
 # Project Status
 
-**Last updated:** 2026-07-22
+**Last updated:** 2026-07-23
 
 This is a factual dashboard, generated from direct inspection of this
 repository's migrations, tests, CI configuration, merged pull requests,
@@ -12,11 +12,11 @@ detail behind the security/RLS status line.
 
 ## Current milestone
 
-Migration `0042` (`create_user_profiles_and_platform_roles`) merged
-into `main` via PR #2, with Database CI passing on the merge commit.
-This closes the post-`0042` documentation-sync milestone; the next
-milestone is deciding and scoping migration `0043` (see
-`docs/DATABASE_ROADMAP.md`).
+Migration `0042` (`create_user_profiles_and_platform_roles`) is the
+latest migration merged into `main`. Migration `0043`
+(`create_feature_flags`) is in development on its dedicated branch as
+a PLATFORM-only feature flag capability with pgTAP coverage; it is not
+yet committed, reviewed, or merged.
 
 ## Current branch baseline
 
@@ -30,19 +30,20 @@ CI-validated.
 
 ## Next planned migration
 
-None started. `0043` onward is **not started** — see
-`docs/DATABASE_ROADMAP.md` for the prerequisites and the assessed
-0043–0050 candidate sequence (which requires revision before use).
+`0043_create_feature_flags.sql` is **in development**. It adds one
+PLATFORM-wide administrative feature flag table, a boolean runtime
+evaluation function, RLS, least-privilege grants, and audit integration.
+No narrower targeting scope is included. `0044` onward is not started.
 
 ## Status by area
 
 | Area | Status | Notes |
 |---|---|---|
-| Database migrations | **Complete** (through `0042`) | 42 migrations, 90 tables, merged into `main`. Zero destructive operations (`DROP TABLE`/`DROP COLUMN`/`TRUNCATE`) in the entire history. |
+| Database migrations | **Merged through `0042`; `0043` in development** | 42 migrations and 90 tables are merged into `main`. The unmerged `0043` branch adds one table. Zero destructive operations (`DROP TABLE`/`DROP COLUMN`/`TRUNCATE`) exist in the migration history or the `0043` draft. |
 | Documentation | **In progress** | Core reference docs (`ARCHITECTURE.md`, `SECURITY_MODEL.md`, `MIGRATION_INDEX.md`, `DATABASE_ROADMAP.md`, `PROJECT_CONTEXT.md`, `BOOTSTRAP_PLATFORM_ADMIN.md`) exist and are current as of this sync. Several `docs/` subdirectories (`00-overview/`, `02-frs/`, `05-ui-ux/`, `06-admin/`, `07-api/`, `08-testing/`, `09-roadmap/`) are placeholders (`.gitkeep` only). `decisions/` (ADRs) and `glossary/` are also placeholders. |
-| Testing (pgTAP) | **Needs improvement** | 4 test files / 23 assertions exist, covering migration `0042` only (schema/constraint checks, RLS positive/negative paths, function-behavior checks, audit-trail checks). Migrations `0001`–`0041` have no dedicated pgTAP coverage of their own — CI's `supabase db reset` step does prove they apply cleanly, but that is not the same as behavioral test coverage. |
+| Testing (pgTAP) | **Needs improvement** | The merged suite has 4 files / 23 assertions covering `0042`; the `0043` branch adds focused constraint, RLS, evaluation, and audit tests. Migrations `0001`–`0041` still have no dedicated pgTAP coverage of their own. |
 | CI/CD | **Complete** (for its current scope) | `.github/workflows/database-ci.yml` (Database CI) runs on every PR touching `supabase/migrations/**` or `supabase/tests/**`, and on every push to `main` touching `supabase/migrations/**`. It performs a real Supabase local-stack startup, full migration replay from empty, the full pgTAP suite, and database linting at `warning` and `error` level. Latest run on `main` (the `0042` merge commit): **success**. Scope is database-only — there is no application build/deploy pipeline, because there is no application yet. |
-| Security / RLS | **Complete** (for what's built) | RLS enabled on all 90 tables, no exceptions. Blanket `anon`/`authenticated` grants revoked in `0041`; access granted back narrowly by policy, including column-level grants in `0042`. Exactly 3 `SECURITY DEFINER` functions in the codebase, each justified and pinned to `search_path = pg_catalog`. Privilege-escalation and cross-tenant-exposure paths tested adversarially, not just by policy inspection. Scoped (non-`PLATFORM`) authorization is **deferred**, not built — see `docs/DATABASE_ROADMAP.md`. The first-platform-administrator bootstrap procedure (`docs/BOOTSTRAP_PLATFORM_ADMIN.md`) is documented but has **not yet been manually exercised** end-to-end against a live Supabase project. |
+| Security / RLS | **Complete through `0042`; extended by `0043` draft** | RLS is enabled on all 90 merged tables and on the draft's one new table. The merged schema has 3 `SECURITY DEFINER` functions; `0043` adds 2 narrowly justified, pinned functions for boolean-only evaluation and audit writes. Feature-flag management requires an active `PLATFORM_ADMINISTRATOR`; narrower authorization remains deferred. The first-platform-administrator bootstrap procedure is documented but has not been manually exercised against a live project. |
 | Backend API | **Not started** | No API/service code exists anywhere in this repository. |
 | Frontend | **Not started** | No frontend/UI code exists anywhere in this repository. |
 | AI / recommendation implementation | **Not started (as an operational service); database structures exist** | Migrations `0022`–`0034` (13 migrations) model a rules/scoring-based recommendation engine at the schema level: financial/spending profiles, preferences, eligibility assessments, value simulations, recommendation models/factors/segments, runs, results, explanations, factor scores, feedback, and outcomes. This is schema only — there is no running recommendation service, model, or API that produces a recommendation today. `recommendation_models` models a rules/scoring approach, not machine learning; an ML feature store or model-serving layer is explicitly deferred in `docs/DATABASE_ROADMAP.md` (`0048`, "speculative at the current product stage"). |
@@ -52,9 +53,8 @@ None started. `0043` onward is **not started** — see
 
 - No blocker to further database work: `0042` is merged, tested, and
   CI-validated.
-- Migration `0043`'s scope is not yet decided — the originally proposed
-  `0043`–`0050` sequence needs revision before any of it is built (see
-  `docs/DATABASE_ROADMAP.md`).
+- Migration `0043` requires local/CI validation and human review before
+  merge. Its scope is now decided as PLATFORM-only feature flags.
 - The first-platform-administrator bootstrap procedure has not been
   manually exercised against a live Supabase project; this should
   happen before any environment built from this schema is expected to
@@ -81,9 +81,7 @@ None started. `0043` onward is **not started** — see
    procedure against a local or staging Supabase project and confirm
    the result, closing the one remaining manual-verification gap noted
    in `docs/SECURITY_MODEL.md`.
-2. Decide the scope of migration `0043` using
-   `docs/DATABASE_ROADMAP.md`'s assessment as the starting point, then
-   open a dedicated branch and PR for it, with pgTAP tests in the same
-   PR.
+2. Validate and review migration `0043` and its pgTAP suite, then open
+   a dedicated PR only after explicit authorization.
 3. Add pgTAP coverage for migrations `0001`–`0041` so CI's regression
    guarantee is not limited to `0042`.

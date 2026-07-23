@@ -51,8 +51,10 @@ out of sync with reality.
 | 0040 | `create_audit_governance_and_compliance` | 4250 | merged | governance_controls, governance_control_assessments, audit_events, approval_requests, approval_decisions, consent_records, data_classification_rules, data_retention_policies, data_retention_executions, legal_holds, legal_hold_items, data_access_logs, data_export_requests, compliance_cases, compliance_case_events |
 | 0041 | `create_security_and_access_control` | 961 | merged | — (0 new tables; enables RLS + grants across all 85 prior tables) |
 | 0042 | `create_user_profiles_and_platform_roles` | 921 | merged | user_profiles, platform_roles, platform_permissions, platform_role_permissions, user_platform_role_assignments |
+| 0043 | `create_feature_flags` | 267 | in development | feature_flags |
 
-**Merged total:** 42 migrations, 90 tables, 30,186 lines.
+**Merged total:** 42 migrations, 90 tables, 30,186 lines. Migration
+`0043` is in development and is not included in the merged total.
 
 ## `0042` revision note
 
@@ -84,3 +86,7 @@ migration was first drafted.
   something, that would be the first destructive operation in this
   repository's history — treat it with proportionate caution and
   document the decision.
+- `0043` depends on `0042`'s `PLATFORM_ADMINISTRATOR` role and
+  `has_active_platform_role(text)` authorization function, and on
+  `0040`'s `audit_events` table. It adds PLATFORM-wide feature flags
+  only; no narrower targeting scope is represented.
