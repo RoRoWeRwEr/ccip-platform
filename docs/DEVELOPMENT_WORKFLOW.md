@@ -42,3 +42,5 @@ Without both the variable and secret, the job remains skipped or cannot authenti
 ## Security automation scope
 
 Dependency Review checks dependency-manifest changes, and Dependabot maintains GitHub Actions references. Repository Policy validates ordered/immutable migrations, YAML, Markdown links, and obvious hardcoded credential assignments. GitHub secret scanning and push protection should be enabled in repository settings as documented in `docs/BRANCH_PROTECTION.md`. CodeQL is not configured because the repository currently contains SQL, Markdown, YAML, and small validation scripts rather than a supported application codebase; add a language-specific CodeQL matrix when a supported backend or frontend language is introduced.
+
+GitHub reported that Dependency Review is not currently supported because the dependency graph is disabled. To activate the workflow, enable the dependency graph under **Settings → Code security**, then create the repository Actions variable `DEPENDENCY_REVIEW_ENABLED=true`. Until both steps are complete, the job is safely skipped rather than failing every PR.

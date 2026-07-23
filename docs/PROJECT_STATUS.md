@@ -33,5 +33,6 @@ Complete, validate, independently review, and obtain human approval for the Spri
 
 - Repository owner must configure branch protection after the Sprint 0 PR lands.
 - Claude Code workflow activation requires verification of `ANTHROPIC_API_KEY`; until then it remains manual and gated.
+- Dependency Review requires enabling GitHub's dependency graph and setting `DEPENDENCY_REVIEW_ENABLED=true`.
 - The first-platform-administrator bootstrap procedure has not been manually exercised against a real local or staging Supabase project.
 - Migration `0044` has no approved bounded issue and is explicitly blocked until Sprint 0 is complete.
