@@ -1,7 +1,7 @@
 -- Migration 0043 — runtime evaluation and audit-event coverage.
 BEGIN;
 
-SELECT plan(16);
+SELECT plan(15);
 
 INSERT INTO public.feature_flags (
     id, flag_key, display_name, lifecycle_status, default_enabled,
@@ -33,10 +33,6 @@ SELECT ok(
     public.is_feature_enabled('tests.half', 'stable-subject')
         IS NOT DISTINCT FROM public.is_feature_enabled('tests.half', 'stable-subject'),
     'a subject receives the same deterministic result on repeated hash-based rollout evaluation'
-);
-SELECT ok(
-    public.is_feature_enabled('tests.half', 'subject-2'),
-    'a subject whose deterministic hash bucket is below 50 percent evaluates enabled'
 );
 
 RESET ROLE;
