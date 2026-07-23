@@ -20,13 +20,13 @@ for the next planning decision, not a backlog.
   scope only at the constraint level (`chk_user_platform_role_assignments_
   scope`), and the removed scope values are explicitly deferred to a
   future migration rather than left half-modeled.
-- `0043` (`create_feature_flags`): **in development** on the dedicated
-  `codex/0043-feature-flags` branch. Its scope is intentionally limited
+- `0043` (`create_feature_flags`): **merged into `main` via PR #4**. Its scope is intentionally limited
   to PLATFORM-wide flag definitions and evaluation, using the existing
   `PLATFORM_ADMINISTRATOR` role for management. It does not introduce
   bank, country, tenant, customer, organization, or functional-area
   targeting.
-- `0044` onward: **not started.**
+- `0044` onward: **not started.** Migration `0044` must not begin until
+  Sprint 0 is merged and a bounded capability is approved in a new issue.
 
 ## Why scoped authorization was deferred, not half-built
 
@@ -68,7 +68,7 @@ contains only a placeholder. Validated against what's actually built:
 
 ## Recommended sequencing
 
-1. Complete and review `0043` (`feature_flags`) as a PLATFORM-only
+1. `0043` (`feature_flags`) is complete and merged as a PLATFORM-only
    capability with pgTAP coverage and administrative auditing.
 2. Narrow `0044` (`api_management`) to a specific consumer before
    building it.
@@ -84,7 +84,7 @@ contains only a placeholder. Validated against what's actually built:
 5. Drop `0050` as currently framed; replace with specifically scoped
    hardening migrations once there's something concrete to harden.
 
-## Prerequisites before 0043 begins
+## Established prerequisites for every future migration
 
 - `0042` reviewed, tested, and merged — **done** (PR #2). CI
   (`.github/workflows/database-ci.yml`) now runs the full migration

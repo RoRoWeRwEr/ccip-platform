@@ -11,12 +11,12 @@ and business requirements.
 ## Current implementation status: database-first platform foundation
 
 This repository currently contains **only the database layer**.
-Migrations `0001`–`0042` are merged into `main`: 90 tables covering the
+Migrations `0001`–`0043` are merged into `main`: 91 tables covering the
 card/bank/reward catalog, customer financial and spending profiles, the
 recommendation engine, comparisons, notifications, bank applications,
 partnerships/commissions, a full governance/audit/compliance layer, and
 a platform RBAC/identity model — with row-level security enabled on
-every table. Migration `0043` has not started.
+every table. Migration `0044` has not started and is blocked until Sprint 0 is complete.
 
 **No application, API, or frontend code exists in this repository yet.**
 Anything above that sounds like a user-facing feature (recommendations,
@@ -41,6 +41,9 @@ docs/
   MIGRATION_INDEX.md         Every migration, in order, with what it created
   BOOTSTRAP_PLATFORM_ADMIN.md  How to safely assign the first platform administrator
   PROJECT_STATUS.md          Factual project dashboard across every layer
+  AI_AGENT_HANDOFF.md        Canonical startup and session-resume protocol
+  DEVELOPMENT_WORKFLOW.md    Cloud-first issue-to-merge workflow
+  BRANCH_PROTECTION.md       Recommended main-branch ruleset
   01-brd/BRD.md              Original business requirements
   03-des/                    Decision-engine specification documents
   04-database/               Historical pre-implementation design drafts (superseded — see below)
@@ -49,8 +52,8 @@ docs/
 decisions/                  Reserved for architecture decision records; currently empty
 glossary/                   Reserved for a project glossary; currently empty
 supabase/
-  migrations/                42 merged SQL migrations (0001–0042)
-  tests/database/            pgTAP test suite (currently covers migration 0042)
+  migrations/                43 merged SQL migrations (0001–0043)
+  tests/database/            pgTAP test suite (currently covers migrations 0042–0043)
 .github/workflows/
   database-ci.yml            Database CI — see below
 ```
@@ -75,11 +78,15 @@ carries a banner pointing to `docs/ARCHITECTURE.md` and
    grants, and `SECURITY DEFINER` model, and what CI does and doesn't
    validate.
 5. Read [`docs/DATABASE_ROADMAP.md`](docs/DATABASE_ROADMAP.md) for what
-   comes after migration `0042` and why.
+   comes after migration `0043` and why.
 6. Read [`docs/BOOTSTRAP_PLATFORM_ADMIN.md`](docs/BOOTSTRAP_PLATFORM_ADMIN.md)
    before assigning the first platform administrator in any environment.
 7. Read [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) for a
    current, factual snapshot of every layer of the project.
+8. Read [`docs/AI_AGENT_HANDOFF.md`](docs/AI_AGENT_HANDOFF.md),
+   [`docs/DEVELOPMENT_WORKFLOW.md`](docs/DEVELOPMENT_WORKFLOW.md), and
+   [`docs/BRANCH_PROTECTION.md`](docs/BRANCH_PROTECTION.md) before
+   beginning or publishing a change.
 
 ## Database validation
 
