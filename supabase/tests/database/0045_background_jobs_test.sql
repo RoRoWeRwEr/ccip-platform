@@ -1,6 +1,6 @@
 -- Migration 0045 — schema, scheduling, leasing, lifecycle, RLS, and audit coverage.
 BEGIN;
-SELECT plan(35);
+SELECT plan(36);
 
 SELECT has_table('public', 'background_job_definitions', 'job definitions exist');
 SELECT has_table('public', 'background_job_schedules', 'job schedules exist');
@@ -130,6 +130,12 @@ INSERT INTO public.background_job_schedules (
     '45000000-0000-4000-8000-000000000005',
     '{"source":"schedule"}'
 );
+SELECT ok(EXISTS (
+    SELECT 1 FROM public.audit_events
+     WHERE entity_type = 'background_job_schedules'
+       AND entity_id = '45000000-0000-4000-8000-000000000012'
+       AND event_action = 'CREATE'
+), 'job-schedule creation exercises the shared audit trigger safely');
 SELECT is((
     SELECT count(*)::INTEGER FROM public.materialize_due_background_jobs(10)
 ), 1, 'a due schedule materializes one execution');

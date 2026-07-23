@@ -814,13 +814,18 @@ BEGIN
         END;
         after_record := to_jsonb(NEW) - 'lease_token';
         record_id := NEW.id;
-        action := CASE
-            WHEN TG_OP = 'INSERT' THEN 'CREATE'
-            WHEN TG_TABLE_NAME = 'background_job_executions'
-                 AND NEW.execution_status = 'CANCELLED'
-                 AND OLD.execution_status <> 'CANCELLED' THEN 'CANCEL'
-            ELSE 'UPDATE'
-        END;
+        IF TG_OP = 'INSERT' THEN
+            action := 'CREATE';
+        ELSIF TG_TABLE_NAME = 'background_job_executions' THEN
+            IF NEW.execution_status = 'CANCELLED'
+               AND OLD.execution_status <> 'CANCELLED' THEN
+                action := 'CANCEL';
+            ELSE
+                action := 'UPDATE';
+            END IF;
+        ELSE
+            action := 'UPDATE';
+        END IF;
     END IF;
 
     IF TG_TABLE_NAME = 'background_job_executions'
