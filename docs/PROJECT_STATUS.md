@@ -14,14 +14,15 @@ detail behind the security/RLS status line.
 
 Migration `0042` (`create_user_profiles_and_platform_roles`) is the
 latest migration merged into `main`. Migration `0043`
-(`create_feature_flags`) is in development on its dedicated branch as
-a PLATFORM-only feature flag capability with pgTAP coverage; it is not
-yet committed, reviewed, or merged.
+(`create_feature_flags`) is committed on branch
+`codex/0043-feature-flags` and published for independent review in
+Draft PR #4. It is not merged; Database CI for the latest review-fix
+update is pending.
 
 ## Current branch baseline
 
-`main`, at the merge of PR #2 plus one follow-up documentation commit
-("docs: reflect migration 0042 merged to main").
+The development branch is `codex/0043-feature-flags`, based on current
+`main`. Draft PR #4 targets `main` and remains unmerged.
 
 ## Latest completed migration
 
@@ -30,7 +31,7 @@ CI-validated.
 
 ## Next planned migration
 
-`0043_create_feature_flags.sql` is **in development**. It adds one
+`0043_create_feature_flags.sql` is **committed and in Draft PR #4**. It adds one
 PLATFORM-wide administrative feature flag table, a boolean runtime
 evaluation function, RLS, least-privilege grants, and audit integration.
 No narrower targeting scope is included. `0044` onward is not started.
@@ -39,10 +40,10 @@ No narrower targeting scope is included. `0044` onward is not started.
 
 | Area | Status | Notes |
 |---|---|---|
-| Database migrations | **Merged through `0042`; `0043` in development** | 42 migrations and 90 tables are merged into `main`. The unmerged `0043` branch adds one table. Zero destructive operations (`DROP TABLE`/`DROP COLUMN`/`TRUNCATE`) exist in the migration history or the `0043` draft. |
+| Database migrations | **Merged through `0042`; `0043` in Draft PR #4** | 42 migrations and 90 tables are merged into `main`. The committed, unmerged `0043` branch adds one table. Zero destructive operations (`DROP TABLE`/`DROP COLUMN`/`TRUNCATE`) exist in the migration history or the `0043` draft. |
 | Documentation | **In progress** | Core reference docs (`ARCHITECTURE.md`, `SECURITY_MODEL.md`, `MIGRATION_INDEX.md`, `DATABASE_ROADMAP.md`, `PROJECT_CONTEXT.md`, `BOOTSTRAP_PLATFORM_ADMIN.md`) exist and are current as of this sync. Several `docs/` subdirectories (`00-overview/`, `02-frs/`, `05-ui-ux/`, `06-admin/`, `07-api/`, `08-testing/`, `09-roadmap/`) are placeholders (`.gitkeep` only). `decisions/` (ADRs) and `glossary/` are also placeholders. |
 | Testing (pgTAP) | **Needs improvement** | The merged suite has 4 files / 23 assertions covering `0042`; the `0043` branch adds focused constraint, RLS, evaluation, and audit tests. Migrations `0001`–`0041` still have no dedicated pgTAP coverage of their own. |
-| CI/CD | **Complete** (for its current scope) | `.github/workflows/database-ci.yml` (Database CI) runs on every PR touching `supabase/migrations/**` or `supabase/tests/**`, and on every push to `main` touching `supabase/migrations/**`. It performs a real Supabase local-stack startup, full migration replay from empty, the full pgTAP suite, and database linting at `warning` and `error` level. Latest run on `main` (the `0042` merge commit): **success**. Scope is database-only — there is no application build/deploy pipeline, because there is no application yet. |
+| CI/CD | **Pending for latest PR #4 update** | Database CI performs a real Supabase local-stack startup, full migration replay from empty, the pgTAP suite, and database linting at `warning` and `error` level. The previous PR #4 run passed; a new run for the latest review-fix commit is pending. Scope remains database-only. |
 | Security / RLS | **Complete through `0042`; extended by `0043` draft** | RLS is enabled on all 90 merged tables and on the draft's one new table. The merged schema has 3 `SECURITY DEFINER` functions; `0043` adds 2 narrowly justified, pinned functions for boolean-only evaluation and audit writes. Feature-flag management requires an active `PLATFORM_ADMINISTRATOR`; narrower authorization remains deferred. The first-platform-administrator bootstrap procedure is documented but has not been manually exercised against a live project. |
 | Backend API | **Not started** | No API/service code exists anywhere in this repository. |
 | Frontend | **Not started** | No frontend/UI code exists anywhere in this repository. |
@@ -71,9 +72,8 @@ No narrower targeting scope is included. `0044` onward is not started.
 - Resolve the single-schema-vs-multi-schema question flagged in
   `docs/ARCHITECTURE.md` before analytics/warehouse work makes it more
   expensive to change.
-- Decide and scope migration `0043` deliberately rather than defaulting
-  to the originally proposed sequence as-is (see
-  `docs/DATABASE_ROADMAP.md` for the per-item assessment).
+- Complete independent review and Database CI for Draft PR #4 before
+  considering migration `0043` ready to merge.
 
 ## Next three actions
 
@@ -81,7 +81,7 @@ No narrower targeting scope is included. `0044` onward is not started.
    procedure against a local or staging Supabase project and confirm
    the result, closing the one remaining manual-verification gap noted
    in `docs/SECURITY_MODEL.md`.
-2. Validate and review migration `0043` and its pgTAP suite, then open
-   a dedicated PR only after explicit authorization.
+2. Complete review and Database CI for migration `0043` in Draft PR #4;
+   keep it unmerged until explicitly authorized.
 3. Add pgTAP coverage for migrations `0001`–`0041` so CI's regression
    guarantee is not limited to `0042`.

@@ -150,17 +150,20 @@ DECLARE
     changed_record JSONB;
     previous_record JSONB;
     changed_record_id UUID;
+    changed_record_reference TEXT;
     audit_action TEXT;
 BEGIN
     IF TG_OP = 'INSERT' THEN
         changed_record = to_jsonb(NEW);
         previous_record = NULL;
         changed_record_id = NEW.id;
+        changed_record_reference = NEW.flag_key;
         audit_action = 'CREATE';
     ELSIF TG_OP = 'UPDATE' THEN
         changed_record = to_jsonb(NEW);
         previous_record = to_jsonb(OLD);
         changed_record_id = NEW.id;
+        changed_record_reference = NEW.flag_key;
         audit_action = CASE
             WHEN NEW.lifecycle_status = 'ARCHIVED'
                  AND OLD.lifecycle_status <> 'ARCHIVED' THEN 'ARCHIVE'
@@ -174,6 +177,7 @@ BEGIN
         changed_record = NULL;
         previous_record = to_jsonb(OLD);
         changed_record_id = OLD.id;
+        changed_record_reference = OLD.flag_key;
         audit_action = 'DELETE';
     END IF;
 
@@ -205,7 +209,7 @@ BEGIN
         'DATABASE_FEATURE_FLAGS',
         'feature_flags',
         changed_record_id,
-        COALESCE(NEW.flag_key, OLD.flag_key),
+        changed_record_reference,
         TG_OP,
         'INTERNAL',
         previous_record,
@@ -221,7 +225,11 @@ BEGIN
         jsonb_build_object('trigger_operation', TG_OP)
     );
 
-    RETURN COALESCE(NEW, OLD);
+    IF TG_OP = 'DELETE' THEN
+        RETURN OLD;
+    END IF;
+
+    RETURN NEW;
 END;
 $$;
 

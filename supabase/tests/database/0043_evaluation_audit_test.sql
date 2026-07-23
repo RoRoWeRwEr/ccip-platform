@@ -1,7 +1,7 @@
 -- Migration 0043 — runtime evaluation and audit-event coverage.
 BEGIN;
 
-SELECT plan(13);
+SELECT plan(15);
 
 INSERT INTO public.feature_flags (
     id, flag_key, display_name, lifecycle_status, default_enabled,
@@ -14,7 +14,8 @@ INSERT INTO public.feature_flags (
     ('43000000-0000-4000-8000-000000000005', 'tests.future', 'Future', 'ACTIVE', TRUE, NULL, now() + interval '1 day', NULL, 'evaluation test'),
     ('43000000-0000-4000-8000-000000000006', 'tests.expired', 'Expired', 'ACTIVE', TRUE, NULL, now() - interval '2 days', now() - interval '1 day', 'evaluation test'),
     ('43000000-0000-4000-8000-000000000007', 'tests.zero', 'Zero rollout', 'ACTIVE', TRUE, 0.00, NULL, NULL, 'evaluation test'),
-    ('43000000-0000-4000-8000-000000000008', 'tests.full', 'Full rollout', 'ACTIVE', FALSE, 100.00, NULL, NULL, 'evaluation test');
+    ('43000000-0000-4000-8000-000000000008', 'tests.full', 'Full rollout', 'ACTIVE', FALSE, 100.00, NULL, NULL, 'evaluation test'),
+    ('43000000-0000-4000-8000-000000000009', 'tests.half', 'Half rollout', 'ACTIVE', FALSE, 50.00, NULL, NULL, 'evaluation test');
 
 SET ROLE anon;
 
@@ -28,6 +29,11 @@ SELECT ok(NOT public.is_feature_enabled('tests.missing'), 'a missing flag fails 
 SELECT ok(NOT public.is_feature_enabled('tests.zero', 'subject-1'), 'zero percent rollout disables every supplied subject');
 SELECT ok(public.is_feature_enabled('tests.full', 'subject-1'), 'one hundred percent rollout enables every supplied subject');
 SELECT ok(NOT public.is_feature_enabled('tests.full'), 'without a rollout subject the configured default is used');
+SELECT ok(
+    public.is_feature_enabled('tests.half', 'stable-subject')
+        IS NOT DISTINCT FROM public.is_feature_enabled('tests.half', 'stable-subject'),
+    'a subject receives the same deterministic result on repeated hash-based rollout evaluation'
+);
 
 RESET ROLE;
 
@@ -35,8 +41,25 @@ SELECT ok(
     (SELECT count(*) FROM public.audit_events
      WHERE event_category = 'ADMINISTRATION'
        AND entity_type = 'feature_flags'
-       AND event_action = 'CREATE') = 8,
+       AND event_action = 'CREATE') = 9,
     'each feature flag creation writes one administrative audit event'
+);
+
+DELETE FROM public.feature_flags
+WHERE id = '43000000-0000-4000-8000-000000000004'::uuid;
+
+SELECT ok(
+    EXISTS (
+        SELECT 1 FROM public.audit_events
+        WHERE event_category = 'ADMINISTRATION'
+          AND entity_type = 'feature_flags'
+          AND entity_id = '43000000-0000-4000-8000-000000000004'::uuid
+          AND entity_reference = 'tests.draft'
+          AND event_action = 'DELETE'
+          AND before_values IS NOT NULL
+          AND after_values IS NULL
+    ),
+    'deleting a flag writes a DELETE event using only the OLD row values'
 );
 
 UPDATE public.feature_flags
