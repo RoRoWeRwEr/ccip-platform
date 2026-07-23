@@ -18,8 +18,8 @@ below.
 ## RLS coverage
 
 Row-level security is enabled on **every merged table in the schema** —
-91 tables total: 85 as of `0041`, plus the 5 tables `0042` adds and the
-one table added by merged migration `0043`. Migration `0043` enables RLS on its
+97 tables total: 85 as of `0041`, plus the 5 tables `0042` adds, the
+one table added by `0043`, and the 6 tables added by `0044`. Migration `0043` enables RLS on its
 `feature_flags` table in the same migration. This is enforced in one
 disciplined pass in `0041`
 for everything that existed at that point, and per-table in `0042` for
@@ -29,6 +29,15 @@ from an otherwise perfect record — the `01_rls_enabled`-style check
 pgTAP tests should include this as a standing assertion in the pgTAP
 suite that Database CI now runs on every relevant PR and push to
 `main` (see `docs/DATABASE_ROADMAP.md`).
+
+Migration `0045` adds three RLS-enabled background-job tables.
+Authenticated platform administrators can manage definitions and
+schedules and read executions, but receive no direct execution
+mutation grant. Enqueueing, scheduling materialization, leasing,
+heartbeats, completion, failure, cancellation acknowledgement, and
+lease reaping remain service-role-only. The sole authenticated
+execution mutation surface is a `SECURITY DEFINER` cancellation helper
+that independently verifies the active administrator role.
 
 ## Grants
 

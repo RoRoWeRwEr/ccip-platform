@@ -52,10 +52,11 @@ out of sync with reality.
 | 0041 | `create_security_and_access_control` | 961 | merged | — (0 new tables; enables RLS + grants across all 85 prior tables) |
 | 0042 | `create_user_profiles_and_platform_roles` | 921 | merged | user_profiles, platform_roles, platform_permissions, platform_role_permissions, user_platform_role_assignments |
 | 0043 | `create_feature_flags` | 275 | merged (PR #4) | feature_flags |
-| 0044 | `create_api_management` | 373 | draft (Issue #11) | api_clients, api_keys, api_scopes, api_client_scope_assignments, api_rate_limit_policies, api_client_rate_limit_assignments |
+| 0044 | `create_api_management` | 373 | merged (PR #12) | api_clients, api_keys, api_scopes, api_client_scope_assignments, api_rate_limit_policies, api_client_rate_limit_assignments |
+| 0045 | `create_background_jobs` | 975 | in development (Issue #13) | background_job_definitions, background_job_schedules, background_job_executions |
 
-**Merged total:** 43 migrations, 91 tables, 30,461 lines. Migration 0044
-is proposed and is not included in the merged total.
+**Merged total:** 44 migrations, 97 tables, 30,834 lines. Migration 0045
+is in development and is not included in the merged total.
 
 ## `0042` revision note
 
@@ -82,7 +83,7 @@ migration was first drafted.
 - `0042` depends on `auth.users` (Supabase-provided, not created by any
   migration in this repository) and on `audit_events` (`0040`) for its
   audit trigger.
-- No migration in `0001`–`0043` uses `DROP TABLE`, `DROP COLUMN`, or
+- No migration in `0001`–`0044` uses `DROP TABLE`, `DROP COLUMN`, or
   `TRUNCATE`. If a future corrective migration needs to remove
   something, that would be the first destructive operation in this
   repository's history — treat it with proportionate caution and
@@ -95,3 +96,8 @@ migration was first drafted.
   `0040`'s `audit_events`, `auth.users`, and the `btree_gist` extension
   enabled by `0001`. It stores only API-key SHA-256 digests and excludes
   webhook and gateway implementation concerns.
+- `0045` depends on `data_retention_executions` (`0040`),
+  `commission_settlements` (`0039`), `audit_events` (`0040`), and
+  `0042`'s platform-administrator predicate. Worker lifecycle functions
+  are granted only to `service_role`; authenticated administrators use
+  a narrow cancellation helper and cannot directly mutate executions.
