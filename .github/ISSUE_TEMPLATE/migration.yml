@@ -5,7 +5,7 @@ labels: [database]
 body:
   - type: markdown
     attributes:
-      value: One issue and PR may contain only one cohesive migration. Never edit a merged migration.
+      value: Routine migration delivery pushes directly to `main` and does not require an issue — see docs/DEVELOPMENT_WORKFLOW.md. Use this template only to plan or coordinate an exceptional-path delivery. One issue and PR may contain only one cohesive migration. Never edit a merged migration.
   - type: input
     id: migration
     attributes:

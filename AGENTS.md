@@ -6,11 +6,11 @@ These rules apply to every coding agent and human contributor. Repository state 
 
 Before planning or editing:
 
-1. Fetch the latest `main` and inspect open pull requests and checks.
+1. Fetch the latest `main`, inspect the current commit, and check GitHub Actions status; note any open pull requests (exceptional path only — see below).
 2. Read `README.md`.
 3. Read this file.
 4. Read `CLAUDE.md`.
-5. Read every authoritative file under `docs/`, beginning with `docs/AI_AGENT_HANDOFF.md` and `docs/PROJECT_STATUS.md`.
+5. Read every authoritative file under `docs/`, beginning with `docs/AI_AGENT_HANDOFF.md`, `docs/DEVELOPMENT_WORKFLOW.md`, and `docs/PROJECT_STATUS.md`.
 6. Inspect all workflows under `.github/workflows/` and the files relevant to the task.
 7. Reconcile documentation with the actual tree and GitHub state; report discrepancies before work.
 
@@ -24,14 +24,21 @@ Before planning or editing:
 - Add or update tests with every behavior change. Run every available validation and state exactly what passed, failed, or could not run.
 - Keep authoritative documentation synchronized with the implementation and current GitHub state.
 
-## Git and review workflow
+## Delivery workflow (direct-to-main)
 
-1. Start from the latest `main` on a dedicated branch linked to an issue.
-2. Never commit or push directly to `main`.
-3. Review the full diff and migration integrity before committing.
-4. Open a Draft PR and allow required GitHub Actions checks to complete.
-5. Obtain independent Claude review and address blocking and important findings.
-6. Require explicit human approval before merge. Agents, automation, and reviewers must not merge.
-7. Stop after the authorized task. Do not begin the next migration or adjacent feature.
+The repository owner has authorized a validated direct-to-main delivery workflow. A GitHub Issue, dedicated branch, Draft PR, and manual merge are no longer required for routine migration delivery.
+
+1. Start from the latest clean `main`.
+2. Handle exactly one cohesive migration per delivery. Never start a second migration in the same delivery.
+3. Develop the migration, its tests, and its documentation together.
+4. Run every available local validation before pushing (migration replay, pgTAP, lint, repository policy, Markdown links, YAML validation, `git diff --check`) and review the full diff and migration integrity yourself.
+5. Push directly to `main` only when every locally available required test passes and there are no known Blocking issues.
+6. Let GitHub Actions run immediately after the push. Never skip or bypass a required check.
+7. If GitHub Actions fails, stop all subsequent migration work and fix the failure with a forward-fix commit on `main`. Never force-push, rewrite history, or modify a merged migration.
+8. Record the delivery: commit SHA, exact files changed, local test results, CI conclusion, known risks, and the single next approved action.
+9. After every five successfully delivered migrations, stop and conduct the comprehensive review described in `docs/DEVELOPMENT_WORKFLOW.md` before starting a sixth.
+10. Stop after the authorized task. Do not begin the next migration or an adjacent feature in the same delivery.
+
+A GitHub Issue, branch, or PR may still be opened for a genuinely exceptional case (see `docs/DEVELOPMENT_WORKFLOW.md`), but it is never required and never substitutes for steps 4–9 above.
 
 See `docs/DEVELOPMENT_WORKFLOW.md` for roles and the end-to-end process.

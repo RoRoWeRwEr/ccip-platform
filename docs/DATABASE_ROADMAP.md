@@ -28,11 +28,13 @@ for the next planning decision, not a backlog.
 - `0044` (`create_api_management`): **merged through PR #12.** Its
   scope is limited to API clients, hashed-key lifecycle metadata,
   scopes, and rate-limit assignments.
-- `0045` (`create_background_jobs`): **in development under Issue #13.**
+- `0045` (`create_background_jobs`): **merged into `main` via PR #14.**
   Its bounded scope is durable PostgreSQL scheduling, execution,
   retry, leasing, heartbeat, cancellation, result, and failure metadata
   for retention executions and commission settlements.
-- `0046` onward: **not started.**
+- `0046` onward: **not started.** Routine delivery now follows the
+  direct-to-main workflow in `docs/DEVELOPMENT_WORKFLOW.md` rather than
+  a GitHub Issue.
 
 ## Why scoped authorization was deferred, not half-built
 

@@ -1,32 +1,46 @@
 # Development Workflow
 
-The normal delivery path is:
+The repository owner has authorized a validated direct-to-main delivery workflow. The previous mandatory path (`GitHub Issue → dedicated branch → Draft PR → GitHub Actions → Claude review → human approval → merge`) is no longer required for routine migration delivery.
 
-`GitHub Issue → Codex Cloud → dedicated branch → Draft PR → GitHub Actions → Claude review → Codex fixes → human approval → merge`
+## Delivery workflow
+
+1. Start from the latest clean `main` (`git fetch origin main`; base all work on `origin/main`).
+2. Handle exactly one cohesive migration per delivery — its schema, tests, and documentation together. Never bundle unrelated capabilities.
+3. Develop the migration, its pgTAP tests, and its documentation updates.
+4. Run every available local validation before pushing: migration replay from empty (`supabase db reset`), the full pgTAP suite (`supabase test db`), `supabase db lint` at `warning` and `error` level, `bash scripts/validate_repository_policy.sh`, `python scripts/check_markdown_links.py`, YAML validation, and `git diff --check`.
+5. Push directly to `main` only when every locally available required test passes and there are no known Blocking issues.
+6. Let GitHub Actions (Database CI, Repository Policy, Dependency Review where applicable) run immediately after the push. Do not skip or bypass required checks.
+7. If GitHub Actions fails, stop all subsequent migration work and fix the failure with a forward-fix commit on `main`. Never force-push, rewrite history, or modify a merged migration to "undo" a failure — correct forward with a new statement or object.
+8. Record the delivery — commit SHA, exact files changed, local test results, CI conclusion, known risks, and the single next approved action — and keep `docs/PROJECT_STATUS.md` synchronized with it.
+9. After every five successfully delivered migrations, stop and conduct a comprehensive review covering architecture and data model, migration integrity and replay, PostgreSQL correctness, RLS and least privilege, grants and `SECURITY DEFINER` functions, audit behavior, indexes and query performance, naming and consistency, pgTAP coverage, CI and lint results, documentation accuracy, and technical debt/roadmap alignment — before starting a sixth migration.
+10. Never force-push, rewrite history, bypass a failed required check, or modify a merged migration, regardless of urgency.
 
 ## Responsibilities
 
 | Participant | Responsibility |
 |---|---|
-| ChatGPT | Clarify product intent, help define a bounded issue and acceptance criteria, and avoid claiming repository state without verification. |
-| Codex | Read repository instructions, start from latest `main`, implement only the issue scope, add tests and documentation, run validation, open a Draft PR, and address review findings. Codex never merges. |
-| Claude | Independently review security, PostgreSQL/RLS correctness, performance, compatibility, migrations, tests, naming, and production readiness. Findings are Blocking, Important, or Suggestion. Claude never merges or silently redesigns the database. |
-| GitHub Actions | Reproduce deterministic policy, migration, database, syntax, documentation, dependency, and security checks. A green check is necessary but does not grant merge authorization. |
-| Repository owner | Own scope and design decisions, configure secrets and branch protection, resolve accepted risk, give final explicit approval, and merge. |
+| ChatGPT | Clarify product intent, help scope a bounded delivery and acceptance criteria, and avoid claiming repository state without verification. |
+| Delivering agent (Codex, Claude, or human) | Read repository instructions, start from latest `main`, implement only one cohesive migration, add tests and documentation, run every local validation, push directly to `main`, forward-fix any CI failure, and stop after the authorized delivery. |
+| Independent reviewer (Claude, on request) | Independently review security, PostgreSQL/RLS correctness, performance, compatibility, migrations, tests, naming, and production readiness for a delivered change or for the mandatory five-migration comprehensive review. Findings are Blocking, Important, or Suggestion. A reviewer never merges, never pushes on someone else's behalf, and never silently redesigns the database. |
+| GitHub Actions | Reproduce deterministic policy, migration, database, syntax, documentation, dependency, and security checks on every push to `main`. A green check is evidence of correctness; a red check is a forward-fix trigger, not a merge gate, since the push has already landed. |
+| Repository owner | Own scope and design decisions, configure secrets and required status checks, resolve accepted risk, and revoke or narrow this authorization at any time. |
 
 ## Working agreement
 
-- Every change begins with a GitHub issue and uses a dedicated branch.
-- Database changes use one cohesive migration per issue and PR. Merged migrations remain immutable.
-- PRs begin as drafts and include exact validation evidence and risks.
-- Blocking Claude findings must be fixed. Important findings must be fixed or explicitly accepted by the owner.
-- Required checks and conversations must be resolved before owner review.
-- Migrations and security changes are never auto-merged.
-- No agent starts the next migration within the current task.
+- Each delivery contains one cohesive migration, its tests, and its documentation. Merged migrations remain immutable.
+- Every locally available required check must pass before a push to `main`.
+- A push happens only when there are no known Blocking issues; Important findings must be fixed or explicitly recorded as an accepted risk.
+- A CI failure halts further migration work until fixed by a forward-fix commit.
+- No agent starts a subsequent migration within the same delivery.
+- Every five successfully delivered migrations trigger a mandatory comprehensive review before the next migration begins.
 
-## Emergency and local fallback
+## Exceptional PR path
 
-Local Terminal is an emergency or outage fallback, not the normal daily workflow. Use it only when Codex Cloud or GitHub Actions is unavailable, when reproducing an environment-specific failure, or for an explicitly authorized recovery. Start from a clean checkout of latest `main`, use the same branch/PR process, capture exact commands and results, never place credentials in shell history or repository files, and return the work to a Draft PR as soon as GitHub is available. Direct pushes to `main` and bypassing required checks remain prohibited during an emergency.
+A GitHub Issue, dedicated branch, or Pull Request may still be opened for a genuinely exceptional case — for example, a change too large or contested to review through a single direct push, or coordination across multiple agents. This path is optional, never required, and uses `.github/PULL_REQUEST_TEMPLATE.md` and the existing issue templates. When it is used, require at least one explicit human approval before merge; agents and automation must not merge. The exceptional path never substitutes for the local validation and forward-fix discipline above.
+
+## GitHub Actions unavailability
+
+Pushing to `main` depends on GitHub Actions running immediately afterward to validate the delivery. If GitHub Actions is unavailable, do not push — wait for it to recover, or perform local validation only and hold the push until Actions can run. Bypassing a required check is never permitted, regardless of urgency.
 
 ## Claude Code activation
 
@@ -34,7 +48,7 @@ Local Terminal is an emergency or outage fallback, not the normal daily workflow
 
 1. Create the Actions repository secret `ANTHROPIC_API_KEY` with a valid Anthropic API key. Never place the value in a file, issue, log, or PR.
 2. Create the Actions repository variable `CLAUDE_CODE_ENABLED` with the exact value `true`.
-3. Run **Claude Review** manually against a Draft PR and verify that it posts review-only feedback.
+3. Run **Claude Review** manually (`workflow_dispatch`, or an `@claude` PR/issue comment on an exceptional-path PR) and verify that it posts review-only feedback.
 4. Confirm the workflow retains `contents: read` and does not receive write permission before enabling routine `@claude` comments.
 
 Without both the variable and secret, the job remains skipped or cannot authenticate. The workflow limits Claude to PR read/comment commands and does not permit code mutation.

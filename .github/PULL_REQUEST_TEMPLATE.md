@@ -1,4 +1,9 @@
-## Linked issue
+<!-- Routine migration delivery pushes directly to `main`; see
+     docs/DEVELOPMENT_WORKFLOW.md. Use this PR template only for the
+     exceptional path (e.g. a change too large or contested for a
+     single direct push, or multi-agent coordination). -->
+
+## Linked issue (optional)
 
 Closes #
 
