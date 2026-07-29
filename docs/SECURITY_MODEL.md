@@ -18,10 +18,10 @@ below.
 ## RLS coverage
 
 Row-level security is enabled on **every merged table in the schema** —
-107 tables total: 85 as of `0041`, plus the 5 tables `0042` adds, the
+110 tables total: 85 as of `0041`, plus the 5 tables `0042` adds, the
 one table added by `0043`, the 6 tables added by `0044`, the 3 tables
-added by `0045`, the 1 table added by `0046`, and the 6 tables added by
-`0047`. Migration `0043` enables RLS on its
+added by `0045`, the 1 table added by `0046`, the 6 tables added by
+`0047`, and the 3 tables added by `0048`. Migration `0043` enables RLS on its
 `feature_flags` table in the same migration. This is enforced in one
 disciplined pass in `0041`
 for everything that existed at that point, and per-table in `0042` for
@@ -68,6 +68,14 @@ also extends `catalog_source_provenance` (`0046`) with a `merchant_id`
 column and widened `CHECK` constraints — purely additive `ALTER TABLE`
 statements against an existing table, not a new table, so it does not
 change the table or RLS-policy count attributed to `0046` above.
+
+Migration `0048` adds three RLS-enabled publication-governance tables.
+Authenticated callers with `CATALOG_MANAGE` may create and edit draft
+version content and read workflow/history data, but lifecycle changes are
+forced through narrowly scoped `SECURITY DEFINER` functions. Anonymous and
+unprivileged authenticated callers receive no governance visibility. Domain
+history is append-only to authenticated callers, while `service_role` retains
+trusted scheduling and corrective access.
 
 ## Grants
 

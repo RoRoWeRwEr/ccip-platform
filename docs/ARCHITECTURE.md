@@ -1,7 +1,7 @@
 # Database Architecture
 
 This describes the actual, current state of `supabase/migrations/` —
-merged through `0047`. It is derived directly from reading
+merged through `0048`. It is derived directly from reading
 every migration file and from live-executing the full migration sequence
 against PostgreSQL 16 (and, since `0042` merged, against a real
 Supabase local stack via Database CI); it is not aspirational.
@@ -167,6 +167,16 @@ Merchants (0047)
   0046 itself is unmodified. Does not implement offers, publication
   governance, scraping, transaction ingestion, or automated/fuzzy
   merchant matching.
+
+Catalog publication governance (0048)
+  catalog_publication_versions — typed, versioned snapshots for the eight
+  catalog target types supported by provenance, with controlled lifecycle,
+  scheduling/effective windows, overlap exclusion, supersession and rollback.
+  catalog_publication_requests — publication projection linked one-to-one to
+  0040's approval_requests; reviewer and final-approver assignments reuse
+  approval_decisions.
+  catalog_publication_events — append-only ordered lifecycle history, with
+  every transition also written to audit_events.
 ```
 
 ## The RLS and authorization model
@@ -225,8 +235,9 @@ Migration `0043` follows that same design through
 
 ## Reproducibility
 
-The full sequence `0001`→`0047` has been verified to apply cleanly,
-in order, against an empty database with zero errors and zero
+The full sequence `0001`→`0048` has been verified to apply cleanly,
+in order, against an empty database with zero errors. Current Supabase CLI
+replay emits only the pre-existing `0041` redundant privilege revoke/grant
 warnings — both in the hand-built PostgreSQL 16 stand-in used for the
 original pre-merge review (no Docker available in that environment),
 and now automatically via **Database CI**

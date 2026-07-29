@@ -63,10 +63,16 @@ for the next planning decision, not a backlog.
   merchants, matching the existing catalog-read pattern), `audit_events`
   integration. Does not implement offers, publication governance,
   scraping, transaction ingestion, or automated/fuzzy merchant matching.
-- `0048` onward: **not started.** Routine delivery now follows the
-  direct-to-main workflow in `docs/DEVELOPMENT_WORKFLOW.md` rather than
-  a GitHub Issue. Next: `0048` (Catalog Publication Governance), then
-  `0049` (Catalog Admin Authorization).
+- `0048` (`create_catalog_publication_governance`): **merged.** Adds typed
+  catalog content versions, publication requests linked to `0040`'s generic
+  approval engine, ordered reviewer/final-approver decisions with requester
+  separation, scheduled/effective publication windows, exclusion-backed
+  overlap prevention, controlled transitions, append-only publication events,
+  central audit integration, and atomic rollback/supersession lineage. It uses
+  the existing platform-wide `CATALOG_MANAGE` permission and intentionally
+  does not implement resource-scoped catalog administration.
+- `0049` onward: **not started.** Next candidate: `0049` (Catalog Admin
+  Authorization), subject to separate authorization.
 
 ## Why scoped authorization was deferred, not half-built
 

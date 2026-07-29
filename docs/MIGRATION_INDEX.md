@@ -56,8 +56,9 @@ out of sync with reality.
 | 0045 | `create_background_jobs` | 1036 | merged (PR #14) | background_job_definitions, background_job_schedules, background_job_executions |
 | 0046 | `create_catalog_source_provenance` | 588 | merged | catalog_source_provenance |
 | 0047 | `create_merchants` | 1072 | merged | merchants, merchant_aliases, merchant_relationships, merchant_category_assignments, merchant_market_presence, merchant_domains |
+| 0048 | `create_catalog_publication_governance` | 379 | merged | catalog_publication_versions, catalog_publication_requests, catalog_publication_events |
 
-**Merged total:** 47 migrations, 107 tables, 33,530 lines.
+**Merged total:** 48 migrations, 110 tables, 33,909 lines.
 
 ## `0042` revision note
 
@@ -125,3 +126,10 @@ migration was first drafted.
   its seven original entity types. It adds six tables and no new roles,
   and does not implement offers, publication governance, scraping,
   transaction ingestion, or automated/fuzzy merchant matching.
+- `0048` depends on all eight typed catalog targets supported by `0046`/`0047`,
+  the generic `approval_requests` and `approval_decisions` tables and
+  `audit_events` from `0040`, `auth.users`, `btree_gist`, and `0042`'s
+  `CATALOG_MANAGE` predicate. It reuses the generic approval engine, adds
+  three RLS-enabled publication-governance tables, and deliberately does not
+  add roles, permissions, or resource-scoped administrator assignments; those
+  remain migration `0049` scope.
