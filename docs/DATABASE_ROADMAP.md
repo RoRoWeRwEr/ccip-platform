@@ -32,7 +32,19 @@ for the next planning decision, not a backlog.
   Its bounded scope is durable PostgreSQL scheduling, execution,
   retry, leasing, heartbeat, cancellation, result, and failure metadata
   for retention executions and commission settlements.
-- `0046` onward: **not started.** Routine delivery now follows the
+- `0046` (`create_catalog_source_provenance`): **merged.** Adds one
+  table, `catalog_source_provenance`, recording where catalog evidence
+  came from (official bank/product/terms/fee/rewards/loyalty/regulatory
+  sources or approved manual entry) for exactly one of `banks`, `cards`,
+  `card_fees`, `card_benefits`, `reward_rules`, `loyalty_programs`, or
+  `card_eligibility_requirements`, with lifecycle and verification state
+  machines, deduplication, and `CATALOG_MANAGE`-gated RLS. This departs
+  from the originally proposed `0046` (`data_warehouse_views`, see
+  below) at explicit task direction; that proposal remains deferred and
+  unscheduled. It is a foundation for future catalog publication
+  governance and deliberately does not implement publication approval,
+  ingestion, or content storage.
+- `0047` onward: **not started.** Routine delivery now follows the
   direct-to-main workflow in `docs/DEVELOPMENT_WORKFLOW.md` rather than
   a GitHub Issue.
 
@@ -68,7 +80,7 @@ contains only a placeholder. Validated against what's actually built:
 | 0043 | `feature_flags` | No dependency conflicts with anything merged or pending. Reasonable to build as scoped. |
 | 0044 | `api_management` | Narrowed and approved by Issue #11: client/key lifecycle, scopes, and rate-limit metadata only; webhooks and gateway behavior are excluded. |
 | 0045 | `background_jobs` | Reasonable, and there's already real demand for it: `data_retention_executions` (`0040`) and `commission_settlements` (`0039`) both look like they're meant to be driven by a scheduler, but nothing currently models a job/worker table. Scope this migration to explicitly serve those two consumers first, not built in the abstract. |
-| 0046 | `data_warehouse_views` | Premature — there is no application layer generating real query patterns yet. Defer until there's production traffic, or narrow to materialized views over `recommendation_*`/`bank_application_*` specifically. |
+| 0046 | `data_warehouse_views` | Premature — there is no application layer generating real query patterns yet. Defer until there's production traffic, or narrow to materialized views over `recommendation_*`/`bank_application_*` specifically. **Superseded in practice:** the actual `0046` delivered was `create_catalog_source_provenance`, a bounded, explicitly directed capability unrelated to warehousing. `data_warehouse_views` remains unbuilt and unscheduled; renumber it into a future slot if it is still wanted. |
 | 0047 | `analytics_and_reporting` | Depends on `0046`; same premature-maturity concern. Note: the `REPORTING_VIEWER` role and `REPORTING_READ` permission already exist in `0042`'s seed data with nothing to gate yet — this is what would finally give that role a purpose. Sequence it here, not earlier. |
 | 0048 | `ml_feature_store` | Speculative at the current product stage. `recommendation_models`/`recommendation_model_factors` (`0028`) already model a rules/scoring-based approach, not ML — building a feature store ahead of an actual ML use case invents a dependency nothing currently needs. Defer past `0050` until a concrete ML use case exists. |
 | 0049 | `search_and_indexing` | Validate actual query volume/patterns before building backend search infrastructure — the catalog tables (`0004`–`0021`) are on the order of tens to low hundreds of rows per entity type at this product stage, which is well within client-side search territory. |

@@ -18,8 +18,9 @@ below.
 ## RLS coverage
 
 Row-level security is enabled on **every merged table in the schema** —
-97 tables total: 85 as of `0041`, plus the 5 tables `0042` adds, the
-one table added by `0043`, and the 6 tables added by `0044`. Migration `0043` enables RLS on its
+101 tables total: 85 as of `0041`, plus the 5 tables `0042` adds, the
+one table added by `0043`, the 6 tables added by `0044`, the 3 tables
+added by `0045`, and the 1 table added by `0046`. Migration `0043` enables RLS on its
 `feature_flags` table in the same migration. This is enforced in one
 disciplined pass in `0041`
 for everything that existed at that point, and per-table in `0042` for
@@ -38,6 +39,17 @@ heartbeats, completion, failure, cancellation acknowledgement, and
 lease reaping remain service-role-only. The sole authenticated
 execution mutation surface is a `SECURITY DEFINER` cancellation helper
 that independently verifies the active administrator role.
+
+Migration `0046` adds one RLS-enabled table,
+`catalog_source_provenance`. Only authenticated callers holding the
+existing `CATALOG_MANAGE` permission (held by both `CATALOG_
+ADMINISTRATOR` and `PLATFORM_ADMINISTRATOR` since `0042`) may `SELECT`,
+`INSERT`, or `UPDATE`; no authenticated caller receives `DELETE`, and
+`anon` receives no grant on the table at all. `service_role` retains
+full CRUD for corrective actions and future ingestion processes. Target
+validation is enforced by real foreign keys and a `CHECK` constraint —
+not by RLS or application code — so it holds even for `service_role`
+writes.
 
 ## Grants
 
@@ -87,7 +99,18 @@ Both schema-qualify references, pin `search_path = pg_catalog`, and
 document their justification. Its management trigger remains
 `SECURITY INVOKER`.
 
-**Every function in the codebase — all 43 merged migrations,
+Migration `0046` adds exactly one `SECURITY DEFINER` function,
+`audit_catalog_source_provenance_change()`, which writes to
+`audit_events` without granting authenticated administrators direct
+audit-log writes — the same justification pattern as every prior audit
+trigger. Its companion `manage_catalog_source_provenance_change()`
+trigger (identity/target-field protection, lifecycle and verification
+transition validation, actor/timestamp stamping) remains `SECURITY
+INVOKER`, consistent with every other management trigger in the
+schema. Both schema-qualify references and pin `search_path =
+pg_catalog`.
+
+**Every function in the codebase — all 46 merged migrations,
 `SECURITY DEFINER` or not — sets
 `SET search_path = pg_catalog`.** No exceptions
 found. This is an unusually disciplined baseline; keep it that way. Any

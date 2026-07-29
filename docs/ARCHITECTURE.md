@@ -1,7 +1,7 @@
 # Database Architecture
 
 This describes the actual, current state of `supabase/migrations/` —
-merged through `0044`. It is derived directly from reading
+merged through `0046`. It is derived directly from reading
 every migration file and from live-executing the full migration sequence
 against PostgreSQL 16 (and, since `0042` merged, against a real
 Supabase local stack via Database CI); it is not aspirational.
@@ -115,13 +115,26 @@ API management (0044 — merged via PR #12)
   assignments, and rate-limit policy assignments. Plaintext API
   secrets, webhooks, and gateway execution remain outside PostgreSQL.
 
-Background jobs (0045 — in development under Issue #13)
+Background jobs (0045 — merged via PR #14)
   job definitions, one-time/interval schedules, and durable executions
   for data_retention_executions and commission_settlements, with
   service-role-only enqueueing and worker lifecycle functions, atomic
   SKIP LOCKED leasing, fencing tokens, heartbeats, retries,
   cancellation, result/failure metadata, audit events, and
   administrator-readable RLS.
+
+Catalog source provenance (0046)
+  catalog_source_provenance — auditable evidence of where catalog data
+  came from (official bank/product/terms/fee/rewards/loyalty/regulatory
+  sources, or approved manual entry), supporting exactly one of banks,
+  cards, card_fees, card_benefits, reward_rules, loyalty_programs, or
+  card_eligibility_requirements via typed foreign keys (not a bare
+  polymorphic entity_type/entity_id pair), with independent lifecycle
+  (ACTIVE/SUPERSEDED/ARCHIVED) and verification (UNVERIFIED/VERIFIED/
+  REJECTED) state machines, fingerprint/version-scoped deduplication,
+  CATALOG_MANAGE-gated RLS, and audit_events integration. Foundation for
+  future catalog publication governance; does not itself gate
+  publication, and does not ingest, crawl, or store source content.
 ```
 
 ## The RLS and authorization model
@@ -180,7 +193,7 @@ Migration `0043` follows that same design through
 
 ## Reproducibility
 
-The full sequence `0001`→`0043` has been verified to apply cleanly,
+The full sequence `0001`→`0046` has been verified to apply cleanly,
 in order, against an empty database with zero errors and zero
 warnings — both in the hand-built PostgreSQL 16 stand-in used for the
 original pre-merge review (no Docker available in that environment),

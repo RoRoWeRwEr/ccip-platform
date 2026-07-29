@@ -53,10 +53,10 @@ out of sync with reality.
 | 0042 | `create_user_profiles_and_platform_roles` | 921 | merged | user_profiles, platform_roles, platform_permissions, platform_role_permissions, user_platform_role_assignments |
 | 0043 | `create_feature_flags` | 275 | merged (PR #4) | feature_flags |
 | 0044 | `create_api_management` | 373 | merged (PR #12) | api_clients, api_keys, api_scopes, api_client_scope_assignments, api_rate_limit_policies, api_client_rate_limit_assignments |
-| 0045 | `create_background_jobs` | 975 | in development (Issue #13) | background_job_definitions, background_job_schedules, background_job_executions |
+| 0045 | `create_background_jobs` | 1036 | merged (PR #14) | background_job_definitions, background_job_schedules, background_job_executions |
+| 0046 | `create_catalog_source_provenance` | 588 | merged | catalog_source_provenance |
 
-**Merged total:** 44 migrations, 97 tables, 30,834 lines. Migration 0045
-is in development and is not included in the merged total.
+**Merged total:** 46 migrations, 101 tables, 32,458 lines.
 
 ## `0042` revision note
 
@@ -101,3 +101,12 @@ migration was first drafted.
   `0042`'s platform-administrator predicate. Worker lifecycle functions
   are granted only to `service_role`; authenticated administrators use
   a narrow cancellation helper and cannot directly mutate executions.
+- `0046` depends on `banks` (`0005`), `cards` (`0006`), `card_fees`
+  (`0007`), `card_benefits` (`0008`), `reward_rules` (`0009`),
+  `loyalty_programs` (`0004`), and `card_eligibility_requirements`
+  (`0013`) as the seven eligible provenance target tables, on
+  `audit_events` (`0040`) for its audit trigger, and on `0042`'s
+  `has_active_platform_permission('CATALOG_MANAGE')` predicate (held by
+  both `CATALOG_ADMINISTRATOR` and `PLATFORM_ADMINISTRATOR`) for its RLS
+  policies. It adds one table, no new roles, and does not implement
+  catalog publication approval.
