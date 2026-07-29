@@ -18,9 +18,10 @@ below.
 ## RLS coverage
 
 Row-level security is enabled on **every merged table in the schema** —
-101 tables total: 85 as of `0041`, plus the 5 tables `0042` adds, the
+107 tables total: 85 as of `0041`, plus the 5 tables `0042` adds, the
 one table added by `0043`, the 6 tables added by `0044`, the 3 tables
-added by `0045`, and the 1 table added by `0046`. Migration `0043` enables RLS on its
+added by `0045`, the 1 table added by `0046`, and the 6 tables added by
+`0047`. Migration `0043` enables RLS on its
 `feature_flags` table in the same migration. This is enforced in one
 disciplined pass in `0041`
 for everything that existed at that point, and per-table in `0042` for
@@ -50,6 +51,23 @@ full CRUD for corrective actions and future ingestion processes. Target
 validation is enforced by real foreign keys and a `CHECK` constraint —
 not by RLS or application code — so it holds even for `service_role`
 writes.
+
+Migration `0047` adds six RLS-enabled tables (`merchants`,
+`merchant_aliases`, `merchant_relationships`,
+`merchant_category_assignments`, `merchant_market_presence`,
+`merchant_domains`). Writes on all six require the same `CATALOG_MANAGE`
+permission as `0046`. Unlike `0046`, all six also grant `anon` and
+`authenticated` `SELECT` — merchants are public catalog data like banks
+and cards, not internal provenance evidence — scoped to `lifecycle_
+status = 'ACTIVE'` merchants (and, for the five child tables, to rows
+whose parent merchant is `ACTIVE`, plus the child row's own `is_active`
+flag where present), matching the `catalog_read_active_*` pattern
+established in `0041`. No authenticated caller receives `DELETE` on any
+of the six tables; `service_role` retains full CRUD. Migration `0047`
+also extends `catalog_source_provenance` (`0046`) with a `merchant_id`
+column and widened `CHECK` constraints — purely additive `ALTER TABLE`
+statements against an existing table, not a new table, so it does not
+change the table or RLS-policy count attributed to `0046` above.
 
 ## Grants
 
@@ -110,7 +128,26 @@ INVOKER`, consistent with every other management trigger in the
 schema. Both schema-qualify references and pin `search_path =
 pg_catalog`.
 
-**Every function in the codebase — all 46 merged migrations,
+Migration `0047` adds exactly one `SECURITY DEFINER` function,
+`audit_merchant_catalog_change()`, shared by `merchants` and its five
+child tables (deriving `entity_type` from `TG_TABLE_NAME` and linking
+child-table events to their parent merchant via `audit_events`'
+`parent_entity_type`/`parent_entity_id` columns, the same generalization
+pattern `0042`'s `audit_platform_authorization_change()` already uses
+across four tables) — the same audit-without-direct-write justification
+as every prior audit trigger. Its three companion `SECURITY INVOKER`
+triggers — `manage_merchant_change()` (identity protection, lifecycle/
+verification transitions, actor stamping, mirroring `0046`'s pattern but
+with a freely-reversible ACTIVE/INACTIVE toggle), `manage_merchant_
+child_change()` (identity protection and actor stamping shared by all
+five child tables, plus hierarchy-cycle rejection specifically for
+`merchant_relationships`), and `sync_catalog_source_provenance_target_
+entity_id()` (maintains `catalog_source_provenance.target_entity_id`
+now that it is a plain, trigger-maintained column rather than a
+`GENERATED ALWAYS AS (...) STORED` one) — all schema-qualify references
+and pin `search_path = pg_catalog`.
+
+**Every function in the codebase — all 47 merged migrations,
 `SECURITY DEFINER` or not — sets
 `SET search_path = pg_catalog`.** No exceptions
 found. This is an unusually disciplined baseline; keep it that way. Any

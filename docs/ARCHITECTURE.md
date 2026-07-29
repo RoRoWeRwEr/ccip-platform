@@ -1,7 +1,7 @@
 # Database Architecture
 
 This describes the actual, current state of `supabase/migrations/` —
-merged through `0046`. It is derived directly from reading
+merged through `0047`. It is derived directly from reading
 every migration file and from live-executing the full migration sequence
 against PostgreSQL 16 (and, since `0042` merged, against a real
 Supabase local stack via Database CI); it is not aspirational.
@@ -123,18 +123,50 @@ Background jobs (0045 — merged via PR #14)
   cancellation, result/failure metadata, audit events, and
   administrator-readable RLS.
 
-Catalog source provenance (0046)
+Catalog source provenance (0046, extended by 0047)
   catalog_source_provenance — auditable evidence of where catalog data
   came from (official bank/product/terms/fee/rewards/loyalty/regulatory
   sources, or approved manual entry), supporting exactly one of banks,
-  cards, card_fees, card_benefits, reward_rules, loyalty_programs, or
-  card_eligibility_requirements via typed foreign keys (not a bare
-  polymorphic entity_type/entity_id pair), with independent lifecycle
-  (ACTIVE/SUPERSEDED/ARCHIVED) and verification (UNVERIFIED/VERIFIED/
-  REJECTED) state machines, fingerprint/version-scoped deduplication,
-  CATALOG_MANAGE-gated RLS, and audit_events integration. Foundation for
-  future catalog publication governance; does not itself gate
-  publication, and does not ingest, crawl, or store source content.
+  cards, card_fees, card_benefits, reward_rules, loyalty_programs,
+  card_eligibility_requirements, or (since 0047) merchants via typed
+  foreign keys (not a bare polymorphic entity_type/entity_id pair), with
+  independent lifecycle (ACTIVE/SUPERSEDED/ARCHIVED) and verification
+  (UNVERIFIED/VERIFIED/REJECTED) state machines, fingerprint/version-scoped
+  deduplication, CATALOG_MANAGE-gated RLS, and audit_events integration.
+  Foundation for future catalog publication governance; does not itself
+  gate publication, and does not ingest, crawl, or store source content.
+
+Merchants (0047)
+  merchants — canonical merchant identity: bilingual (English/Arabic)
+  display names, optional bilingual legal names, a fixed classification
+  (marketplace/government/utility/airline/hotel/restaurant/retail/fuel/
+  healthcare/education/telecom/transport/entertainment/financial-services/
+  other), a channel type (online-only/physical-only/omnichannel), an
+  optional headquarters country, and independent lifecycle
+  (ACTIVE/INACTIVE freely reversible; SUPERSEDED/ARCHIVED terminal, for
+  merge/consolidation) and verification (UNVERIFIED/VERIFIED/REJECTED)
+  state machines, mirroring 0046's pattern.
+  merchant_aliases — alternate names/spellings, globally unique among
+  active rows, for future transaction-description matching.
+  merchant_relationships — typed PARENT_SUBSIDIARY/BRAND_OF/
+  CHAIN_MEMBER_OF edges between merchants (a single edge type expresses
+  both hierarchy and brand-vs-legal-entity distinctions); each child has
+  at most one active parent per type, and a trigger rejects any edge that
+  would create a cycle.
+  merchant_category_assignments — reuses merchant_categories (0004)
+  rather than duplicating it; at most one assignment per merchant may be
+  primary.
+  merchant_market_presence — reuses countries (0004) for
+  physical/online/omnichannel market presence.
+  merchant_domains — official websites/app links/marketplace storefronts/
+  social media, globally unique among active rows.
+  All six tables are CATALOG_MANAGE-gated for writes (with public read of
+  ACTIVE merchants and their active child rows, matching the existing
+  catalog-read pattern) and audit_events-integrated. catalog_source_
+  provenance (0046) is extended forward-compatibly via ALTER TABLE only —
+  0046 itself is unmodified. Does not implement offers, publication
+  governance, scraping, transaction ingestion, or automated/fuzzy
+  merchant matching.
 ```
 
 ## The RLS and authorization model
@@ -193,7 +225,7 @@ Migration `0043` follows that same design through
 
 ## Reproducibility
 
-The full sequence `0001`→`0046` has been verified to apply cleanly,
+The full sequence `0001`→`0047` has been verified to apply cleanly,
 in order, against an empty database with zero errors and zero
 warnings — both in the hand-built PostgreSQL 16 stand-in used for the
 original pre-merge review (no Docker available in that environment),

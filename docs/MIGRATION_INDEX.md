@@ -55,8 +55,9 @@ out of sync with reality.
 | 0044 | `create_api_management` | 373 | merged (PR #12) | api_clients, api_keys, api_scopes, api_client_scope_assignments, api_rate_limit_policies, api_client_rate_limit_assignments |
 | 0045 | `create_background_jobs` | 1036 | merged (PR #14) | background_job_definitions, background_job_schedules, background_job_executions |
 | 0046 | `create_catalog_source_provenance` | 588 | merged | catalog_source_provenance |
+| 0047 | `create_merchants` | 1072 | merged | merchants, merchant_aliases, merchant_relationships, merchant_category_assignments, merchant_market_presence, merchant_domains |
 
-**Merged total:** 46 migrations, 101 tables, 32,458 lines.
+**Merged total:** 47 migrations, 107 tables, 33,530 lines.
 
 ## `0042` revision note
 
@@ -110,3 +111,17 @@ migration was first drafted.
   both `CATALOG_ADMINISTRATOR` and `PLATFORM_ADMINISTRATOR`) for its RLS
   policies. It adds one table, no new roles, and does not implement
   catalog publication approval.
+- `0047` depends on `countries` (`0004`) and `merchant_categories`
+  (`0004`, reused rather than duplicated), `auth.users`, `audit_events`
+  (`0040`) for its audit trigger, and `0042`'s
+  `has_active_platform_permission('CATALOG_MANAGE')` predicate for its
+  RLS policies. It also extends `catalog_source_provenance` (`0046`)
+  forward-compatibly, purely via `ALTER TABLE`/new triggers — adding a
+  `merchant_id` column, widening the `target_entity_type` and
+  `target_match` CHECK constraints to accept `'MERCHANT'`, and converting
+  `target_entity_id` from a `GENERATED ALWAYS AS (...) STORED` column to
+  one maintained by a new trigger — without editing the immutable `0046`
+  migration file or any of its existing rows, indexes, or behavior for
+  its seven original entity types. It adds six tables and no new roles,
+  and does not implement offers, publication governance, scraping,
+  transaction ingestion, or automated/fuzzy merchant matching.

@@ -44,9 +44,29 @@ for the next planning decision, not a backlog.
   unscheduled. It is a foundation for future catalog publication
   governance and deliberately does not implement publication approval,
   ingestion, or content storage.
-- `0047` onward: **not started.** Routine delivery now follows the
+- `0047` (`create_merchants`): **merged.** Adds six tables — `merchants`
+  (canonical merchant identity: bilingual display and optional bilingual
+  legal names, classification, channel type, headquarters country,
+  lifecycle and verification state machines, supersession/consolidation),
+  `merchant_aliases` (alternate names/spellings, globally unique while
+  active), `merchant_relationships` (typed PARENT_SUBSIDIARY/BRAND_OF/
+  CHAIN_MEMBER_OF edges, cycle-rejecting), `merchant_category_assignments`
+  (reuses the existing `merchant_categories` table from `0004` rather than
+  duplicating it), `merchant_market_presence` (reuses `countries`), and
+  `merchant_domains` (official websites/app links/storefronts, globally
+  unique while active). Extends `catalog_source_provenance` (`0046`)
+  forward-compatibly via `ALTER TABLE` only — adding a `merchant_id`
+  column, widening its `target_entity_type`/`target_match` CHECK
+  constraints, and converting `target_entity_id` from a generated column
+  to a trigger-maintained one — without editing the immutable `0046`
+  migration file. `CATALOG_MANAGE`-gated RLS (with public read of active
+  merchants, matching the existing catalog-read pattern), `audit_events`
+  integration. Does not implement offers, publication governance,
+  scraping, transaction ingestion, or automated/fuzzy merchant matching.
+- `0048` onward: **not started.** Routine delivery now follows the
   direct-to-main workflow in `docs/DEVELOPMENT_WORKFLOW.md` rather than
-  a GitHub Issue.
+  a GitHub Issue. Next: `0048` (Catalog Publication Governance), then
+  `0049` (Catalog Admin Authorization).
 
 ## Why scoped authorization was deferred, not half-built
 
@@ -81,7 +101,7 @@ contains only a placeholder. Validated against what's actually built:
 | 0044 | `api_management` | Narrowed and approved by Issue #11: client/key lifecycle, scopes, and rate-limit metadata only; webhooks and gateway behavior are excluded. |
 | 0045 | `background_jobs` | Reasonable, and there's already real demand for it: `data_retention_executions` (`0040`) and `commission_settlements` (`0039`) both look like they're meant to be driven by a scheduler, but nothing currently models a job/worker table. Scope this migration to explicitly serve those two consumers first, not built in the abstract. |
 | 0046 | `data_warehouse_views` | Premature — there is no application layer generating real query patterns yet. Defer until there's production traffic, or narrow to materialized views over `recommendation_*`/`bank_application_*` specifically. **Superseded in practice:** the actual `0046` delivered was `create_catalog_source_provenance`, a bounded, explicitly directed capability unrelated to warehousing. `data_warehouse_views` remains unbuilt and unscheduled; renumber it into a future slot if it is still wanted. |
-| 0047 | `analytics_and_reporting` | Depends on `0046`; same premature-maturity concern. Note: the `REPORTING_VIEWER` role and `REPORTING_READ` permission already exist in `0042`'s seed data with nothing to gate yet — this is what would finally give that role a purpose. Sequence it here, not earlier. |
+| 0047 | `analytics_and_reporting` | Depends on `0046`; same premature-maturity concern. Note: the `REPORTING_VIEWER` role and `REPORTING_READ` permission already exist in `0042`'s seed data with nothing to gate yet — this is what would finally give that role a purpose. Sequence it here, not earlier. **Superseded in practice:** the actual `0047` delivered was `create_merchants`, a bounded canonical-merchant-identity foundation, at explicit task direction; `analytics_and_reporting` remains unbuilt and unscheduled — renumber it into a future slot if it is still wanted. |
 | 0048 | `ml_feature_store` | Speculative at the current product stage. `recommendation_models`/`recommendation_model_factors` (`0028`) already model a rules/scoring-based approach, not ML — building a feature store ahead of an actual ML use case invents a dependency nothing currently needs. Defer past `0050` until a concrete ML use case exists. |
 | 0049 | `search_and_indexing` | Validate actual query volume/patterns before building backend search infrastructure — the catalog tables (`0004`–`0021`) are on the order of tens to low hundreds of rows per entity type at this product stage, which is well within client-side search territory. |
 | 0050 | `platform_finalization` | Not a bounded migration — "finalization" is a milestone label, not a cohesive capability, and contradicts the repository's own rule against combining unrelated capabilities into one migration. Replace with whatever specific hardening tasks remain once `0043`–`0049` (revised) land — likely index tuning, `FORCE ROW LEVEL SECURITY` reconsideration, and connection/role-limit configuration — tracked as their own scoped items, not one catch-all migration. |

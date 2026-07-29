@@ -11,13 +11,13 @@ and business requirements.
 ## Current implementation status: database-first platform foundation
 
 This repository currently contains **only the database layer**.
-Migrations `0001`–`0046` are merged into `main`: 101 tables covering the
+Migrations `0001`–`0047` are merged into `main`: 107 tables covering the
 card/bank/reward catalog, customer financial and spending profiles, the
 recommendation engine, comparisons, notifications, bank applications,
 partnerships/commissions, a full governance/audit/compliance layer, a
 platform RBAC/identity model, feature flags, API-management metadata,
-background jobs, and a catalog source-provenance layer — with
-row-level security enabled on every table.
+background jobs, a catalog source-provenance layer, and a canonical
+merchant catalog — with row-level security enabled on every table.
 
 **No application, API, or frontend code exists in this repository yet.**
 Anything above that sounds like a user-facing feature (recommendations,
@@ -53,8 +53,8 @@ docs/
 decisions/                  Reserved for architecture decision records; currently empty
 glossary/                   Reserved for a project glossary; currently empty
 supabase/
-  migrations/                46 merged SQL migrations (0001–0046)
-  tests/database/            pgTAP test suite (currently covers migrations 0042–0046)
+  migrations/                47 merged SQL migrations (0001–0047)
+  tests/database/            pgTAP test suite (currently covers migrations 0042–0047)
 .github/workflows/
   database-ci.yml            Database CI — see below
 ```
@@ -79,7 +79,7 @@ carries a banner pointing to `docs/ARCHITECTURE.md` and
    grants, and `SECURITY DEFINER` model, and what CI does and doesn't
    validate.
 5. Read [`docs/DATABASE_ROADMAP.md`](docs/DATABASE_ROADMAP.md) for what
-   comes after migration `0046` and why.
+   comes after migration `0047` and why.
 6. Read [`docs/BOOTSTRAP_PLATFORM_ADMIN.md`](docs/BOOTSTRAP_PLATFORM_ADMIN.md)
    before assigning the first platform administrator in any environment.
 7. Read [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) for a
