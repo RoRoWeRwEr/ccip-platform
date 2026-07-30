@@ -6,4 +6,5 @@ node_modules
 package-lock.json
 supabase/migrations
 supabase/tests
+supabase/.temp
 src/types/database.ts
