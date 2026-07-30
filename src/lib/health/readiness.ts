@@ -1,0 +1,39 @@
+import { createClient } from "@supabase/supabase-js";
+import { getServerEnvironment } from "@/lib/config/env";
+
+const READINESS_TIMEOUT_MS = 3_000;
+
+export async function checkReadiness(): Promise<{
+  ready: true;
+  latencyMs: number;
+}> {
+  const environment = getServerEnvironment();
+  const client = createClient(
+    environment.NEXT_PUBLIC_SUPABASE_URL,
+    environment.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+    {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+        detectSessionInUrl: false,
+      },
+    },
+  );
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), READINESS_TIMEOUT_MS);
+  const startedAt = performance.now();
+
+  try {
+    const { error } = await client
+      .from("countries")
+      .select("id", { head: true, count: "exact" })
+      .abortSignal(controller.signal);
+    if (error) throw error;
+    return {
+      ready: true,
+      latencyMs: Math.round(performance.now() - startedAt),
+    };
+  } finally {
+    clearTimeout(timeout);
+  }
+}

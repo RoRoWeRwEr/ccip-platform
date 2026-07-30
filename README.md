@@ -130,6 +130,31 @@ supabase db lint --level warning
 supabase db lint --level error
 ```
 
+## Application development
+
+The application requires Node.js 22 or newer. Copy `.env.example` to an
+untracked `.env.local` and provide the public URL and publishable key for the
+target Supabase project. Never expose a service-role key through a
+`NEXT_PUBLIC_*` variable.
+
+```bash
+npm ci
+npm run dev
+```
+
+Runtime probes are available at `/api/health` (process health) and `/api/ready`
+(validated, time-bounded Supabase readiness). The complete local application
+gate is:
+
+```bash
+npm run format
+npm run lint
+npm run typecheck
+npm test
+npm run build
+npm audit --audit-level=high
+```
+
 ## Single source of truth
 
 This repository — its migrations, tests, CI configuration, and `docs/`
