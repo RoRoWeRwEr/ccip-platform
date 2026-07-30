@@ -1,9 +1,8 @@
 # CCIP v1 Execution Status
 
-**Last verified:** 2026-07-30 at `main` commit
-`ca765ef0de354f3d22494a93689208e8d035b0ff` before the v1 execution-system
-delivery. Local `main` and `origin/main` were equal and the working tree was
-clean.
+**Last verified:** 2026-07-30 at execution-system commit
+`20e1011b51151b7e7d98b85daa5b1da7c5bbdec5`. Repository Policy run
+30522625364 completed successfully.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -14,7 +13,7 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 | Phase | State | Evidence |
 |---|---|---|
 | 1 — Database Foundation | Complete | 49 migrations, 111 RLS-enabled tables, 18 pgTAP files / 426 assertions; Database CI run 30519983707 and Repository Policy run 30520249357 succeeded. |
-| 2 — Application Foundation | In progress | P2.1 execution-system documents are being delivered; application code does not yet exist. |
+| 2 — Application Foundation | In progress | P2.1 is complete at `20e1011`; P2.2 application scaffold is active. |
 | 3 — Public Catalog | Not started | Database catalog exists; no product surface exists. |
 | 4 — Comparison and Calculation | Not started | Schema/design exist; no runtime implementation exists. |
 | 5 — Recommendation | Not started | Schema and DES exist; no runtime engine exists. |
@@ -26,16 +25,15 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 
 ## Current task
 
-Complete **P2.1 Execution system and application architecture**: add the five
-authoritative v1 documents, update agent governance, validate, commit, push,
-and monitor Repository Policy.
+Complete **P2.2 Web application scaffold**: create the Next.js TypeScript
+application and application CI with Arabic/English routing foundation, design
+tokens, and passing format, lint, typecheck, unit test, and production build.
 
 ## Exact next task
 
-Immediately begin **P2.2 Web application scaffold** after P2.1 is green. Create
-the Next.js TypeScript application and application CI with Arabic/English
-routing foundation, design tokens, and passing lint, typecheck, unit test, and
-production build commands.
+Complete **P2.3 Runtime foundation** after P2.2 is green: validated environment
+configuration, Supabase clients, auth middleware foundation, health/readiness,
+structured logging, typed errors, request correlation, and security headers.
 
 ## Current validation and CI
 
@@ -43,7 +41,9 @@ production build commands.
 - Database CI: success, run 30519983707.
 - Latest Repository Policy: success, run 30520249357 at `ca765ef`.
 - Open PRs: Dependabot #7, #8, and #9; none block direct-to-main execution.
-- P2.1 local validation and CI: pending.
+- P2.1: repository policy, Markdown links, workflow-equivalent YAML lint, and
+  whitespace checks passed locally; Repository Policy run 30522625364 passed.
+- P2.2 local validation and CI: pending.
 
 ## Blockers and owner-only actions
 
