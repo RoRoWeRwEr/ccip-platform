@@ -8,9 +8,8 @@ benefits, and personalized recommendation logic. See
 [`docs/01-brd/BRD.md`](docs/01-brd/BRD.md) for the full product vision
 and business requirements.
 
-## Current implementation status: database-first platform foundation
+## Current implementation status: application foundation in progress
 
-This repository currently contains **only the database layer**.
 Migrations `0001`–`0049` complete the current database roadmap: 111 tables covering the
 card/bank/reward catalog, customer financial and spending profiles, the
 recommendation engine, comparisons, notifications, bank applications,
@@ -21,11 +20,13 @@ catalog, catalog publication governance, and explicit BANK/GLOBAL catalog
 administrator authorization — with row-level security
 enabled on every table.
 
-**No application, API, or frontend code exists in this repository yet.**
-Anything above that sounds like a user-facing feature (recommendations,
-comparisons, notifications, bank applications) exists only as a
-PostgreSQL schema with RLS policies — there is no service that lets a
-person actually use it. See
+The CCIP v1 application foundation is now being built as a Next.js TypeScript
+web application. The current scaffold provides Arabic/English locale routes,
+RTL/LTR document direction, responsive design tokens, unit tests, production
+build validation, and Application CI. Catalog, comparison, recommendation,
+authentication, user, and administration product features are still unfinished;
+their database capabilities must not be described as working product surfaces.
+See
 [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) for the current,
 factual status of every layer of the platform (database, tests, CI,
 security, API, frontend, AI/recommendation, deployment).
@@ -62,8 +63,12 @@ glossary/                   Reserved for a project glossary; currently empty
 supabase/
   migrations/                49 SQL migrations (0001–0049)
   tests/database/            pgTAP test suite (currently covers migrations 0042–0049)
+src/
+  app/                       Next.js App Router and bilingual route foundation
+  lib/                       Shared application modules
 .github/workflows/
   database-ci.yml            Database CI — see below
+  application-ci.yml         Application format, lint, types, tests, and build
 ```
 
 `docs/04-database/ERD-v1.md` and `docs/04-database/postgresql-schema-v1.md`

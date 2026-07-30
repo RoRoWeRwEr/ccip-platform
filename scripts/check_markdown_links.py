@@ -11,9 +11,10 @@ from urllib.parse import unquote
 ROOT = Path(__file__).resolve().parents[1]
 LINK = re.compile(r"(?<!!)\[[^\]]*\]\(([^)]+)\)")
 errors: list[str] = []
+IGNORED_DIRECTORIES = {".git", ".next", "coverage", "node_modules", "out"}
 
 for document in sorted(ROOT.rglob("*.md")):
-    if ".git" in document.parts:
+    if IGNORED_DIRECTORIES.intersection(document.relative_to(ROOT).parts):
         continue
     for line_number, line in enumerate(document.read_text(encoding="utf-8").splitlines(), 1):
         for raw_target in LINK.findall(line):

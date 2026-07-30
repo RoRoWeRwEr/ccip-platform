@@ -1,0 +1,23 @@
+# dependencies
+/node_modules/
+
+# Next.js
+/.next/
+/out/
+
+# test output
+/coverage/
+/test-results/
+/playwright-report/
+
+# environment files (document values in .env.example only)
+.env*
+!.env.example
+
+# platform and editor output
+.DS_Store
+*.tsbuildinfo
+.vercel/
+
+# Supabase CLI runtime state
+/supabase/.temp/

@@ -1,8 +1,8 @@
 # CCIP v1 Execution Status
 
-**Last verified:** 2026-07-30 at execution-system commit
-`20e1011b51151b7e7d98b85daa5b1da7c5bbdec5`. Repository Policy run
-30522625364 completed successfully.
+**Last verified:** 2026-07-30. P2.2 is committed locally at
+`d2d078d3c0e0ea58a8b8401cc66a09367a7219a5` but is not on `origin/main` because
+the configured GitHub OAuth credential lacks `workflow` scope.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -13,7 +13,7 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 | Phase | State | Evidence |
 |---|---|---|
 | 1 — Database Foundation | Complete | 49 migrations, 111 RLS-enabled tables, 18 pgTAP files / 426 assertions; Database CI run 30519983707 and Repository Policy run 30520249357 succeeded. |
-| 2 — Application Foundation | In progress | P2.1 is complete at `20e1011`; P2.2 application scaffold is active. |
+| 2 — Application Foundation | Blocked on publish credential | P2.1 is complete and green. P2.2 is implemented and locally validated at `d2d078d`, but GitHub rejected creation of `.github/workflows/application-ci.yml` because the OAuth credential lacks `workflow` scope. |
 | 3 — Public Catalog | Not started | Database catalog exists; no product surface exists. |
 | 4 — Comparison and Calculation | Not started | Schema/design exist; no runtime implementation exists. |
 | 5 — Recommendation | Not started | Schema and DES exist; no runtime engine exists. |
@@ -25,9 +25,9 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 
 ## Current task
 
-Complete **P2.2 Web application scaffold**: create the Next.js TypeScript
-application and application CI with Arabic/English routing foundation, design
-tokens, and passing format, lint, typecheck, unit test, and production build.
+Publish **P2.2 Web application scaffold** after restoring GitHub workflow-write
+authorization, then monitor Application CI and Repository Policy and forward-fix
+any failure. Do not start P2.3 until P2.2 is on `origin/main` and green.
 
 ## Exact next task
 
@@ -43,11 +43,24 @@ structured logging, typed errors, request correlation, and security headers.
 - Open PRs: Dependabot #7, #8, and #9; none block direct-to-main execution.
 - P2.1: repository policy, Markdown links, workflow-equivalent YAML lint, and
   whitespace checks passed locally; Repository Policy run 30522625364 passed.
-- P2.2 local validation and CI: pending.
+- P2.2 local validation: format, lint, strict typecheck, 2/2 unit assertions,
+  production build, zero-vulnerability npm audit, repository policy, Markdown
+  links, YAML lint, and whitespace checks passed. Arabic/English routes,
+  RTL/LTR document metadata, locale switching, 390px no-overflow behavior, and
+  clean browser console were verified locally.
+- P2.2 CI: not started because GitHub rejected the push before updating
+  `origin/main`.
 
 ## Blockers and owner-only actions
 
-- No blocker to P2.1 or P2.2.
+- **Immediate blocker:** the current HTTPS OAuth credential cannot create or
+  update `.github/workflows/application-ci.yml` without GitHub `workflow`
+  scope. SSH fallback was checked and no authorized SSH key is configured.
+- **Exact owner action:** reauthenticate the GitHub credential used by Git with
+  repository and workflow permissions (for GitHub CLI, run
+  `gh auth login --hostname github.com --scopes repo,workflow`, then ensure Git
+  uses that credential). Resume with `git push origin main`; monitor
+  Application CI and Repository Policy before P2.3.
 - Deployment credentials, production/staging Supabase project selection,
   domain configuration, and first-admin identity are not present. These become
   owner actions only when Phase 9 needs them; all repository work continues in
