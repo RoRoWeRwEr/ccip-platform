@@ -128,6 +128,19 @@ bank, network, fee, reward, persona, and eligibility filters with shareable stat
 
 ## Blockers and owner-only actions
 
+- **P3.3 public-detail authorization decision required:** the product roadmap
+  requires public reward rules, eligibility, provenance, publication, and
+  merchant detail. The implemented schema grants `anon` access to cards, fees,
+  benefits, and active merchant catalog rows, but not to `reward_rules` or
+  `card_eligibility_requirements`; provenance and publication-governance rows
+  are catalog-administrator-only; and no card-to-merchant relationship exists.
+  No existing public view or controlled read function closes this gap. A
+  service-role application client would violate the security model. Proceeding
+  therefore requires either explicit authorization to reopen the database
+  roadmap for a narrowly scoped forward migration, or an authoritative P3.3
+  scope revision that removes those inaccessible relationships. Until that
+  decision, `fbf2255` is the last complete green application milestone and the
+  working tree remains clean.
 - The HTTPS OAuth credential still lacks GitHub `workflow` scope, but the
   installed GitHub connector is an authorized publishing path for workflow
   changes. No immediate owner action is required for P2.3.
