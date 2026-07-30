@@ -1,8 +1,8 @@
 # CCIP v1 Execution Status
 
-**Last verified:** 2026-07-30 at P2.4 forward-fix commit
-`7890526308fdf63eaf08ac9d9dfd1d64cd2cfe8e`. Application CI run 30525606887
-and Repository Policy run 30525606736 completed successfully.
+**Last verified:** 2026-07-30 at P3.1 commit
+`322c364e9c7279f7d83bae689db2d8f7058fa9e6`. Application CI run 30527138679
+and Repository Policy run 30527138619 completed successfully.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -14,7 +14,7 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 |---|---|---|
 | 1 — Database Foundation | Complete | 49 migrations, 111 RLS-enabled tables, 18 pgTAP files / 426 assertions; Database CI run 30519983707 and Repository Policy run 30520249357 succeeded. |
 | 2 — Application Foundation | Complete | P2.1–P2.4 and the phase review are complete and green. |
-| 3 — Public Catalog | In progress | P3.1 shell and homepage is the active milestone. |
+| 3 — Public Catalog | In progress | P3.1 is complete and green. P3.2 catalog browsing is active. |
 | 4 — Comparison and Calculation | Not started | Schema/design exist; no runtime implementation exists. |
 | 5 — Recommendation | Not started | Schema and DES exist; no runtime engine exists. |
 | 6 — Authentication and User Features | Not started | Supabase identity/RLS schema exists; no UI exists. |
@@ -25,19 +25,19 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 
 ## Current task
 
-Complete **P3.1 Shell and homepage**: accessible mobile-first bilingual
-navigation, locale switching, homepage content, and persona entry points.
+Complete **P3.2 Catalog browsing**: Saudi banks and cards with loading, empty,
+and error states, pagination, and stable URLs.
 
 ## Exact next task
 
-Complete **P3.2 Catalog browsing** after P3.1 is green: Saudi banks and cards
-with loading, empty, and error states, pagination, and stable URLs.
+Complete **P3.3 Card details** after P3.2 is green: fees, benefits, reward
+rules, eligibility, loyalty, merchant, provenance, and publication information.
 
 ## Current validation and CI
 
 - Database completion commit: `0fada5a3d91c8c7e2a76fcd317cdb2f55c41f139`.
 - Database CI: success, run 30519983707.
-- Latest Repository Policy: success, run 30525606736 at `7890526`.
+- Latest Repository Policy: success, run 30527138619 at `322c364`.
 - Open PRs: Dependabot #7, #8, and #9; none block direct-to-main execution.
 - P2.1: repository policy, Markdown links, workflow-equivalent YAML lint, and
   whitespace checks passed locally; Repository Policy run 30522625364 passed.
@@ -70,6 +70,21 @@ with loading, empty, and error states, pagination, and stable URLs.
   `supabase/.temp` files to ESLint; forward-fix `7890526` excluded that runtime
   directory from formatting/lint. Application CI run 30525606887 and
   Repository Policy run 30525606736 then passed.
+- P3.1 delivery: bilingual semantic navigation, localized metadata and
+  alternates, skip link, responsive homepage, working locale links, three
+  persona entry URLs per locale, trust principles, and the product disclaimer
+  are implemented. Development CSP permits `unsafe-eval` only for the Next.js
+  debugger; the production CSP was smoke-tested without it.
+- P3.1 validation: formatting, lint, strict typecheck, 16/16 unit tests, 4/4
+  local-Supabase integration tests, production build, zero-vulnerability npm
+  audit, repository policy, Markdown links, YAML lint, and whitespace checks
+  passed locally. Production HTML confirmed English/LTR and Arabic/RTL with
+  request/security headers. A 390px in-app browser audit confirmed landmarks,
+  stable persona links, localized SEO metadata, and no horizontal overflow.
+  The browser safety policy blocked the post-restart 320px repeat; 320px remains
+  covered by mobile-first CSS review and the production build, not claimed as a
+  second observed browser run. Application CI run 30527138679 and Repository
+  Policy run 30527138619 passed.
 
 ## Phase 2 completion review
 
