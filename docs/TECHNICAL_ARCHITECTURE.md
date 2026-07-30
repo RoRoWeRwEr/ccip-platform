@@ -45,6 +45,16 @@ server-only secret or privileged client into browser bundles.
 ## Data-access model
 
 - Public catalog reads use the Supabase anonymous role and existing public RLS.
+- `src/types/database.ts` is the checked-in generated contract for the full
+  schema. Supabase browser, server, proxy, readiness, and repository clients
+  use that contract instead of untyped queries.
+- Public catalog repositories apply explicit active, availability, and
+  publication-time filters in addition to RLS, return application-owned DTOs,
+  and cap page sizes at 50. The duplicate filtering is intentional defense in
+  depth and prevents accidental reliance on privileged-client behavior.
+- Application integration tests seed through a local-only service-role client
+  and assert reads through an anonymous client against the replayed schema and
+  real RLS policies. No service-role credential is available to browser code.
 - Authenticated user reads/writes use the user's session so RLS remains the
   primary ownership boundary.
 - Catalog administration uses the administrator session and scope-aware RLS or

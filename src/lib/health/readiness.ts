@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { getServerEnvironment } from "@/lib/config/env";
+import type { Database } from "@/types/database";
 
 const READINESS_TIMEOUT_MS = 3_000;
 
@@ -8,7 +9,7 @@ export async function checkReadiness(): Promise<{
   latencyMs: number;
 }> {
   const environment = getServerEnvironment();
-  const client = createClient(
+  const client = createClient<Database>(
     environment.NEXT_PUBLIC_SUPABASE_URL,
     environment.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
     {

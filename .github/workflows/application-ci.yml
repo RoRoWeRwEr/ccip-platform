@@ -12,7 +12,9 @@ on:
       - "eslint.config.mjs"
       - "postcss.config.mjs"
       - "vitest.config.ts"
+      - "vitest.integration.config.ts"
       - "vitest.setup.ts"
+      - "tests/**"
       - ".github/workflows/application-ci.yml"
   push:
     branches: [main]
@@ -26,7 +28,9 @@ on:
       - "eslint.config.mjs"
       - "postcss.config.mjs"
       - "vitest.config.ts"
+      - "vitest.integration.config.ts"
       - "vitest.setup.ts"
+      - "tests/**"
       - ".github/workflows/application-ci.yml"
 
 permissions:
@@ -49,6 +53,18 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
+      - name: Set up Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - name: Start local Supabase and configure integration environment
+        run: |
+          supabase start
+          supabase db reset
+          eval "$(supabase status -o env)"
+          echo "NEXT_PUBLIC_SUPABASE_URL=$API_URL" >> "$GITHUB_ENV"
+          echo "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=$ANON_KEY" >> "$GITHUB_ENV"
+          echo "SUPABASE_TEST_SERVICE_ROLE_KEY=$SERVICE_ROLE_KEY" >> "$GITHUB_ENV"
       - name: Check formatting
         run: npm run format
       - name: Lint
@@ -57,5 +73,7 @@ jobs:
         run: npm run typecheck
       - name: Unit tests
         run: npm test
+      - name: Integration tests
+        run: npm run test:integration
       - name: Production build
         run: npm run build
