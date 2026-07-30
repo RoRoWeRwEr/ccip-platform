@@ -1,8 +1,8 @@
 # CCIP v1 Execution Status
 
-**Last verified:** 2026-07-30 at reconciled P2.2 commit
-`478204bf3f71252c9655dd2f3f0fdeac6b61bc09`. Local `main` and `origin/main`
-were synchronized; Application CI and Repository Policy were green.
+**Last verified:** 2026-07-30 at P2.3 commit
+`b48eb61ca9997fe124f457eff6167d2b97c4ee5f`. Application CI run 30524273922
+and Repository Policy run 30524273965 completed successfully.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -13,7 +13,7 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 | Phase | State | Evidence |
 |---|---|---|
 | 1 — Database Foundation | Complete | 49 migrations, 111 RLS-enabled tables, 18 pgTAP files / 426 assertions; Database CI run 30519983707 and Repository Policy run 30520249357 succeeded. |
-| 2 — Application Foundation | In progress | P2.1 and P2.2 are complete and green. P2.3 runtime foundation is active. |
+| 2 — Application Foundation | In progress | P2.1–P2.3 are complete and green. P2.4 data-access foundation is active. |
 | 3 — Public Catalog | Not started | Database catalog exists; no product surface exists. |
 | 4 — Comparison and Calculation | Not started | Schema/design exist; no runtime implementation exists. |
 | 5 — Recommendation | Not started | Schema and DES exist; no runtime engine exists. |
@@ -25,15 +25,15 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 
 ## Current task
 
-Complete **P2.3 Runtime foundation**: validated environment configuration,
-Supabase clients, auth middleware foundation, health/readiness endpoints,
-structured logging, typed errors, request correlation, and security headers.
+Complete **P2.4 Data-access foundation**: checked-in database types, typed
+catalog repositories, publication-aware public queries, bounded pagination,
+and the integration-test harness.
 
 ## Exact next task
 
-Complete **P2.4 Data-access foundation** after P2.3 is green: checked-in database
-types, typed catalog repositories, publication-aware public queries, bounded
-pagination, and the integration-test harness.
+Begin **P3.1 Shell and homepage** after P2.4 and the Application Foundation
+phase review are green: accessible mobile-first bilingual navigation, locale
+switching, homepage, and persona entry points.
 
 ## Current validation and CI
 
@@ -52,6 +52,13 @@ pagination, and the integration-test harness.
   30523740892 / 30523779594 passed. The GitHub connector published the complete
   tree atomically after the HTTPS OAuth token rejected workflow-file creation;
   local and remote histories were reconciled without rewriting either side.
+- P2.3 local validation: format, lint, strict typecheck, 11/11 unit assertions,
+  production build, zero-vulnerability npm audit, repository policy, Markdown
+  links, YAML lint, and whitespace checks passed. Production-mode smoke tests
+  returned health 200, unconfigured readiness 503, propagated correlation IDs,
+  no-store responses, and the configured security headers.
+- P2.3 CI: Application CI run 30524273922 and Repository Policy run
+  30524273965 passed at `b48eb61`.
 
 ## Blockers and owner-only actions
 
