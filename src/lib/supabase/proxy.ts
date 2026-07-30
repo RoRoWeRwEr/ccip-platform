@@ -2,6 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 import { getPublicEnvironment } from "@/lib/config/env";
 import { getRequestId } from "@/lib/http/request-id";
+import type { Database } from "@/types/database";
 
 export async function refreshSession(request: NextRequest) {
   const requestId = getRequestId(request.headers);
@@ -13,7 +14,7 @@ export async function refreshSession(request: NextRequest) {
 
   try {
     const environment = getPublicEnvironment();
-    const supabase = createServerClient(
+    const supabase = createServerClient<Database>(
       environment.NEXT_PUBLIC_SUPABASE_URL,
       environment.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
       {

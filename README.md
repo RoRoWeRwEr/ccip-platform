@@ -20,10 +20,12 @@ catalog, catalog publication governance, and explicit BANK/GLOBAL catalog
 administrator authorization — with row-level security
 enabled on every table.
 
-The CCIP v1 application foundation is now being built as a Next.js TypeScript
-web application. The current scaffold provides Arabic/English locale routes,
-RTL/LTR document direction, responsive design tokens, unit tests, production
-build validation, and Application CI. Catalog, comparison, recommendation,
+The CCIP v1 application foundation is a Next.js TypeScript web application.
+It provides Arabic/English locale routes, RTL/LTR document direction,
+responsive design tokens, typed browser/server Supabase clients, checked-in
+database types, publication-aware catalog repositories, bounded pagination,
+unit and local-Supabase integration tests, production build validation, and
+Application CI. Catalog screens, comparison, recommendation,
 authentication, user, and administration product features are still unfinished;
 their database capabilities must not be described as working product surfaces.
 See
@@ -65,7 +67,10 @@ supabase/
   tests/database/            pgTAP test suite (currently covers migrations 0042–0049)
 src/
   app/                       Next.js App Router and bilingual route foundation
+  features/catalog/data/     Typed, RLS-aware public catalog repositories
   lib/                       Shared application modules
+  types/database.ts          Generated types for the complete public schema
+tests/integration/           Local-Supabase application integration tests
 .github/workflows/
   database-ci.yml            Database CI — see below
   application-ci.yml         Application format, lint, types, tests, and build
@@ -151,9 +156,17 @@ npm run format
 npm run lint
 npm run typecheck
 npm test
+npm run test:integration
 npm run build
 npm audit --audit-level=high
 ```
+
+`npm run test:integration` requires the local Supabase stack and the URL,
+anonymous key, and service-role key emitted by `supabase status -o env`. The
+service-role key is test setup/cleanup infrastructure only; repository reads
+under test use the anonymous client so public RLS is exercised. Application CI
+starts and resets Supabase, supplies those values ephemerally, and runs this
+suite on every relevant change.
 
 ## Single source of truth
 
