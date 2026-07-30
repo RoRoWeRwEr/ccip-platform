@@ -38,6 +38,11 @@ AGENTS.md                    Equivalent operating rules for Codex/other agents
 README.md                    This file
 docs/
   PROJECT_CONTEXT.md         What CCIP is, who it's for, MVP scope
+  PROJECT_MASTER_PLAN.md     Authoritative CCIP v1 phases and milestones
+  PRODUCT_REQUIREMENTS.md    Testable v1 product requirements and exclusions
+  TECHNICAL_ARCHITECTURE.md  Application stack, boundaries, and operations
+  DEFINITION_OF_DONE.md      Milestone, phase, and v1 completion gates
+  EXECUTION_STATUS.md        Live autonomous-execution ledger and resume point
   ARCHITECTURE.md            How the schema is organized, dependency order, RLS/role model
   DATABASE_ROADMAP.md        What's merged, what's pending, what's next and why
   SECURITY_MODEL.md          RLS coverage, grants, SECURITY DEFINER usage, audit design, CI validation
@@ -72,21 +77,27 @@ carries a banner pointing to `docs/ARCHITECTURE.md` and
 1. Read this file, then [`CLAUDE.md`](CLAUDE.md) (or
    [`AGENTS.md`](AGENTS.md) if you're working as Codex) — both are
    session entry points describing engineering rules and current state.
-2. Read [`docs/PROJECT_CONTEXT.md`](docs/PROJECT_CONTEXT.md) for what
+2. Read [`docs/PROJECT_MASTER_PLAN.md`](docs/PROJECT_MASTER_PLAN.md) and
+   [`docs/EXECUTION_STATUS.md`](docs/EXECUTION_STATUS.md) for the active v1
+   roadmap and exact next unfinished milestone.
+3. Read [`docs/PRODUCT_REQUIREMENTS.md`](docs/PRODUCT_REQUIREMENTS.md),
+   [`docs/TECHNICAL_ARCHITECTURE.md`](docs/TECHNICAL_ARCHITECTURE.md), and
+   [`docs/DEFINITION_OF_DONE.md`](docs/DEFINITION_OF_DONE.md).
+4. Read [`docs/PROJECT_CONTEXT.md`](docs/PROJECT_CONTEXT.md) for what
    CCIP is and its MVP scope.
-3. Read [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for how the
+5. Read [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for how the
    schema is organized, and [`docs/MIGRATION_INDEX.md`](docs/MIGRATION_INDEX.md)
    for the full migration-by-migration inventory.
-4. Read [`docs/SECURITY_MODEL.md`](docs/SECURITY_MODEL.md) for the RLS,
+6. Read [`docs/SECURITY_MODEL.md`](docs/SECURITY_MODEL.md) for the RLS,
    grants, and `SECURITY DEFINER` model, and what CI does and doesn't
    validate.
-5. Read [`docs/DATABASE_ROADMAP.md`](docs/DATABASE_ROADMAP.md) for the
+7. Read [`docs/DATABASE_ROADMAP.md`](docs/DATABASE_ROADMAP.md) for the
    completed Database Phase and explicitly deferred, unscheduled ideas.
-6. Read [`docs/BOOTSTRAP_PLATFORM_ADMIN.md`](docs/BOOTSTRAP_PLATFORM_ADMIN.md)
+8. Read [`docs/BOOTSTRAP_PLATFORM_ADMIN.md`](docs/BOOTSTRAP_PLATFORM_ADMIN.md)
    before assigning the first platform administrator in any environment.
-7. Read [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) for a
+9. Read [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) for a
    current, factual snapshot of every layer of the project.
-8. Read [`docs/AI_AGENT_HANDOFF.md`](docs/AI_AGENT_HANDOFF.md),
+10. Read [`docs/AI_AGENT_HANDOFF.md`](docs/AI_AGENT_HANDOFF.md),
    [`docs/DEVELOPMENT_WORKFLOW.md`](docs/DEVELOPMENT_WORKFLOW.md), and
    [`docs/BRANCH_PROTECTION.md`](docs/BRANCH_PROTECTION.md) before
    beginning or publishing a change.

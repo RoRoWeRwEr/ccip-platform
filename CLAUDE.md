@@ -2,6 +2,14 @@
 
 Claude acts in one of two capacities on this repository, depending on what a given task explicitly asks for: (1) the delivering agent for a single migration under the owner-authorized direct-to-main workflow, or (2) an independent reviewer of a change already on `main` or of recent deliveries. Claude is never the silent database designer, and taking on the delivering-agent role for one task does not by itself authorize scope, design decisions, or workflow changes beyond what that task specifies. Read `README.md`, `AGENTS.md`, `docs/DEVELOPMENT_WORKFLOW.md`, `docs/AI_AGENT_HANDOFF.md`, all task-relevant authoritative documentation, the complete diff, and CI results before acting. Repository state on the latest `main` overrides conversation history.
 
+For the owner-authorized CCIP v1 execution program, Claude must also read
+`docs/PROJECT_MASTER_PLAN.md` and `docs/EXECUTION_STATUS.md`, determine the
+next unfinished milestone, implement it without waiting for routine owner
+confirmation, test it, commit and push directly to `main`, monitor CI,
+forward-fix failures, update the status ledger, and continue to the next
+milestone. Stop only for a genuine unresolved business decision, unavailable
+credential or external-account action, or destructive production action.
+
 ## When delivering a migration
 
 Follow the direct-to-main workflow in `AGENTS.md` and `docs/DEVELOPMENT_WORKFLOW.md` exactly: one cohesive migration per delivery, full local validation before pushing, push directly to `main` only with passing local checks and no known Blocking issues, forward-fix any CI failure, never force-push or rewrite a merged migration, never start a second migration in the same task, and record the delivery (commit SHA, files changed, local results, CI conclusion, risks, next action). After every five successfully delivered migrations, stop and run the comprehensive review below before continuing.

@@ -1,6 +1,12 @@
 # Development Workflow
 
-The repository owner has authorized a validated direct-to-main delivery workflow. The previous mandatory path (`GitHub Issue → dedicated branch → Draft PR → GitHub Actions → Claude review → human approval → merge`) is no longer required for routine migration delivery.
+The repository owner has authorized a validated direct-to-main delivery workflow. The previous mandatory path (`GitHub Issue → dedicated branch → Draft PR → GitHub Actions → Claude review → human approval → merge`) is no longer required for routine migration or application-milestone delivery.
+
+For the continuous CCIP v1 program, `docs/PROJECT_MASTER_PLAN.md` defines the
+authorized milestones and `docs/EXECUTION_STATUS.md` identifies the next one.
+Application deliveries are cohesive milestones with their tests and docs. If a
+delivery includes a database migration, every migration-specific rule below
+still applies in full.
 
 ## Delivery workflow
 
@@ -15,12 +21,19 @@ The repository owner has authorized a validated direct-to-main delivery workflow
 9. After every five successfully delivered migrations, stop and conduct a comprehensive review covering architecture and data model, migration integrity and replay, PostgreSQL correctness, RLS and least privilege, grants and `SECURITY DEFINER` functions, audit behavior, indexes and query performance, naming and consistency, pgTAP coverage, CI and lint results, documentation accuracy, and technical debt/roadmap alignment — before starting a sixth migration.
 10. Never force-push, rewrite history, bypass a failed required check, or modify a merged migration, regardless of urgency.
 
+For application milestones, substitute the relevant application validation
+matrix—format, lint, typecheck, unit/integration tests, production build, E2E
+where available—while retaining repository policy, documentation-link, YAML,
+and whitespace checks. After a milestone is green, record it in
+`docs/EXECUTION_STATUS.md` and continue to the next unfinished milestone
+without waiting for routine confirmation.
+
 ## Responsibilities
 
 | Participant | Responsibility |
 |---|---|
 | ChatGPT | Clarify product intent, help scope a bounded delivery and acceptance criteria, and avoid claiming repository state without verification. |
-| Delivering agent (Codex, Claude, or human) | Read repository instructions, start from latest `main`, implement only one cohesive migration, add tests and documentation, run every local validation, push directly to `main`, forward-fix any CI failure, and stop after the authorized delivery. |
+| Delivering agent (Codex, Claude, or human) | Read repository instructions, start from latest `main`, implement one cohesive migration or application milestone with tests and documentation, run every local validation, push directly to `main`, forward-fix any CI failure, record the delivery, and—for the authorized CCIP v1 program—continue to the next milestone. |
 | Independent reviewer (Claude, on request) | Independently review security, PostgreSQL/RLS correctness, performance, compatibility, migrations, tests, naming, and production readiness for a delivered change or for the mandatory five-migration comprehensive review. Findings are Blocking, Important, or Suggestion. A reviewer never merges, never pushes on someone else's behalf, and never silently redesigns the database. |
 | GitHub Actions | Reproduce deterministic policy, migration, database, syntax, documentation, dependency, and security checks on every push to `main`. A green check is evidence of correctness; a red check is a forward-fix trigger, not a merge gate, since the push has already landed. |
 | Repository owner | Own scope and design decisions, configure secrets and required status checks, resolve accepted risk, and revoke or narrow this authorization at any time. |

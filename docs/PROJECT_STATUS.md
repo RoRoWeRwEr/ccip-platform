@@ -8,6 +8,10 @@ This dashboard reports observed states only. Repository and GitHub state overrid
 
 Sprint 0 — AI-powered cloud development infrastructure — is **merged** through PR #5.
 
+The Database Phase is complete and the owner-authorized CCIP v1 application
+execution program is active. `docs/PROJECT_MASTER_PLAN.md` is the authoritative
+roadmap and `docs/EXECUTION_STATUS.md` is the live milestone ledger.
+
 Migrations `0001`–`0048` are immutable historical migrations. Migration
 `0049_create_catalog_admin_authorization.sql` completes the current Database
 Phase and is merged under the
@@ -36,9 +40,10 @@ branch, Draft PR, or manual merge.
 
 ## Next approved action
 
-None. The current Database Phase roadmap is complete through `0049`. Do not
-invent or begin migration `0050`; the next work belongs to the application/API
-phase unless the owner separately approves a new bounded database roadmap.
+Execute the next unfinished application milestone recorded in
+`docs/EXECUTION_STATUS.md`. The Database Phase roadmap remains complete through
+`0049`; do not invent migration `0050` without a documented application-proven
+schema gap and explicit roadmap justification.
 
 ## Current blockers
 

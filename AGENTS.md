@@ -11,6 +11,9 @@ Before planning or editing:
 3. Read this file.
 4. Read `CLAUDE.md`.
 5. Read every authoritative file under `docs/`, beginning with `docs/AI_AGENT_HANDOFF.md`, `docs/DEVELOPMENT_WORKFLOW.md`, and `docs/PROJECT_STATUS.md`.
+   For CCIP v1 execution, always read `docs/PROJECT_MASTER_PLAN.md` and
+   `docs/EXECUTION_STATUS.md`, determine the next unfinished milestone, and
+   treat that milestone as the active routine delivery.
 6. Inspect all workflows under `.github/workflows/` and the files relevant to the task.
 7. Reconcile documentation with the actual tree and GitHub state; report discrepancies before work.
 
@@ -42,3 +45,21 @@ The repository owner has authorized a validated direct-to-main delivery workflow
 A GitHub Issue, branch, or PR may still be opened for a genuinely exceptional case (see `docs/DEVELOPMENT_WORKFLOW.md`), but it is never required and never substitutes for steps 4–9 above.
 
 See `docs/DEVELOPMENT_WORKFLOW.md` for roles and the end-to-end process.
+
+## Autonomous CCIP v1 execution
+
+The owner has authorized continuous execution of the milestones in
+`docs/PROJECT_MASTER_PLAN.md`. After each milestone, update
+`docs/EXECUTION_STATUS.md`, validate, commit, push directly to `main`, monitor
+all triggered GitHub Actions, forward-fix failures, and continue automatically
+to the next unfinished milestone. The database-only one-migration rule still
+applies whenever a delivery contains a migration; application milestones must
+also remain cohesive and reviewable.
+
+Stop only for a genuine unresolved business decision, an unavailable
+credential or required external-account action, or a destructive production
+action. Record external blockers precisely and continue every other executable
+task. Context or session limits are not completion: finish the current safe
+atomic operation, commit and push it, update `docs/EXECUTION_STATUS.md` with the
+exact resume point, and provide one resume instruction without leaving
+undocumented local changes.
