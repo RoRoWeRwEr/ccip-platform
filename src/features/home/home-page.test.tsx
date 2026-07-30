@@ -1,10 +1,23 @@
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { SiteHeader } from "@/components/site-header";
 import { HomePage } from "./home-page";
+
+function renderPage(locale: "ar" | "en") {
+  render(
+    <>
+      <a href="#main-content">
+        {locale === "ar" ? "انتقل إلى المحتوى الرئيسي" : "Skip to main content"}
+      </a>
+      <SiteHeader locale={locale} />
+      <HomePage locale={locale} />
+    </>,
+  );
+}
 
 describe("localized homepage", () => {
   it("provides an accessible English shell and real journey links", () => {
-    render(<HomePage locale="en" />);
+    renderPage("en");
 
     expect(
       screen.getByRole("link", { name: "Skip to main content" }),
@@ -31,7 +44,7 @@ describe("localized homepage", () => {
   });
 
   it("provides equivalent Arabic navigation and persona entry points", () => {
-    render(<HomePage locale="ar" />);
+    renderPage("ar");
 
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
       "اعرف القيمة الحقيقية",

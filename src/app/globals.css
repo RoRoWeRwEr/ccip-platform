@@ -34,3 +34,17 @@ body {
   background: #cb7a2d;
   color: white;
 }
+
+@layer components {
+  .catalog-filter {
+    @apply border-line hover:border-brand hover:text-brand focus-visible:outline-brand inline-flex min-h-11 items-center rounded-full border bg-white px-4 py-2 text-sm font-bold transition focus-visible:outline-2 focus-visible:outline-offset-4;
+  }
+
+  .catalog-filter[aria-current="page"] {
+    @apply bg-brand border-brand text-white;
+  }
+
+  .catalog-page-link {
+    @apply border-line focus-visible:outline-brand inline-flex min-h-11 items-center rounded-full border bg-white px-5 py-2 font-bold focus-visible:outline-2 focus-visible:outline-offset-4;
+  }
+}
