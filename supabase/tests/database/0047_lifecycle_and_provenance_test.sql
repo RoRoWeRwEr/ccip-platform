@@ -17,6 +17,12 @@ INSERT INTO public.banks (id, country_id, slug, name_en, name_ar) VALUES
 INSERT INTO public.merchant_categories (id, code, slug, name_en, name_ar) VALUES
     ('4a720000-0000-4000-8000-000000000001', '5411', 'grocery-4720', 'Grocery', 'بقالة');
 
+INSERT INTO public.catalog_administrator_scope_assignments
+    (role_assignment_id, scope_type, assignment_reason)
+SELECT id, 'GLOBAL', '0047 lifecycle regression coverage'
+FROM public.user_platform_role_assignments
+WHERE user_id = 'a4720000-0000-4000-8000-000000000001';
+
 SET ROLE authenticated;
 SET LOCAL request.jwt.claim.sub = 'a4720000-0000-4000-8000-000000000001';
 
@@ -94,6 +100,8 @@ SELECT is(
 );
 
 -- 28. Missing-merchant provenance rejection: no merchant_id at all.
+RESET ROLE;
+SET ROLE service_role;
 SELECT throws_ok(
     $$INSERT INTO public.catalog_source_provenance
         (target_entity_type, source_type, authority_level, source_locator, source_title, source_owner)
@@ -107,6 +115,10 @@ SELECT throws_ok(
       VALUES ('MERCHANT', 'ffffffff-0000-4000-8000-000000000099', 'MANUAL_ENTRY_APPROVED', 'AUTHORIZED_SECONDARY', 'https://x.example/nonexistent', 't', 'o')$$,
     '23503', NULL, 'a reference to a non-existent merchant is rejected by the foreign key'
 );
+
+RESET ROLE;
+SET ROLE authenticated;
+SET LOCAL request.jwt.claim.sub = 'a4720000-0000-4000-8000-000000000001';
 
 -- Merchant provenance may not set the optional successor pointer (documented,
 -- deliberate limitation from 0046's fixed cross-record validation function).

@@ -18,10 +18,11 @@ below.
 ## RLS coverage
 
 Row-level security is enabled on **every merged table in the schema** —
-110 tables total: 85 as of `0041`, plus the 5 tables `0042` adds, the
+111 tables total: 85 as of `0041`, plus the 5 tables `0042` adds, the
 one table added by `0043`, the 6 tables added by `0044`, the 3 tables
 added by `0045`, the 1 table added by `0046`, the 6 tables added by
-`0047`, and the 3 tables added by `0048`. Migration `0043` enables RLS on its
+`0047`, the 3 tables added by `0048`, and the 1 table added by `0049`.
+Migration `0043` enables RLS on its
 `feature_flags` table in the same migration. This is enforced in one
 disciplined pass in `0041`
 for everything that existed at that point, and per-table in `0042` for
@@ -77,6 +78,16 @@ unprivileged authenticated callers receive no governance visibility. Domain
 history is append-only to authenticated callers, while `service_role` retains
 trusted scheduling and corrective access.
 
+Migration `0049` adds one RLS-enabled authorization table,
+`catalog_administrator_scope_assignments`. Only active platform
+administrators may read, create, or revoke BANK/GLOBAL scopes; ordinary
+catalog administrators cannot inspect assignments or grant themselves scope.
+Scope-aware policies replace the interim platform-wide management policies on
+provenance, merchants, and publication governance. BANK administrators see and
+mutate only targets resolved to their bank, while GLOBAL and platform
+administrators cover shared resources and every bank. Earlier core catalog
+tables receive no new write grant.
+
 ## Grants
 
 `0041` starts by revoking blanket schema and table access from `anon`
@@ -101,8 +112,10 @@ and succeeds updating `display_name`.
 
 ## `SECURITY DEFINER` usage
 
-There are exactly three `SECURITY DEFINER` functions in the merged
-schema, all in `0042`:
+There are 35 `SECURITY DEFINER` functions in the merged schema through
+`0049`: 3 from `0042`, 2 from `0043`, 4 from `0044`, 11 from `0045`,
+1 from `0046`, 1 from `0047`, 6 from `0048`, and 7 from `0049`. The three introduced
+by `0042` are:
 
 - `has_active_platform_role(text)` and `has_active_platform_permission
   (text)` — both `STABLE`, both schema-qualify every reference inside
@@ -124,6 +137,16 @@ administrative metadata, and `audit_feature_flag_change()` writes to
 Both schema-qualify references, pin `search_path = pg_catalog`, and
 document their justification. Its management trigger remains
 `SECURITY INVOKER`.
+
+Migration `0044` adds four `SECURITY DEFINER` functions: three expose
+narrow API-key, scope, and rate-limit decisions without exposing protected
+metadata, while `audit_api_management_change()` writes redacted changes to
+the central audit log. Migration `0045` adds 11 tightly allowlisted worker,
+scheduler, cancellation, lease-reaping, and audit functions; worker lifecycle
+entry points are executable only by `service_role`, while authenticated users
+receive only the independently authorized cancellation entry point. All 15
+functions schema-qualify references, pin `search_path = pg_catalog`, and have
+documented justifications.
 
 Migration `0046` adds exactly one `SECURITY DEFINER` function,
 `audit_catalog_source_provenance_change()`, which writes to
@@ -155,7 +178,23 @@ now that it is a plain, trigger-maintained column rather than a
 `GENERATED ALWAYS AS (...) STORED` one) — all schema-qualify references
 and pin `search_path = pg_catalog`.
 
-**Every function in the codebase — all 47 merged migrations,
+Migration `0048` adds six narrowly scoped `SECURITY DEFINER` functions:
+`record_catalog_publication_event()` appends publication history and central
+audit events; `submit_catalog_publication(...)`,
+`decide_catalog_publication(...)`, `publish_catalog_version(uuid)`,
+`unpublish_catalog_version(uuid, boolean, text)`, and
+`rollback_catalog_version(uuid, uuid, text)` provide the row-locked workflow
+boundaries. Each schema-qualifies references, pins `search_path = pg_catalog`,
+documents its justification, and has an explicit execute allowlist.
+
+Migration `0049` adds seven `SECURITY DEFINER` functions: one central-audit
+trigger plus six scope/target evaluators. Public helpers expose booleans only;
+the user-specific and target-resolution helpers needed by publication
+assignment validation are internal and not executable by authenticated users.
+All seven schema-qualify references, pin `search_path = pg_catalog`, document
+their justification, and have explicit execute allowlists.
+
+**Every application-defined function in the codebase — all 49 merged migrations,
 `SECURITY DEFINER` or not — sets
 `SET search_path = pg_catalog`.** No exceptions
 found. This is an unusually disciplined baseline; keep it that way. Any

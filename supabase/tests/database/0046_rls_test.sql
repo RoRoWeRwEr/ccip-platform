@@ -42,6 +42,13 @@ INSERT INTO public.countries (id, code, slug, name_en, name_ar) VALUES
 INSERT INTO public.banks (id, country_id, slug, name_en, name_ar) VALUES
     ('b4600000-0000-4000-8000-000000000001', 'c4600000-0000-4000-8000-000000000001', 'test-bank-46', 'Test Bank', 'بنك تجريبي');
 
+INSERT INTO public.catalog_administrator_scope_assignments
+    (role_assignment_id, scope_type, bank_id, assignment_reason)
+SELECT id, 'BANK', 'b4600000-0000-4000-8000-000000000001',
+       '0046 RLS regression coverage'
+FROM public.user_platform_role_assignments
+WHERE user_id = 'a4600000-0000-4000-8000-000000000001';
+
 -- 4. Valid creation by an authorized administrator.
 SET ROLE authenticated;
 SET LOCAL request.jwt.claim.sub = 'a4600000-0000-4000-8000-000000000001';

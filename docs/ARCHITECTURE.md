@@ -1,7 +1,7 @@
 # Database Architecture
 
 This describes the actual, current state of `supabase/migrations/` —
-merged through `0048`. It is derived directly from reading
+merged through `0049`. It is derived directly from reading
 every migration file and from live-executing the full migration sequence
 against PostgreSQL 16 (and, since `0042` merged, against a real
 Supabase local stack via Database CI); it is not aspirational.
@@ -39,9 +39,11 @@ See `docs/MIGRATION_INDEX.md` for the file-by-file inventory and
   user-initiated removal) — pick the one that matches the table's
   actual semantics, don't default to whichever is more familiar.
 - **No destructive operations exist anywhere in the migration history**
-  — no `DROP TABLE`, `DROP COLUMN`, or `TRUNCATE` in any of the 42
-  migration files. Keep it that way; corrective migrations add or
-  constrain, they don't erase history.
+  — no `DROP TABLE`, `DROP COLUMN`, or `TRUNCATE` in any of the 49
+  migration files. (`0047` uses the data-preserving PostgreSQL `DROP
+  EXPRESSION` operation to convert a generated column to a trigger-maintained
+  column; it does not drop the column or its data.) Keep it that way;
+  corrective migrations add or constrain, they don't erase history.
 
 ## Schema layout by capability
 
@@ -177,6 +179,18 @@ Catalog publication governance (0048)
   approval_decisions.
   catalog_publication_events — append-only ordered lifecycle history, with
   every transition also written to audit_events.
+
+Catalog administrator authorization (0049)
+  catalog_administrator_scope_assignments — history-preserving GLOBAL or
+  BANK authorization attached to an existing CATALOG_ADMINISTRATOR role
+  assignment. PLATFORM_ADMINISTRATOR is explicitly global; legacy catalog
+  role assignments without a scope row fail closed. Typed helpers resolve
+  bank ownership through banks/cards and their dependent fee, benefit,
+  reward-rule, and eligibility tables. Loyalty programs and merchant catalog
+  data are GLOBAL resources. Scope-aware RLS replaces the interim 0046–0048
+  CATALOG_MANAGE gates, and every 0048 publication workflow boundary validates
+  its target plus the assigned reviewer/final approver. No write privilege is
+  added to the earlier core catalog tables.
 ```
 
 ## The RLS and authorization model
@@ -193,18 +207,17 @@ which one governs a given table:
    `customer_financial_profiles`. This is how a customer sees only
    their own data, with no role or permission system involved at all.
 
-2. **Platform administration** (`0042`, merged via PR #2): a small,
+2. **Platform administration** (`0042`, scoped for catalog work by `0049`): a small,
    internal RBAC layer — `platform_roles` → `platform_permissions` via
    `platform_role_permissions`, assigned to Supabase auth users via
    `user_platform_role_assignments`. Two `SECURITY DEFINER` functions,
    `has_active_platform_role(code)` and `has_active_platform_permission
    (code)`, are the only way policies check this layer (avoiding RLS
    self-recursion on `user_platform_role_assignments`). As of the
-   current revision, this system is **PLATFORM-scoped only** — there is
-   no per-bank, per-country, or per-functional-area restriction. Do
-   not build application logic that assumes scoped administration
-   exists; it does not yet, by design (see
-   `docs/DATABASE_ROADMAP.md`).
+   current revision, generic role assignments remain PLATFORM-shaped.
+   Catalog administration adds a deliberately separate GLOBAL/BANK scope
+   record in `0049`; no arbitrary resource IDs, country scope, or generic
+   functional-area scope exists.
 
 Six seeded roles exist: `PLATFORM_ADMINISTRATOR`, `CATALOG_
 ADMINISTRATOR`, `COMPLIANCE_REVIEWER`, `OPERATIONS_ANALYST`,
@@ -235,7 +248,7 @@ Migration `0043` follows that same design through
 
 ## Reproducibility
 
-The full sequence `0001`→`0048` has been verified to apply cleanly,
+The full sequence `0001`→`0049` has been verified to apply cleanly,
 in order, against an empty database with zero errors. Current Supabase CLI
 replay emits only the pre-existing `0041` redundant privilege revoke/grant
 warnings — both in the hand-built PostgreSQL 16 stand-in used for the

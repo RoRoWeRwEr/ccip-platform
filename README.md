@@ -11,13 +11,14 @@ and business requirements.
 ## Current implementation status: database-first platform foundation
 
 This repository currently contains **only the database layer**.
-Migrations `0001`–`0048` are merged into `main`: 110 tables covering the
+Migrations `0001`–`0049` complete the current database roadmap: 111 tables covering the
 card/bank/reward catalog, customer financial and spending profiles, the
 recommendation engine, comparisons, notifications, bank applications,
 partnerships/commissions, a full governance/audit/compliance layer, a
 platform RBAC/identity model, feature flags, API-management metadata,
 background jobs, a catalog source-provenance layer, a canonical merchant
-catalog, and catalog publication governance — with row-level security
+catalog, catalog publication governance, and explicit BANK/GLOBAL catalog
+administrator authorization — with row-level security
 enabled on every table.
 
 **No application, API, or frontend code exists in this repository yet.**
@@ -54,8 +55,8 @@ docs/
 decisions/                  Reserved for architecture decision records; currently empty
 glossary/                   Reserved for a project glossary; currently empty
 supabase/
-  migrations/                48 merged SQL migrations (0001–0048)
-  tests/database/            pgTAP test suite (currently covers migrations 0042–0048)
+  migrations/                49 SQL migrations (0001–0049)
+  tests/database/            pgTAP test suite (currently covers migrations 0042–0049)
 .github/workflows/
   database-ci.yml            Database CI — see below
 ```
@@ -79,8 +80,8 @@ carries a banner pointing to `docs/ARCHITECTURE.md` and
 4. Read [`docs/SECURITY_MODEL.md`](docs/SECURITY_MODEL.md) for the RLS,
    grants, and `SECURITY DEFINER` model, and what CI does and doesn't
    validate.
-5. Read [`docs/DATABASE_ROADMAP.md`](docs/DATABASE_ROADMAP.md) for what
-   comes after migration `0048` and why.
+5. Read [`docs/DATABASE_ROADMAP.md`](docs/DATABASE_ROADMAP.md) for the
+   completed Database Phase and explicitly deferred, unscheduled ideas.
 6. Read [`docs/BOOTSTRAP_PLATFORM_ADMIN.md`](docs/BOOTSTRAP_PLATFORM_ADMIN.md)
    before assigning the first platform administrator in any environment.
 7. Read [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) for a

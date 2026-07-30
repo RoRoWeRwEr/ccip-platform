@@ -18,6 +18,15 @@ INSERT INTO public.user_platform_role_assignments(user_id,role_id) VALUES
  ('a4800000-0000-4000-8000-000000000001','42000000-0000-4000-8000-000000000002'),
  ('a4800000-0000-4000-8000-000000000002','42000000-0000-4000-8000-000000000002'),
  ('a4800000-0000-4000-8000-000000000003','42000000-0000-4000-8000-000000000002');
+INSERT INTO public.catalog_administrator_scope_assignments
+    (role_assignment_id,scope_type,assignment_reason)
+SELECT id,'GLOBAL','0048 publication regression coverage'
+FROM public.user_platform_role_assignments
+WHERE user_id IN (
+ 'a4800000-0000-4000-8000-000000000001',
+ 'a4800000-0000-4000-8000-000000000002',
+ 'a4800000-0000-4000-8000-000000000003'
+);
 INSERT INTO public.merchants(id,slug,display_name_en,display_name_ar) VALUES
  ('48000000-0000-4000-8000-000000000001','publication-merchant-48','Publication Merchant','تاجر النشر');
 
@@ -26,7 +35,12 @@ SET LOCAL request.jwt.claim.sub='a4800000-0000-4000-8000-000000000001';
 SELECT lives_ok($$INSERT INTO public.catalog_publication_versions(id,target_entity_type,merchant_id,version_number,content_snapshot,change_summary)
  VALUES('48000000-0000-4000-8000-000000000101','MERCHANT','48000000-0000-4000-8000-000000000001',1,'{"name":"v1"}','Initial publication')$$,'authorized requester creates draft');
 SELECT is((SELECT lifecycle_status FROM public.catalog_publication_versions WHERE id='48000000-0000-4000-8000-000000000101'),'DRAFT','new version is draft');
+RESET ROLE;
+SET ROLE service_role;
 SELECT throws_ok($$INSERT INTO public.catalog_publication_versions(target_entity_type,merchant_id,version_number,content_snapshot,change_summary) VALUES('BANK','48000000-0000-4000-8000-000000000001',2,'{}','bad')$$,'23514',NULL,'typed target mismatch rejected');
+RESET ROLE;
+SET ROLE authenticated;
+SET LOCAL request.jwt.claim.sub='a4800000-0000-4000-8000-000000000001';
 SELECT throws_ok($$UPDATE public.catalog_publication_versions SET lifecycle_status='PUBLISHED' WHERE id='48000000-0000-4000-8000-000000000101'$$,'42501',NULL,'direct lifecycle transition rejected');
 SELECT throws_ok($$SELECT public.submit_catalog_publication('48000000-0000-4000-8000-000000000101','a4800000-0000-4000-8000-000000000002','a4800000-0000-4000-8000-000000000001')$$,'23514',NULL,'requester cannot final-approve');
 SELECT throws_ok($$SELECT public.submit_catalog_publication('48000000-0000-4000-8000-000000000101','a4800000-0000-4000-8000-000000000003','a4800000-0000-4000-8000-000000000003')$$,'23514',NULL,'reviewer and final approver must differ');

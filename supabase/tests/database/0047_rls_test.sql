@@ -58,6 +58,12 @@ WHERE user_id = 'a4730000-0000-4000-8000-000000000004'::uuid;
 INSERT INTO public.user_platform_role_assignments (user_id, role_id)
 VALUES ('a4730000-0000-4000-8000-000000000005'::uuid, '42000000-0000-4000-8000-000000000001'::uuid);
 
+INSERT INTO public.catalog_administrator_scope_assignments
+    (role_assignment_id, scope_type, assignment_reason)
+SELECT id, 'GLOBAL', '0047 RLS regression coverage'
+FROM public.user_platform_role_assignments
+WHERE user_id = 'a4730000-0000-4000-8000-000000000001';
+
 -- 30. Authorized catalog-administrator management.
 SET ROLE authenticated;
 SET LOCAL request.jwt.claim.sub = 'a4730000-0000-4000-8000-000000000001';

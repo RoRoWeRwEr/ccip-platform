@@ -34,6 +34,12 @@ INSERT INTO public.loyalty_programs (id, slug, name_en, name_ar, type) VALUES
 INSERT INTO public.card_eligibility_requirements (id, card_id, requirement_type, name_en, name_ar, minimum_amount, currency_id) VALUES
     ('16610000-0000-4000-8000-000000000001', 'd4610000-0000-4000-8000-000000000001', 'MINIMUM_SALARY', 'Minimum salary', 'الحد الأدنى للراتب', 5000, 'f4610000-0000-4000-8000-000000000001');
 
+INSERT INTO public.catalog_administrator_scope_assignments
+    (role_assignment_id, scope_type, assignment_reason)
+SELECT id, 'GLOBAL', '0046 integrity regression coverage'
+FROM public.user_platform_role_assignments
+WHERE user_id = 'a4610000-0000-4000-8000-000000000001';
+
 SET ROLE authenticated;
 SET LOCAL request.jwt.claim.sub = 'a4610000-0000-4000-8000-000000000001';
 
@@ -75,6 +81,8 @@ SELECT lives_ok(
 );
 
 -- 10. Missing target-entity rejection (FK enforcement) for a second entity type.
+RESET ROLE;
+SET ROLE service_role;
 SELECT throws_ok(
     $$INSERT INTO public.catalog_source_provenance (target_entity_type, card_id, source_type, authority_level, source_locator, source_title, source_owner)
       VALUES ('CARD', 'ffffffff-0000-4000-8000-000000000099', 'OFFICIAL_PRODUCT_PAGE', 'OFFICIAL_PRIMARY', 'https://x.example/missing', 't', 'o')$$,

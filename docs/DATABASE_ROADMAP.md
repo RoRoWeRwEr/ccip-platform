@@ -71,8 +71,16 @@ for the next planning decision, not a backlog.
   central audit integration, and atomic rollback/supersession lineage. It uses
   the existing platform-wide `CATALOG_MANAGE` permission and intentionally
   does not implement resource-scoped catalog administration.
-- `0049` onward: **not started.** Next candidate: `0049` (Catalog Admin
-  Authorization), subject to separate authorization.
+- `0049` (`create_catalog_admin_authorization`): **delivered.** Adds explicit,
+  audited GLOBAL/BANK scope assignments linked to existing
+  `CATALOG_ADMINISTRATOR` role assignments; scope-aware target helpers; and
+  scoped RLS/workflow enforcement across provenance (`0046`), merchants
+  (`0047`), and publication governance (`0048`). PLATFORM_ADMINISTRATOR remains
+  explicitly global, legacy unscoped catalog assignments fail closed, assigned
+  reviewers/final approvers must hold matching scope, and no write access is
+  added to earlier core catalog tables.
+- **The current Database Phase roadmap is complete through `0049`.** No
+  migration after `0049` is approved or scheduled by this roadmap.
 
 ## Why scoped authorization was deferred, not half-built
 
@@ -108,26 +116,21 @@ contains only a placeholder. Validated against what's actually built:
 | 0045 | `background_jobs` | Reasonable, and there's already real demand for it: `data_retention_executions` (`0040`) and `commission_settlements` (`0039`) both look like they're meant to be driven by a scheduler, but nothing currently models a job/worker table. Scope this migration to explicitly serve those two consumers first, not built in the abstract. |
 | 0046 | `data_warehouse_views` | Premature — there is no application layer generating real query patterns yet. Defer until there's production traffic, or narrow to materialized views over `recommendation_*`/`bank_application_*` specifically. **Superseded in practice:** the actual `0046` delivered was `create_catalog_source_provenance`, a bounded, explicitly directed capability unrelated to warehousing. `data_warehouse_views` remains unbuilt and unscheduled; renumber it into a future slot if it is still wanted. |
 | 0047 | `analytics_and_reporting` | Depends on `0046`; same premature-maturity concern. Note: the `REPORTING_VIEWER` role and `REPORTING_READ` permission already exist in `0042`'s seed data with nothing to gate yet — this is what would finally give that role a purpose. Sequence it here, not earlier. **Superseded in practice:** the actual `0047` delivered was `create_merchants`, a bounded canonical-merchant-identity foundation, at explicit task direction; `analytics_and_reporting` remains unbuilt and unscheduled — renumber it into a future slot if it is still wanted. |
-| 0048 | `ml_feature_store` | Speculative at the current product stage. `recommendation_models`/`recommendation_model_factors` (`0028`) already model a rules/scoring-based approach, not ML — building a feature store ahead of an actual ML use case invents a dependency nothing currently needs. Defer past `0050` until a concrete ML use case exists. |
-| 0049 | `search_and_indexing` | Validate actual query volume/patterns before building backend search infrastructure — the catalog tables (`0004`–`0021`) are on the order of tens to low hundreds of rows per entity type at this product stage, which is well within client-side search territory. |
+| 0048 | `ml_feature_store` | Speculative at the current product stage. `recommendation_models`/`recommendation_model_factors` (`0028`) already model a rules/scoring-based approach, not ML. **Superseded in practice:** the actual `0048` delivered catalog publication governance; an ML feature store remains unbuilt and unscheduled. |
+| 0049 | `search_and_indexing` | Search infrastructure was premature without production query volume. **Superseded in practice:** the actual `0049` delivered scoped catalog-administrator authorization and completed this roadmap; search remains unbuilt and unscheduled. |
 | 0050 | `platform_finalization` | Not a bounded migration — "finalization" is a milestone label, not a cohesive capability, and contradicts the repository's own rule against combining unrelated capabilities into one migration. Replace with whatever specific hardening tasks remain once `0043`–`0049` (revised) land — likely index tuning, `FORCE ROW LEVEL SECURITY` reconsideration, and connection/role-limit configuration — tracked as their own scoped items, not one catch-all migration. |
 
-## Recommended sequencing
+## Completed sequencing
 
-1. `0043` (`feature_flags`) is complete and merged as a PLATFORM-only
-   capability with pgTAP coverage and administrative auditing.
-2. `0044` API management is complete and merged.
-3. Complete and review `0045` (`background_jobs`), explicitly targeting
-   `data_retention_executions` and `commission_settlements` as its first
-   real consumers.
-4. Hold `0046`–`0049` behind the first real application-layer release.
-   Building warehouse, analytics, ML, and search infrastructure against
-   a database with no production traffic spends migration-review
-   bandwidth on problems that don't exist yet, at the cost of bandwidth
-   that scoped-authorization design and CI/test coverage (see
-   `docs/SECURITY_MODEL.md`) need first.
-5. Drop `0050` as currently framed; replace with specifically scoped
-   hardening migrations once there's something concrete to harden.
+1. `0043`–`0045` delivered feature flags, API management, and background
+   jobs as bounded capabilities.
+2. `0046`–`0048` delivered source provenance, canonical merchants, and
+   publication governance under an interim platform-wide catalog gate.
+3. `0049` replaced that interim gate with the approved explicit GLOBAL/BANK
+   authorization model and completed the current Database Phase.
+4. Warehouse, analytics, ML, search, and catch-all "platform finalization"
+   remain explicitly deferred and unscheduled. Any future database work needs
+   a new bounded roadmap decision based on application-layer demand.
 
 ## Established prerequisites for every future migration
 

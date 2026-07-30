@@ -57,8 +57,9 @@ out of sync with reality.
 | 0046 | `create_catalog_source_provenance` | 588 | merged | catalog_source_provenance |
 | 0047 | `create_merchants` | 1072 | merged | merchants, merchant_aliases, merchant_relationships, merchant_category_assignments, merchant_market_presence, merchant_domains |
 | 0048 | `create_catalog_publication_governance` | 379 | merged | catalog_publication_versions, catalog_publication_requests, catalog_publication_events |
+| 0049 | `create_catalog_admin_authorization` | 720 | delivered | catalog_administrator_scope_assignments |
 
-**Merged total:** 48 migrations, 110 tables, 33,909 lines.
+**Database Phase total:** 49 migrations, 111 tables, 34,629 lines.
 
 ## `0042` revision note
 
@@ -133,3 +134,11 @@ migration was first drafted.
   three RLS-enabled publication-governance tables, and deliberately does not
   add roles, permissions, or resource-scoped administrator assignments; those
   remain migration `0049` scope.
+- `0049` depends on `0042`'s platform roles, permissions, and role assignments;
+  `0046`'s typed provenance targets; `0047`'s GLOBAL merchant catalog; and
+  `0048`'s publication tables and controlled workflow functions. It adds an
+  explicit GLOBAL/BANK scope assignment linked to a CATALOG_ADMINISTRATOR role
+  assignment, keeps PLATFORM_ADMINISTRATOR global, makes legacy unscoped
+  catalog assignments fail closed, and replaces the interim authorization
+  policies/functions across `0046`–`0048`. It adds no direct write grant to
+  the earlier core catalog tables.
