@@ -15,6 +15,13 @@ describe("locale foundation", () => {
       expect(copy.title.length).toBeGreaterThan(10);
       expect(copy.description.length).toBeGreaterThan(20);
       expect(copy.signals).toHaveLength(3);
+      expect(copy.navigation).toHaveLength(3);
+      expect(copy.personas.map((persona) => persona.key)).toEqual([
+        "cashback",
+        "travel",
+        "everyday",
+      ]);
+      expect(copy.principles).toHaveLength(3);
     }
   });
 });
