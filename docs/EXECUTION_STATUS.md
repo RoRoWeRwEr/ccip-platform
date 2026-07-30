@@ -1,8 +1,8 @@
 # CCIP v1 Execution Status
 
-**Last verified:** 2026-07-30 at P3.1 commit
-`322c364e9c7279f7d83bae689db2d8f7058fa9e6`. Application CI run 30527138679
-and Repository Policy run 30527138619 completed successfully.
+**Last verified:** 2026-07-30 at P3.2 commit
+`436b0bf07cf7e2f75878087708a1f638fba1fc1c`. Application CI run 30527811656
+and Repository Policy run 30527811581 completed successfully.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -14,7 +14,7 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 |---|---|---|
 | 1 — Database Foundation | Complete | 49 migrations, 111 RLS-enabled tables, 18 pgTAP files / 426 assertions; Database CI run 30519983707 and Repository Policy run 30520249357 succeeded. |
 | 2 — Application Foundation | Complete | P2.1–P2.4 and the phase review are complete and green. |
-| 3 — Public Catalog | In progress | P3.1 is complete and green. P3.2 catalog browsing is active. |
+| 3 — Public Catalog | In progress | P3.1–P3.2 are complete and green. P3.3 card details is active. |
 | 4 — Comparison and Calculation | Not started | Schema/design exist; no runtime implementation exists. |
 | 5 — Recommendation | Not started | Schema and DES exist; no runtime engine exists. |
 | 6 — Authentication and User Features | Not started | Supabase identity/RLS schema exists; no UI exists. |
@@ -25,19 +25,19 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 
 ## Current task
 
-Complete **P3.2 Catalog browsing**: Saudi banks and cards with loading, empty,
-and error states, pagination, and stable URLs.
+Complete **P3.3 Card details**: fees, benefits, reward rules, eligibility,
+loyalty, merchant, provenance, and publication information.
 
 ## Exact next task
 
-Complete **P3.3 Card details** after P3.2 is green: fees, benefits, reward
-rules, eligibility, loyalty, merchant, provenance, and publication information.
+Complete **P3.4 Search and filters** after P3.3 is green: text search and useful
+bank, network, fee, reward, persona, and eligibility filters with shareable state.
 
 ## Current validation and CI
 
 - Database completion commit: `0fada5a3d91c8c7e2a76fcd317cdb2f55c41f139`.
 - Database CI: success, run 30519983707.
-- Latest Repository Policy: success, run 30527138619 at `322c364`.
+- Latest Repository Policy: success, run 30527811581 at `436b0bf`.
 - Open PRs: Dependabot #7, #8, and #9; none block direct-to-main execution.
 - P2.1: repository policy, Markdown links, workflow-equivalent YAML lint, and
   whitespace checks passed locally; Repository Policy run 30522625364 passed.
@@ -85,6 +85,17 @@ rules, eligibility, loyalty, merchant, provenance, and publication information.
   covered by mobile-first CSS review and the production build, not claimed as a
   second observed browser run. Application CI run 30527138679 and Repository
   Policy run 30527138619 passed.
+- P3.2 delivery: the shared bilingual shell now wraps every localized route;
+  `/ar/cards` and `/en/cards` render anonymous-RLS-visible banks and published
+  cards through the typed repository. Bank and page state use reversible query
+  URLs, pages are capped at 12 cards, invalid page input fails to page 1, and
+  localized loading, honest empty, and non-sensitive retry states are present.
+- P3.2 validation: formatting, lint, strict typecheck, 20/20 unit tests, 4/4
+  local-Supabase integration tests, production build, zero-vulnerability npm
+  audit, policy, Markdown links, YAML lint, and whitespace checks passed. Live
+  production routes against local Supabase returned English/LTR and Arabic/RTL
+  empty states under anonymous RLS, including safe invalid query handling.
+  Application CI run 30527811656 and Repository Policy run 30527811581 passed.
 
 ## Phase 2 completion review
 
