@@ -1,0 +1,8 @@
+.next
+.github
+*.md
+coverage
+node_modules
+package-lock.json
+supabase/migrations
+supabase/tests
