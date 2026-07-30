@@ -71,7 +71,7 @@ for the next planning decision, not a backlog.
   central audit integration, and atomic rollback/supersession lineage. It uses
   the existing platform-wide `CATALOG_MANAGE` permission and intentionally
   does not implement resource-scoped catalog administration.
-- `0049` (`create_catalog_admin_authorization`): **delivered.** Adds explicit,
+- `0049` (`create_catalog_admin_authorization`): **merged.** Adds explicit,
   audited GLOBAL/BANK scope assignments linked to existing
   `CATALOG_ADMINISTRATOR` role assignments; scope-aware target helpers; and
   scoped RLS/workflow enforcement across provenance (`0046`), merchants

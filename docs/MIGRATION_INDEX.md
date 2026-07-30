@@ -57,7 +57,7 @@ out of sync with reality.
 | 0046 | `create_catalog_source_provenance` | 588 | merged | catalog_source_provenance |
 | 0047 | `create_merchants` | 1072 | merged | merchants, merchant_aliases, merchant_relationships, merchant_category_assignments, merchant_market_presence, merchant_domains |
 | 0048 | `create_catalog_publication_governance` | 379 | merged | catalog_publication_versions, catalog_publication_requests, catalog_publication_events |
-| 0049 | `create_catalog_admin_authorization` | 720 | delivered | catalog_administrator_scope_assignments |
+| 0049 | `create_catalog_admin_authorization` | 720 | merged | catalog_administrator_scope_assignments |
 
 **Database Phase total:** 49 migrations, 111 tables, 34,629 lines.
 

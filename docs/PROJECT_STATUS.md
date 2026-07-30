@@ -1,6 +1,6 @@
 # Project Status
 
-**Last verified:** 2026-07-30 against `main` commit `d7d0da1cb7f96ff860f7fa6a3a316f51f37ba0d9` (the latest commit before this delivery), the local 0049 validation stack, and GitHub Actions state.
+**Last verified:** 2026-07-30 against migration commit `0fada5a3d91c8c7e2a76fcd317cdb2f55c41f139`, the local 0049 validation stack, and GitHub Actions state.
 
 This dashboard reports observed states only. Repository and GitHub state override prior chat or stale documentation.
 
@@ -10,7 +10,7 @@ Sprint 0 — AI-powered cloud development infrastructure — is **merged** throu
 
 Migrations `0001`–`0048` are immutable historical migrations. Migration
 `0049_create_catalog_admin_authorization.sql` completes the current Database
-Phase in this session under the
+Phase and is merged under the
 validated direct-to-main workflow (see `docs/DEVELOPMENT_WORKFLOW.md`);
 routine migration delivery does not require a GitHub Issue, dedicated
 branch, Draft PR, or manual merge.
@@ -46,3 +46,34 @@ phase unless the owner separately approves a new bounded database roadmap.
 - Claude Code workflow activation requires verification of `ANTHROPIC_API_KEY`; until then it remains manual and gated.
 - Dependency Review requires enabling GitHub's dependency graph and setting `DEPENDENCY_REVIEW_ENABLED=true`.
 - The first-platform-administrator bootstrap procedure has not been manually exercised against a real local or staging Supabase project.
+
+## Migration 0049 delivery record
+
+- **Migration commit:** `0fada5a3d91c8c7e2a76fcd317cdb2f55c41f139`.
+- **Changed files:** `README.md`; `docs/ARCHITECTURE.md`;
+  `docs/DATABASE_ROADMAP.md`; `docs/MIGRATION_INDEX.md`;
+  `docs/PROJECT_STATUS.md`; `docs/SECURITY_MODEL.md`;
+  `supabase/migrations/0049_create_catalog_admin_authorization.sql`;
+  `supabase/tests/database/0046_audit_and_integrity_test.sql`;
+  `supabase/tests/database/0046_rls_test.sql`;
+  `supabase/tests/database/0047_lifecycle_and_provenance_test.sql`;
+  `supabase/tests/database/0047_rls_test.sql`;
+  `supabase/tests/database/0048_catalog_publication_governance_test.sql`;
+  `supabase/tests/database/0049_catalog_admin_authorization_test.sql`.
+- **Local validation:** clean replay of migrations `0001`–`0049`; 18 pgTAP
+  files / 426 assertions passed; warning- and error-level database lint passed;
+  repository policy, Markdown relative links, workflow-equivalent YAML lint,
+  and `git diff --check` passed. Final live-schema review found 111/111 tables
+  with RLS, zero invalid indexes, 35 application `SECURITY DEFINER` functions,
+  zero unhardened application functions, and zero such functions executable by
+  `PUBLIC`.
+- **GitHub Actions:** [Repository Policy run 30519983700](https://github.com/RoRoWeRwEr/ccip-platform/actions/runs/30519983700)
+  and [Database CI run 30519983707](https://github.com/RoRoWeRwEr/ccip-platform/actions/runs/30519983707)
+  both completed successfully for the migration commit.
+- **Known residual risks:** migrations `0001`–`0041` still lack dedicated
+  behavioral pgTAP suites; first-platform-administrator bootstrap remains an
+  operational procedure that must be exercised in a real local/staging
+  project; no application/API or production workload exists yet to supply
+  query-plan evidence for future tuning.
+- **Single next approved action:** begin the application/API phase. No migration
+  `0050` is approved by the current database roadmap.
