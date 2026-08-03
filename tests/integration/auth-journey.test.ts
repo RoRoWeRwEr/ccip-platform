@@ -2,6 +2,11 @@ import { randomUUID } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import type { Database } from "@/types/database";
+import {
+  createCollection,
+  loadUserDashboard,
+  updateUserProfile,
+} from "@/features/account/data";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
@@ -19,6 +24,8 @@ const admin = createClient<Database>(url, serviceRoleKey, {
 const email = `auth-${randomUUID()}@example.test`;
 const password = "integration-password-42";
 let userId: string;
+let secondUserId: string;
+const secondEmail = `auth-${randomUUID()}@example.test`;
 
 beforeAll(async () => {
   const { data, error } = await admin.auth.admin.createUser({
@@ -28,10 +35,18 @@ beforeAll(async () => {
   });
   if (error) throw error;
   userId = data.user.id;
+  const second = await admin.auth.admin.createUser({
+    email: secondEmail,
+    password,
+    email_confirm: true,
+  });
+  if (second.error) throw second.error;
+  secondUserId = second.data.user.id;
 });
 
 afterAll(async () => {
   if (userId) await admin.auth.admin.deleteUser(userId);
+  if (secondUserId) await admin.auth.admin.deleteUser(secondUserId);
 });
 
 describe("Supabase authentication journey", () => {
@@ -63,5 +78,37 @@ describe("Supabase authentication journey", () => {
     );
     expect(known.error).toBeNull();
     expect(unknown.error).toBeNull();
+  });
+
+  it("provisions and isolates profile and collection data through authenticated RLS", async () => {
+    const owner = createClient<Database>(url, publishableKey, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+    const other = createClient<Database>(url, publishableKey, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+    expect(
+      (await owner.auth.signInWithPassword({ email, password })).error,
+    ).toBeNull();
+    expect(
+      (await other.auth.signInWithPassword({ email: secondEmail, password }))
+        .error,
+    ).toBeNull();
+
+    await updateUserProfile(owner, {
+      displayName: "Integration Member",
+      language: "en",
+    });
+    await createCollection(owner, "My shortlist");
+    await expect(loadUserDashboard(owner)).resolves.toMatchObject({
+      email,
+      profile: { displayName: "Integration Member", language: "en" },
+      collections: [{ name: "My shortlist" }],
+    });
+    await expect(loadUserDashboard(other)).resolves.toMatchObject({
+      email: secondEmail,
+      profile: { displayName: null },
+      collections: [],
+    });
   });
 });

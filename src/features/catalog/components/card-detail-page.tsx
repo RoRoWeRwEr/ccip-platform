@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { CardDetail } from "@/features/catalog/data/repository";
 import type { Locale } from "@/lib/i18n";
+import { SaveCardButton } from "@/features/account/save-card-button";
 
 const copy = {
   ar: {
@@ -155,6 +156,7 @@ export function CardDetailPage({
             ) : null}
           </div>
         ) : null}
+        <SaveCardButton locale={locale} card={card} />
       </header>
 
       <div className="mt-8 grid gap-8 lg:grid-cols-2">

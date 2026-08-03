@@ -40,7 +40,7 @@ export function SiteHeader({ locale }: Readonly<{ locale: Locale }>) {
           {copy.languageSwitch}
         </Link>
         <Link
-          href={`/${locale}/auth`}
+          href={`/${locale}/account`}
           className="border-line hover:border-brand hover:text-brand focus-visible:outline-brand order-2 rounded-full border bg-white px-4 py-2 text-sm font-bold transition focus-visible:outline-2 focus-visible:outline-offset-4 sm:order-3"
         >
           {locale === "ar" ? "الحساب" : "Account"}
