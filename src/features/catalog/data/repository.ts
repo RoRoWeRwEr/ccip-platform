@@ -114,8 +114,10 @@ export interface CardDetail {
     calculationMethod: string;
     rewardValue: number;
     minimumSpend: number | null;
+    minimumSpendPeriod: string | null;
     capAmount: number | null;
     capPeriod: string | null;
+    roundingMethod: string;
     targets: Array<{
       id: string;
       nameAr: string | null;
@@ -304,8 +306,10 @@ const publishedCardDetailSchema = z.object({
       calculation_method: z.string(),
       reward_value: z.number().nonnegative(),
       minimum_spend: nullableNumber,
+      minimum_spend_period: nullableString,
       cap_amount: nullableNumber,
       cap_period: nullableString,
+      rounding_method: z.string().optional().default("NONE"),
       targets: z.array(
         z.object({
           id: z.string().uuid(),
@@ -591,8 +595,10 @@ export async function getPublicCardBySlug(
       calculationMethod: rule.calculation_method,
       rewardValue: rule.reward_value,
       minimumSpend: rule.minimum_spend,
+      minimumSpendPeriod: rule.minimum_spend_period,
       capAmount: rule.cap_amount,
       capPeriod: rule.cap_period,
+      roundingMethod: rule.rounding_method,
       targets: rule.targets.map((target) => ({
         id: target.id,
         nameAr: target.merchant_category?.name_ar ?? null,

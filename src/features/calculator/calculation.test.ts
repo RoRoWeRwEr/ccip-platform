@@ -68,8 +68,10 @@ describe("annual card value calculator", () => {
           calculationMethod: "FIXED",
           rewardValue: 1,
           minimumSpend: null,
+          minimumSpendPeriod: null,
           capAmount: null,
           capPeriod: null,
+          roundingMethod: "NONE",
           targets: [],
         },
         {
@@ -78,8 +80,10 @@ describe("annual card value calculator", () => {
           calculationMethod: "FIXED",
           rewardValue: 2,
           minimumSpend: null,
+          minimumSpendPeriod: null,
           capAmount: 10_000,
           capPeriod: "YEAR",
+          roundingMethod: "NONE",
           targets: [
             { id: "t", nameAr: null, nameEn: null, categorySlug: "groceries" },
           ],
@@ -103,8 +107,10 @@ describe("annual card value calculator", () => {
           calculationMethod: "PERCENTAGE",
           rewardValue: 2,
           minimumSpend: null,
+          minimumSpendPeriod: null,
           capAmount: null,
           capPeriod: null,
+          roundingMethod: "NONE",
           targets: [],
         },
       ]),
@@ -129,8 +135,10 @@ describe("annual card value calculator", () => {
           calculationMethod: "TIERED",
           rewardValue: 5,
           minimumSpend: 2_000,
+          minimumSpendPeriod: "MONTH",
           capAmount: null,
           capPeriod: null,
+          roundingMethod: "NONE",
           targets: [],
         },
       ]),
@@ -138,5 +146,111 @@ describe("annual card value calculator", () => {
       0.1,
     );
     expect(result.annualRewardQuantity).toBe(0);
+  });
+
+  it("applies monthly caps, reward rounding, and halala currency rounding", () => {
+    const result = calculateAnnualCardValue(
+      card([
+        {
+          id: "rounded",
+          rewardType: "POINTS",
+          calculationMethod: "PERCENTAGE",
+          rewardValue: 0.333333,
+          minimumSpend: null,
+          minimumSpendPeriod: null,
+          capAmount: 1.2,
+          capPeriod: "MONTH",
+          roundingMethod: "DOWN",
+          targets: [],
+        },
+      ]),
+      { ...spending, groceries: 10, dining: 0 },
+      0.333333,
+    );
+    expect(result.annualRewardQuantity).toBe(0);
+    expect(result.annualRewardValue).toBe(0);
+    expect(result.netValue).toBe(-100);
+  });
+
+  it("shares a published cap across every category using the same rule", () => {
+    const result = calculateAnnualCardValue(
+      card([
+        {
+          id: "shared-cap",
+          rewardType: "POINTS",
+          calculationMethod: "FIXED",
+          rewardValue: 1,
+          minimumSpend: null,
+          minimumSpendPeriod: null,
+          capAmount: 100,
+          capPeriod: "YEAR",
+          roundingMethod: "NONE",
+          targets: [],
+        },
+      ]),
+      spending,
+      1,
+    );
+    expect(result.annualRewardQuantity).toBe(100);
+    expect(result.annualRewardValue).toBe(100);
+    expect(result.netValue).toBe(0);
+  });
+
+  it("maintains finite bounded deterministic outputs across edge-oriented input combinations", () => {
+    const values = [
+      Number.NaN,
+      Number.NEGATIVE_INFINITY,
+      -1,
+      0,
+      0.001,
+      0.1,
+      999.99,
+      100_000,
+      Number.POSITIVE_INFINITY,
+      Number.MAX_VALUE,
+    ];
+    const testCard = card([
+      {
+        id: "property",
+        rewardType: "POINTS",
+        calculationMethod: "PERCENTAGE",
+        rewardValue: 12.345678,
+        minimumSpend: 0.01,
+        minimumSpendPeriod: "YEAR",
+        capAmount: 50_000,
+        capPeriod: "YEAR",
+        roundingMethod: "NEAREST",
+        targets: [],
+      },
+    ]);
+    for (const spend of values) {
+      for (const valuation of values) {
+        const input = {
+          ...spending,
+          general: spend,
+          groceries: spend,
+          dining: spend,
+        };
+        const first = calculateAnnualCardValue(testCard, input, valuation);
+        const second = calculateAnnualCardValue(testCard, input, valuation);
+        expect(first).toEqual(second);
+        for (const output of [
+          first.annualSpend,
+          first.annualRewardQuantity,
+          first.annualRewardValue,
+          first.annualFee,
+          first.netValue,
+          first.valuationApplied,
+        ]) {
+          expect(Number.isFinite(output)).toBe(true);
+        }
+        expect(first.annualSpend).toBeGreaterThanOrEqual(0);
+        expect(first.annualRewardValue).toBeGreaterThanOrEqual(0);
+        expect(first.annualFee).toBeGreaterThanOrEqual(0);
+        expect(Math.abs((first.annualRewardValue * 100) % 1)).toBeLessThan(
+          1e-9,
+        );
+      }
+    }
   });
 });

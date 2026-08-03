@@ -73,8 +73,10 @@ const card: CardDetail = {
       calculationMethod: "FIXED",
       rewardValue: 2,
       minimumSpend: null,
+      minimumSpendPeriod: null,
       capAmount: null,
       capPeriod: "NONE",
+      roundingMethod: "NONE",
       targets: [
         {
           id: "50000000-0000-4000-8000-000000000008",

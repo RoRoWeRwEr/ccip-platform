@@ -33,6 +33,18 @@ const copy = {
     rule: "Published rule",
     noRule: "No applicable published rule",
     assumptions: "Assumptions and limitations",
+    annualized: "Monthly spending is annualized by multiplying by 12.",
+    cashbackParity: "Cashback is valued at SAR parity (1 reward unit = SAR 1).",
+    fixedValuation: (value: string) =>
+      `Reward units use the entered fixed reference of SAR ${value} per unit.`,
+    ruleSelection:
+      "The most specific published category rule is used; otherwise the first published general rule applies.",
+    limitations:
+      "Published minimums, caps, and rounding are applied. Tiered rules without published tiers and transaction/day minimums that cannot be verified from monthly totals return zero.",
+    netMethod:
+      "Offers and benefits are excluded. Net value is annual reward value minus annual fee.",
+    publication: (version: number, date: string) =>
+      `Catalog publication version ${version}, effective ${date}.`,
     empty: "Choose a card and enter spending to calculate an estimate.",
     categories: {
       general: "Other/general",
@@ -65,6 +77,19 @@ const copy = {
     rule: "القاعدة المنشورة",
     noRule: "لا توجد قاعدة منشورة مطبقة",
     assumptions: "الافتراضات والقيود",
+    annualized: "يُحوّل الإنفاق الشهري إلى سنوي بضربه في 12.",
+    cashbackParity:
+      "يُقيّم الاسترداد النقدي بالقيمة نفسها (كل وحدة = ريال واحد).",
+    fixedValuation: (value: string) =>
+      `تستخدم وحدات المكافأة القيمة المرجعية المدخلة: ${value} ريال لكل وحدة.`,
+    ruleSelection:
+      "تُستخدم قاعدة الفئة المنشورة الأكثر تحديداً، وإلا فتُستخدم أول قاعدة عامة منشورة.",
+    limitations:
+      "تُطبق الحدود الدنيا والسقوف والتقريب المنشورة. القواعد المتدرجة دون شرائح منشورة وحدود المعاملة/اليوم التي لا يمكن التحقق منها من الإجماليات الشهرية تُحتسب صفراً.",
+    netMethod:
+      "لا تدخل العروض والمزايا في القيمة. صافي القيمة هو قيمة المكافآت السنوية ناقص الرسوم السنوية.",
+    publication: (version: number, date: string) =>
+      `إصدار الكتالوج المنشور ${version}، ساري من ${date}.`,
     empty: "اختر بطاقة وأدخل الإنفاق لحساب التقدير.",
     categories: {
       general: "أخرى/عامة",
@@ -110,6 +135,22 @@ export function CalculatorPage({
   const result = card
     ? calculateAnnualCardValue(card, spending, valuation)
     : null;
+  const assumptions =
+    result && card
+      ? [
+          text.annualized,
+          result.cashbackParity
+            ? text.cashbackParity
+            : text.fixedValuation(number(locale, result.valuationApplied)),
+          text.ruleSelection,
+          text.limitations,
+          text.netMethod,
+          text.publication(
+            card.publication.versionNumber,
+            card.publication.effectiveFrom,
+          ),
+        ]
+      : [];
   return (
     <main
       id="main-content"
@@ -269,7 +310,7 @@ export function CalculatorPage({
               {text.assumptions}
             </h3>
             <ul className="mt-3 list-disc space-y-2 ps-5 text-sm leading-6">
-              {result.assumptions.map((assumption) => (
+              {assumptions.map((assumption) => (
                 <li key={assumption}>{assumption}</li>
               ))}
             </ul>

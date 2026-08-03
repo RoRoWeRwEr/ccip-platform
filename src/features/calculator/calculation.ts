@@ -18,32 +18,84 @@ export type CalculationResult = {
   annualRewardValue: number;
   annualFee: number;
   netValue: number;
+  valuationApplied: number;
+  cashbackParity: boolean;
   categoryResults: Array<{
     category: SpendingCategory;
     annualSpend: number;
     rewardQuantity: number;
     rule: CardDetail["rewardRules"][number] | null;
+    limitation: "TIERED" | "MINIMUM_PERIOD" | null;
   }>;
-  assumptions: string[];
 };
 
-function finiteNonNegative(value: number, maximum: number) {
-  return Number.isFinite(value) && value > 0 ? Math.min(value, maximum) : 0;
+const MONEY_SCALE = 100n;
+const RATE_SCALE = 1_000_000n;
+const MAX_MONTHLY_HALALAS = 10_000_000n;
+const MAX_REWARD_MICRO_UNITS = 1_000_000_000_000_000n;
+
+function boundedScaled(value: number, scale: bigint, maximum: bigint) {
+  if (!Number.isFinite(value) || value <= 0) return 0n;
+  if (value >= Number(maximum) / Number(scale)) return maximum;
+  const scaled = BigInt(Math.round(value * Number(scale)));
+  return scaled > maximum ? maximum : scaled;
+}
+
+function divideHalfUp(numerator: bigint, denominator: bigint) {
+  return (numerator + denominator / 2n) / denominator;
+}
+
+function toNumber(value: bigint, scale: bigint) {
+  return Number(value) / Number(scale);
 }
 
 function normalized(value: string | null) {
   return value?.trim().toLowerCase().replaceAll("_", "-") ?? null;
 }
 
-function capForYear(amount: number, period: string | null) {
+function annualCapMicroUnits(amount: number, period: string | null) {
+  const base = boundedScaled(amount, RATE_SCALE, MAX_REWARD_MICRO_UNITS);
   switch (period) {
     case "MONTH":
-      return amount * 12;
+      return base * 12n;
     case "QUARTER":
-      return amount * 4;
+      return base * 4n;
     default:
-      return amount;
+      return base;
   }
+}
+
+function roundReward(value: bigint, method: string) {
+  const whole = value / RATE_SCALE;
+  const remainder = value % RATE_SCALE;
+  if (remainder === 0n || method === "NONE") return value;
+  if (method === "UP") return (whole + 1n) * RATE_SCALE;
+  if (method === "DOWN") return whole * RATE_SCALE;
+  if (method === "NEAREST") {
+    return (whole + (remainder * 2n >= RATE_SCALE ? 1n : 0n)) * RATE_SCALE;
+  }
+  return value;
+}
+
+function meetsMinimum(
+  monthlyHalalas: bigint,
+  annualHalalas: bigint,
+  minimum: number | null,
+  period: string | null,
+) {
+  if (minimum === null) return { meets: true, unsupported: false };
+  const minimumHalalas = boundedScaled(
+    minimum,
+    MONEY_SCALE,
+    MAX_MONTHLY_HALALAS * 12n,
+  );
+  if (period === "YEAR") {
+    return { meets: annualHalalas >= minimumHalalas, unsupported: false };
+  }
+  if (period === "MONTH" || period === null) {
+    return { meets: monthlyHalalas >= minimumHalalas, unsupported: false };
+  }
+  return { meets: false, unsupported: true };
 }
 
 export function calculateAnnualCardValue(
@@ -51,74 +103,125 @@ export function calculateAnnualCardValue(
   monthlySpending: MonthlySpending,
   sarPerRewardUnit: number,
 ): CalculationResult {
-  const valuation = finiteNonNegative(sarPerRewardUnit, 100);
+  const valuationMicroSar = boundedScaled(
+    sarPerRewardUnit,
+    RATE_SCALE,
+    100n * RATE_SCALE,
+  );
   const generalRules = card.rewardRules.filter(
     (rule) => rule.targets.length === 0,
   );
-  const categoryResults = spendingCategories.map((category) => {
-    const monthly = finiteNonNegative(monthlySpending[category], 100_000);
-    const annualSpend = monthly * 12;
+  const uncappedResults = spendingCategories.map((category) => {
+    const monthlyHalalas = boundedScaled(
+      monthlySpending[category],
+      MONEY_SCALE,
+      MAX_MONTHLY_HALALAS,
+    );
+    const annualHalalas = monthlyHalalas * 12n;
     const targeted = card.rewardRules.find((rule) =>
       rule.targets.some(
         (target) => normalized(target.categorySlug) === category,
       ),
     );
     const rule = targeted ?? generalRules[0] ?? null;
-    if (!rule || annualSpend === 0) {
-      return { category, annualSpend, rewardQuantity: 0, rule };
+    if (!rule || annualHalalas === 0n) {
+      return {
+        category,
+        annualHalalas,
+        rewardMicroUnits: 0n,
+        rule,
+        limitation: null,
+      };
     }
-    if (rule.minimumSpend !== null && monthly < rule.minimumSpend) {
-      return { category, annualSpend, rewardQuantity: 0, rule };
+    const minimum = meetsMinimum(
+      monthlyHalalas,
+      annualHalalas,
+      rule.minimumSpend,
+      rule.minimumSpendPeriod,
+    );
+    if (!minimum.meets) {
+      return {
+        category,
+        annualHalalas,
+        rewardMicroUnits: 0n,
+        rule,
+        limitation: minimum.unsupported ? ("MINIMUM_PERIOD" as const) : null,
+      };
     }
-    let rewardQuantity =
+    const rateMicro = boundedScaled(
+      rule.rewardValue,
+      RATE_SCALE,
+      1_000_000n * RATE_SCALE,
+    );
+    let rewardMicroUnits =
       rule.calculationMethod === "PERCENTAGE"
-        ? (annualSpend * rule.rewardValue) / 100
+        ? divideHalfUp(annualHalalas * rateMicro, 10_000n)
         : rule.calculationMethod === "FIXED"
-          ? annualSpend * rule.rewardValue
-          : 0;
-    if (rule.capAmount !== null) {
-      rewardQuantity = Math.min(
-        rewardQuantity,
-        capForYear(rule.capAmount, rule.capPeriod),
-      );
-    }
+          ? divideHalfUp(annualHalalas * rateMicro, MONEY_SCALE)
+          : 0n;
+    const limitation =
+      rule.calculationMethod === "TIERED" ? ("TIERED" as const) : null;
+    rewardMicroUnits = roundReward(rewardMicroUnits, rule.roundingMethod);
     return {
       category,
-      annualSpend,
-      rewardQuantity: finiteNonNegative(rewardQuantity, 1_000_000_000),
+      annualHalalas,
+      rewardMicroUnits:
+        rewardMicroUnits > MAX_REWARD_MICRO_UNITS
+          ? MAX_REWARD_MICRO_UNITS
+          : rewardMicroUnits,
       rule,
+      limitation,
     };
   });
-  const annualSpend = categoryResults.reduce(
-    (total, result) => total + result.annualSpend,
-    0,
+  const usedCaps = new Map<string, bigint>();
+  const internalResults = uncappedResults.map((result) => {
+    if (!result.rule || result.rule.capAmount === null) return result;
+    const cap = annualCapMicroUnits(
+      result.rule.capAmount,
+      result.rule.capPeriod,
+    );
+    const used = usedCaps.get(result.rule.id) ?? 0n;
+    const remaining = cap > used ? cap - used : 0n;
+    const rewardMicroUnits =
+      result.rewardMicroUnits < remaining ? result.rewardMicroUnits : remaining;
+    usedCaps.set(result.rule.id, used + rewardMicroUnits);
+    return { ...result, rewardMicroUnits };
+  });
+  const annualSpendHalalas = internalResults.reduce(
+    (total, result) => total + result.annualHalalas,
+    0n,
   );
-  const annualRewardQuantity = categoryResults.reduce(
-    (total, result) => total + result.rewardQuantity,
-    0,
+  const annualRewardMicroUnits = internalResults.reduce(
+    (total, result) => total + result.rewardMicroUnits,
+    0n,
   );
-  const cashbackOnly = card.rewardRules.every(
-    (rule) => rule.rewardType === "CASHBACK",
+  const cashbackParity =
+    card.rewardRules.length > 0 &&
+    card.rewardRules.every((rule) => rule.rewardType === "CASHBACK");
+  const appliedValuation = cashbackParity ? RATE_SCALE : valuationMicroSar;
+  const rewardValueHalalas = divideHalfUp(
+    annualRewardMicroUnits * appliedValuation * MONEY_SCALE,
+    RATE_SCALE * RATE_SCALE,
   );
-  const effectiveValuation = cashbackOnly ? 1 : valuation;
-  const annualRewardValue = annualRewardQuantity * effectiveValuation;
-  const annualFee = finiteNonNegative(card.annualFee, 1_000_000);
+  const annualFeeHalalas = boundedScaled(
+    card.annualFee,
+    MONEY_SCALE,
+    100_000_000n,
+  );
   return {
-    annualSpend,
-    annualRewardQuantity,
-    annualRewardValue,
-    annualFee,
-    netValue: annualRewardValue - annualFee,
-    categoryResults,
-    assumptions: [
-      "Monthly spending is annualized by multiplying by 12.",
-      cashbackOnly
-        ? "Cashback is valued at SAR parity (1 reward unit = SAR 1)."
-        : `Reward units are valued at the entered fixed reference of SAR ${effectiveValuation.toFixed(4)} per unit.`,
-      "The most specific published category rule is used; otherwise the first published general rule applies.",
-      "Published minimum-spend and reward-cap fields are applied. Tiered rules without published tiers return zero.",
-      "Offers and benefits are excluded from monetary value. Net value is annual reward value minus annual fee.",
-      `Catalog publication version ${card.publication.versionNumber}, effective ${card.publication.effectiveFrom}.`,
-    ],
+    annualSpend: toNumber(annualSpendHalalas, MONEY_SCALE),
+    annualRewardQuantity: toNumber(annualRewardMicroUnits, RATE_SCALE),
+    annualRewardValue: toNumber(rewardValueHalalas, MONEY_SCALE),
+    annualFee: toNumber(annualFeeHalalas, MONEY_SCALE),
+    netValue: toNumber(rewardValueHalalas - annualFeeHalalas, MONEY_SCALE),
+    valuationApplied: toNumber(appliedValuation, RATE_SCALE),
+    cashbackParity,
+    categoryResults: internalResults.map((result) => ({
+      category: result.category,
+      annualSpend: toNumber(result.annualHalalas, MONEY_SCALE),
+      rewardQuantity: toNumber(result.rewardMicroUnits, RATE_SCALE),
+      rule: result.rule,
+      limitation: result.limitation,
+    })),
   };
 }
