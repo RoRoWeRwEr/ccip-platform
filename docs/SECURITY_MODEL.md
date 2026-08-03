@@ -220,7 +220,16 @@ projections and requires active/available/public core state plus a default-false
 core eligibility flag and an explicit true value in the effective published
 CARD snapshot. It adds no direct table grant or write path.
 
-**Every application-defined function in the codebase — all 52 migrations,
+Migration `0053` closes the signup/profile lifecycle gap without granting
+authenticated callers direct profile creation. An internal `auth.users`
+trigger calls `bootstrap_user_profile()`, a schema-qualified `SECURITY DEFINER`
+function with `search_path` pinned to `pg_catalog` and execute revoked from
+`PUBLIC`, `anon`, `authenticated`, and `service_role`. It inserts only
+`user_id`, relies on constrained profile defaults, copies no auth metadata,
+backfills missing profiles idempotently, and preserves owner RLS plus the
+protected-column update trigger from `0042`.
+
+**Every application-defined function in the codebase — all 53 migrations,
 `SECURITY DEFINER` or not — sets
 `SET search_path = pg_catalog`.** No exceptions
 found. This is an unusually disciplined baseline; keep it that way. Any

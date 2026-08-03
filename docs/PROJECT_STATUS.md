@@ -14,7 +14,7 @@ The Database Phase is complete and the owner-authorized CCIP v1 application
 execution program is active. `docs/PROJECT_MASTER_PLAN.md` is the authoritative
 roadmap and `docs/EXECUTION_STATUS.md` is the live milestone ledger.
 
-Migrations `0001`–`0050` are immutable historical migrations. Migration
+Migrations `0001`–`0052` are immutable historical migrations. Migration
 `0051_create_published_card_search_interface.sql` completes the revised
 Database Phase after P3.4 proved a concrete result-set reward-filter boundary
 gap. It is
@@ -27,12 +27,12 @@ branch, Draft PR, or manual merge.
 
 | Area | State | Evidence and notes |
 |---|---|---|
-| Migrations `0001`–`0052` | **Database Phase complete** | 52 migrations, 111 tables, 35,273 lines; see `docs/MIGRATION_INDEX.md`. |
+| Migrations `0001`–`0053` | **Database Phase complete** | 53 migrations, 111 tables, 35,310 lines; see `docs/MIGRATION_INDEX.md`. |
 | Governance workflow | **Updated** | Replaced the mandatory issue/branch/Draft PR/manual-merge path with a validated direct-to-main workflow across `AGENTS.md`, `CLAUDE.md`, `docs/DEVELOPMENT_WORKFLOW.md`, `docs/BRANCH_PROTECTION.md`, and `docs/AI_AGENT_HANDOFF.md`. |
 | Sprint 0 infrastructure | **Merged** | PR #5 added unified instructions, handoff/workflow docs, templates, policy automation, Claude workflow, and branch-protection guidance. |
 | Open or draft PRs | **Four Dependabot PRs** | PRs #7–#9 and #15 update GitHub Actions dependencies; none blocks direct-to-main delivery. |
-| Database testing | **Current migrations covered; historical gap remains** | 21 pgTAP files contain 523 assertions covering `0042`–`0052`; migrations `0001`–`0041` lack dedicated behavioral suites. Database CI replays the full migration history. |
-| Security / RLS | **Complete through `0052`** | RLS covers all 111 tables. Detail, list/search, and recommendation-candidate boundaries are execute-only, snapshot-based, and read-only; they add no table grant or write path. |
+| Database testing | **Current migrations covered; historical gap remains** | 22 pgTAP files contain 538 assertions covering `0042`–`0053`; migrations `0001`–`0041` lack dedicated behavioral suites. Database CI replays the full migration history. |
+| Security / RLS | **Complete through `0053`** | RLS covers all 111 tables. Public read boundaries remain execute-only; profile bootstrap is internal, metadata-minimal, and grants no caller execution or table insert. |
 | Catalog source provenance | **Merged (`0046`), extended (`0047`)** | `catalog_source_provenance` records where catalog evidence came from for banks, cards, card fees, card benefits, reward rules, loyalty programs, card eligibility requirements, and (since `0047`) merchants. `CATALOG_MANAGE`-gated RLS, lifecycle/verification state machines, deduplication, and `audit_events` integration. Does not implement catalog publication approval, ingestion, or content storage — see `docs/DATABASE_ROADMAP.md`. |
 | Merchant catalog | **Merged (`0047`)** | `merchants`, `merchant_aliases`, `merchant_relationships`, `merchant_category_assignments`, `merchant_market_presence`, and `merchant_domains` establish canonical merchant identities (bilingual names, classification, channel, lifecycle/verification state machines, parent/subsidiary/brand/chain hierarchy, category and country-presence assignments, official domains) for future offers, reward rules, benefits, and transaction-description matching. `CATALOG_MANAGE`-gated RLS, `audit_events` integration. Does not implement offers, publication governance, scraping, transaction ingestion, or automated/fuzzy matching — see `docs/DATABASE_ROADMAP.md`. |
 | Catalog publication governance | **Merged (`0048`), scoped (`0049`)** | Typed catalog versions, publication requests linked to the existing generic approval engine, two-person ordered review/final approval, scheduling/effective windows, publication/suspension/archive/rejection transitions, overlap prevention, append-only domain events, central audit integration, and rollback/supersession lineage. Every workflow action now enforces GLOBAL or matching BANK scope. |
@@ -40,6 +40,7 @@ branch, Draft PR, or manual merge.
 | Published card detail | **Complete (`0050`)** | `get_published_card_detail(text)` exposes only currently effective PUBLISHED snapshot fields, safe verified provenance, and independently published governed relationships to `anon`/`authenticated`; drafts, workflow records, internal metadata, and unpublished children remain hidden. |
 | Published card list/search | **Complete (`0051`)** | `search_published_cards(...)` filters, sorts, counts, and paginates effective published card snapshots and independently published rewards through an explicit allowlist; anonymous/authenticated callers receive execute only. |
 | Published recommendation candidates | **Complete (`0052`)** | A default-false core flag plus explicit effective-snapshot eligibility gates a bounded array of migration 0050 detail projections; no private governance data or direct table access is exposed. |
+| User profile bootstrap | **Complete (`0053`)** | Existing and future auth users receive one minimal default profile through a hardened internal trigger; no auth metadata or broader profile grant is introduced. |
 | Application foundation | **Complete** | Next.js/Supabase runtime, typed repositories, health/readiness, bilingual routing, logging, security headers, and application CI are delivered. |
 | Frontend | **Phase 4 complete** | P4.1 comparison, P4.2 bilingual spending calculator, P4.3 fixed-point numeric hardening, and the Phase 4 review are green. |
 | Recommendation experience | **Phase 5 complete** | Deterministic fixed-valuation ranking, the bilingual guest journey, and the ownership-scoped authenticated history/save boundary are green over migration 0052's publication-safe candidate interface. |
@@ -50,7 +51,7 @@ branch, Draft PR, or manual merge.
 
 Execute the next unfinished application milestone recorded in
 `docs/EXECUTION_STATUS.md`. The Database Phase roadmap is complete through
-`0052`; P6.2 profile and saved items is the next active delivery.
+`0053`; P6.2 profile and saved items is the next active delivery.
 
 ## Current blockers
 

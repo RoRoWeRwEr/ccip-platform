@@ -13,7 +13,7 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 
 | Phase | State | Evidence |
 |---|---|---|
-| 1 — Database Foundation | Complete | 52 migrations, 111 RLS-enabled tables, 21 pgTAP files / 523 assertions. Migration 0052 adds the bounded dual-gated P5.2 recommendation candidate boundary. |
+| 1 — Database Foundation | Complete | 53 migrations, 111 RLS-enabled tables, 22 pgTAP files / 538 assertions. Migration 0053 adds the minimal internal P6.2 user-profile bootstrap. |
 | 2 — Application Foundation | Complete | P2.1–P2.4 and the phase review are complete and green. |
 | 3 — Public Catalog | Complete | P3.1–P3.4 and the phase review are complete; Application CI run 30810879333 and Repository Policy run 30810879203 passed for `1c269bf`. |
 | 4 — Comparison and Calculation | Complete | P4.1–P4.3 and the phase review are complete; Application CI run 30815813577 and Repository Policy run 30815813897 passed for `8e723b5`. |
@@ -124,6 +124,13 @@ through the existing owner-scoped RLS boundaries.
   passed.
 - P6.1 commit: `42acb5c`; Application CI run 30823715981 and Repository Policy
   run 30823716128 passed.
+- P6.2 prerequisite migration `0053` backfills and provisions exactly one
+  minimal default `user_profiles` row for each auth user through a hardened
+  internal trigger. It copies no auth metadata, grants no runtime execution or
+  profile insert privilege, and preserves owner RLS/protected fields.
+- Migration `0053` local validation: clean replay of all 53 migrations; 22
+  pgTAP files / 538 assertions; warning/error database lint; repository policy;
+  Markdown links; workflow YAML; and whitespace checks passed.
 - Database completion commit: `ed2b6c5` (migration `0051`).
 - Migration `0050` Database CI: success, run 30801523652.
 - Migration `0050` Repository Policy: success, run 30801523667.

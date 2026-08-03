@@ -58,10 +58,9 @@ SELECT throws_ok(
 
 RESET ROLE;
 
--- Protected user_profiles columns: the owner cannot change account_status on their own row,
--- but can still update an ordinary self-service column.
-INSERT INTO public.user_profiles (id, user_id)
-VALUES (gen_random_uuid(), 'a0000000-0000-4000-8000-000000000024'::uuid);
+-- Migration 0053 now provisions this profile from the auth.users insert above.
+-- The owner cannot change account_status but can update an ordinary
+-- self-service column.
 
 SET ROLE authenticated;
 SET LOCAL request.jwt.claim.sub = 'a0000000-0000-4000-8000-000000000024';

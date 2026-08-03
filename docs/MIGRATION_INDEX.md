@@ -61,8 +61,9 @@ out of sync with reality.
 | 0050 | `create_published_card_detail_interface` | 374 | merged | — (read-only `get_published_card_detail(text)` function) |
 | 0051 | `create_published_card_search_interface` | 216 | merged | — (read-only `search_published_cards(...)` function and partial published-read index) |
 | 0052 | `create_published_recommendation_candidates` | 54 | merged | — (fail-closed card eligibility flag, read-only candidate function, and partial candidate index) |
+| 0053 | `create_user_profile_bootstrap` | 37 | merged | — (internal minimal auth-user profile bootstrap and backfill trigger) |
 
-**Database Phase total:** 52 migrations, 111 tables, 35,273 lines.
+**Database Phase total:** 53 migrations, 111 tables, 35,310 lines.
 
 ## `0042` revision note
 
@@ -161,3 +162,6 @@ migration was first drafted.
   eligibility flag to `cards`; the bounded candidate function requires both
   that core flag and an explicit `is_recommendation_eligible: true` in the
   effective CARD snapshot before returning the 0050 allowlisted detail.
+- `0053` depends on `0042`'s `user_profiles` owner RLS, protected-column
+  trigger, and update-only authenticated grant. It provisions only `user_id`
+  through a non-callable hardened trigger function and copies no auth metadata.

@@ -97,8 +97,14 @@ for the next planning decision, not a backlog.
   flag and one bounded, execute-only candidate function requiring both the
   core flag and an explicit true value in the effective published snapshot.
   It adds no table, blanket read grant, write interface, or unrelated feature.
-- **The current Database Phase roadmap is complete through `0052`.** No
-  migration after `0052` is approved or scheduled by this roadmap.
+- `0053` (`create_user_profile_bootstrap`): **autonomously authorized during
+  P6.2.** Application integration proved that signup created an auth identity
+  but no corresponding `user_profiles` row, while authenticated callers
+  intentionally have update-only access. This bounded migration backfills and
+  provisions a minimal default profile through an internal hardened trigger;
+  it copies no auth metadata and adds no table or caller grant.
+- **The current Database Phase roadmap is complete through `0053`.** No
+  migration after `0053` is approved or scheduled by this roadmap.
 
 ## Why scoped authorization was deferred, not half-built
 
@@ -150,7 +156,9 @@ contains only a placeholder. Validated against what's actually built:
    published card-detail function.
 5. `0051` closed the P3.4 result-set reward-filter gap with a snapshot-based,
    read-only list/search function and completed the revised Database Phase.
-6. Warehouse, analytics, ML, and catch-all "platform finalization"
+6. `0052` and `0053` closed concrete P5.2 recommendation-read and P6.2
+   identity-profile bootstrap gaps without broadening table access.
+7. Warehouse, analytics, ML, and catch-all "platform finalization"
    remain explicitly deferred and unscheduled. Any future database work needs
    a new bounded roadmap decision based on application-layer demand.
 
