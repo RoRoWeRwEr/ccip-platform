@@ -1,9 +1,9 @@
 # CCIP v1 Execution Status
 
-**Last verified:** 2026-08-03 at P8.2 commit `aeccb4a`.
-Repository Policy run 30834225757 and Application CI run 30834225028 passed.
+**Last verified:** 2026-08-03 at P8.3 commit `13dba91`.
+Repository Policy run 30835115999 and Application CI run 30835116115 passed.
 
-**Program progress:** 24 of 30 roadmap milestones complete = **80%**.
+**Program progress:** 25 of 30 roadmap milestones complete = **83%**.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -20,20 +20,35 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 | 5 — Recommendation | Complete | P5.1 engine, P5.2 bilingual recommendation journey, P5.3 ownership-scoped persistence boundary, and the phase review are complete and green. |
 | 6 — Authentication and User Features | Complete | P6.1–P6.3 and the phase review are complete and green. |
 | 7 — Catalog Administration | Complete | P7.1–P7.4 and the architecture/security/performance/testing review are complete and green. |
-| 8 — Quality and Security | In progress | P8.1–P8.2 are complete and green; P8.3 security review is next. |
+| 8 — Quality and Security | In progress | P8.1–P8.3 are complete and green; P8.4 performance and resilience is next. |
 | 9 — Staging and Deployment | Not started | No application deployment configuration or credentials observed. |
 | 10 — CCIP v1 Completion | Not started | Depends on phases 1–9. |
 
 ## Current task
 
-Execute **P8.3 Security Review** as the next unfinished milestone.
+Execute **P8.4 Performance and Resilience** as the next unfinished milestone.
 
 ## Exact next task
 
-Review auth/session boundaries, RLS and authorization, secrets, dependencies,
-headers, input validation, abuse cases, and error disclosure; fix findings.
+Review query plans where meaningful, bundle and page performance, caching
+correctness, rate/error behavior, and degraded dependency states; fix findings.
 
 ## Current validation and CI
+
+- P8.3 delivery: production browser policy now adds same-origin resource
+  isolation and disables DNS prefetching while local Supabase connectivity is
+  permitted only in development. Automated desktop/mobile abuse checks enforce
+  security headers, local-only authentication return paths, framework-header
+  suppression, and credential-free operational failures. Auth/session, RLS,
+  authorization, input bounds, error disclosure, dependency, and secrets
+  reviews found no remaining Blocking issue; the cached production dependency
+  audit reported zero vulnerabilities.
+- P8.3 local validation: formatting, lint, strict typecheck, 69/69 unit and
+  component tests, 10/10 real-Supabase integration tests, 32/32 Playwright E2E,
+  accessibility, and security tests, 22 pgTAP files / 538 assertions,
+  production build, repository policy, and whitespace checks passed.
+- P8.3 commit: `13dba91`; Application CI run 30835116115 and Repository Policy
+  run 30835115999 passed.
 
 - P8.2 delivery: automated WCAG A/AA scans cover seven critical bilingual
   routes on desktop and mobile alongside keyboard skip-link, 200% zoom,
