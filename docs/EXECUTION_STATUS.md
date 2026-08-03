@@ -1,9 +1,9 @@
 # CCIP v1 Execution Status
 
-**Last verified:** 2026-08-03 at P5.3 commit `71a1b01`.
-Repository Policy run 30822900731 and Application CI run 30822898794 passed.
+**Last verified:** 2026-08-03 at P6.1 commit `42acb5c`.
+Repository Policy run 30823716128 and Application CI run 30823715981 passed.
 
-**Program progress:** 15 of 30 roadmap milestones complete = **50%**.
+**Program progress:** 16 of 30 roadmap milestones complete = **53%**.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -18,7 +18,7 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 | 3 — Public Catalog | Complete | P3.1–P3.4 and the phase review are complete; Application CI run 30810879333 and Repository Policy run 30810879203 passed for `1c269bf`. |
 | 4 — Comparison and Calculation | Complete | P4.1–P4.3 and the phase review are complete; Application CI run 30815813577 and Repository Policy run 30815813897 passed for `8e723b5`. |
 | 5 — Recommendation | Complete | P5.1 engine, P5.2 bilingual recommendation journey, P5.3 ownership-scoped persistence boundary, and the phase review are complete and green. |
-| 6 — Authentication and User Features | In progress | Supabase identity/RLS schema exists; P6.1 authentication journeys are next. |
+| 6 — Authentication and User Features | In progress | P6.1 secure bilingual identity journeys are complete and green; P6.2 profile and saved items is next. |
 | 7 — Catalog Administration | Not started | Database authorization/workflows exist; no admin UI exists. |
 | 8 — Quality and Security | Not started | Database validation exists; application gates do not. |
 | 9 — Staging and Deployment | Not started | No application deployment configuration or credentials observed. |
@@ -26,13 +26,12 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 
 ## Current task
 
-Execute **P6.1 Authentication Journeys** as the next unfinished milestone.
+Execute **P6.2 Profile and Saved Items** as the next unfinished milestone.
 
 ## Exact next task
 
-Implement secure signup, verification, login, logout, password recovery,
-callback handling, and session refresh over the existing Supabase identity
-boundary.
+Implement the authenticated user profile, saved cards, and saved comparisons
+through the existing owner-scoped RLS boundaries.
 
 ## Current validation and CI
 
@@ -113,6 +112,18 @@ boundary.
   passed.
 - P5.3 commit: `71a1b01`; Application CI run 30822898794 and Repository Policy
   run 30822900731 passed.
+- P6.1 delivery: bilingual no-index identity pages provide signup, email
+  verification callbacks, login, logout, password recovery/update, session
+  validation/refresh, safe same-origin continuation paths, and generic
+  non-enumerating error states through the typed Supabase SSR/browser clients.
+- P6.1 local validation: formatting, lint, strict typecheck, 50/50 unit and
+  component tests, 9/9 real-Supabase integration tests, production build,
+  offline zero-vulnerability npm audit, repository policy, Markdown links,
+  workflow YAML, and whitespace checks passed. The first sandboxed build was
+  denied an internal Turbopack worker port; the identical authorized build
+  passed.
+- P6.1 commit: `42acb5c`; Application CI run 30823715981 and Repository Policy
+  run 30823716128 passed.
 - Database completion commit: `ed2b6c5` (migration `0051`).
 - Migration `0050` Database CI: success, run 30801523652.
 - Migration `0050` Repository Policy: success, run 30801523667.
