@@ -35,8 +35,8 @@ people reviewing cards they already hold.
 
 The committed product currently offers a bilingual public shell, homepage,
 catalog browsing and filters, and publication-governed card detail pages.
-P3.4's final list/search integration is in progress. Through v1, the roadmap
-adds side-by-side comparison, bounded value calculation, deterministic and
+P3.4's final list/search integration is complete and green. Through v1, the
+roadmap adds side-by-side comparison, bounded value calculation, deterministic and
 explainable recommendations, optional accounts and saved work, and governed
 catalog administration. Later possibilities may include change notifications,
 broader accessibility formats, and carefully governed multilingual decision
@@ -95,12 +95,14 @@ about current production performance. The detailed measurement contract is in
 
 ## Planning baseline and roadmap logic
 
-As verified on 2026-08-03, 9 of 30 roadmap milestones are complete (Phase 1 as
-one foundation milestone, P2.1–P2.4, and P3.1–P3.4), so milestone-count
-progress is **30%**. This is a transparent planning measure, not an
-effort-spent estimate; milestones vary substantially in size.
+As verified on 2026-08-03, 10 of 30 roadmap milestones are complete (Phase 1 as
+one foundation milestone, P2.1–P2.4, P3.1–P3.4, and P4.1), so milestone-count
+progress is **33%**. This is a transparent planning measure, not an
+effort-spent estimate; milestones vary substantially in size. P3.4 is delivered
+at `1c269bf`; Application CI run 30810879333 and Repository Policy run
+30810879203 passed.
 
-The critical path is P3.4 → P4 comparison/calculation → P5 recommendation → P6
+The critical path is P4 comparison/calculation → P5 recommendation → P6
 authenticated persistence → P7 governed administration → P8 integrated
 quality/security → P9 staging and operational verification → P10 release
 review. Within that sequence, UX/accessibility design, test-fixture growth,
@@ -268,7 +270,6 @@ server-only and use the anonymous/authenticated clients for RLS-enforced paths.
 
 ## Current next milestone
 
-The next unfinished milestone is **P4.1 multi-card comparison**. Phase 3 is
-complete: migration `0051` supplies the publication-aware list/search boundary
-used by P3.4 reward filtering, sorting, and pagination.
+The next unfinished milestone is **P4.2 spending calculator**. P4.1 provides a
+bounded, shareable, publication-aware comparison of up to three cards.
 `docs/EXECUTION_STATUS.md` is the live source for the exact current task.

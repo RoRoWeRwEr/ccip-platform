@@ -39,7 +39,7 @@ branch, Draft PR, or manual merge.
 | Published card detail | **Complete (`0050`)** | `get_published_card_detail(text)` exposes only currently effective PUBLISHED snapshot fields, safe verified provenance, and independently published governed relationships to `anon`/`authenticated`; drafts, workflow records, internal metadata, and unpublished children remain hidden. |
 | Published card list/search | **Complete (`0051`)** | `search_published_cards(...)` filters, sorts, counts, and paginates effective published card snapshots and independently published rewards through an explicit allowlist; anonymous/authenticated callers receive execute only. |
 | Application foundation | **Complete** | Next.js/Supabase runtime, typed repositories, health/readiness, bilingual routing, logging, security headers, and application CI are delivered. |
-| Frontend | **Phase 3 complete** | Homepage, browsing, card details, publication-aware search, bank/network/fee/persona/salary/reward filters, stable sorting, pagination, loading/empty/error states, and bilingual responsive behavior are delivered and green. |
+| Frontend | **Phase 4 in progress** | Phase 3 is complete. P4.1 adds bilingual, responsive, shareable comparison of up to three publication-safe card details; P4.2 calculator is next. |
 | Operational AI/recommendation service | **Not started** | Recommendation schema exists; no running model or API exists. |
 | Deployment | **Not started** | CI validates database changes but does not deploy a live environment. |
 
@@ -47,7 +47,7 @@ branch, Draft PR, or manual merge.
 
 Execute the next unfinished application milestone recorded in
 `docs/EXECUTION_STATUS.md`. The Database Phase roadmap is complete through
-`0051`; P4.1 multi-card comparison is the next active delivery.
+`0051`; P4.2 spending calculator is the next active delivery.
 
 ## Current blockers
 
