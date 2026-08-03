@@ -1,9 +1,9 @@
 # CCIP v1 Execution Status
 
-**Last verified:** 2026-08-03 at P8.4 commit `566c818`.
-Repository Policy run 30835970048 and Application CI run 30835970031 passed.
+**Last verified:** 2026-08-03 at P9.1 commit `ace16b3`.
+Repository Policy run 30836749288 and Application CI run 30836747504 passed.
 
-**Program progress:** 26 of 30 roadmap milestones complete = **87%**.
+**Program progress:** 27 of 30 roadmap milestones complete = **90%**.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -21,20 +21,35 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 | 6 — Authentication and User Features | Complete | P6.1–P6.3 and the phase review are complete and green. |
 | 7 — Catalog Administration | Complete | P7.1–P7.4 and the architecture/security/performance/testing review are complete and green. |
 | 8 — Quality and Security | Complete | P8.1–P8.4 and the phase review are complete and green. |
-| 9 — Staging and Deployment | Not started | P9.1 deployment readiness is next; no deployment credentials observed. |
+| 9 — Staging and Deployment | In progress | P9.1 is complete and green. P9.2 is blocked on owner-controlled legal/region decisions, staging projects, and deployment credentials. |
 | 10 — CCIP v1 Completion | Not started | Depends on phases 1–9. |
 
 ## Current task
 
-Execute **P9.1 Deployment Readiness** as the next unfinished milestone.
+Execute **P9.2 Staging Deployment** as the next unfinished milestone.
 
 ## Exact next task
 
-Complete the environment contract, deployment configuration, runbooks,
-observability, rollback plan, and production-build verification without using
-or committing deployment credentials.
+After the owner resolves the recorded legal/region decision and provisions the
+staging Vercel and Supabase resources, deploy the exact green `main` commit and
+record the deployment evidence. Do not commit credentials or personal IDs.
 
 ## Current validation and CI
+
+- P9.1 delivery: `vercel.json` pins a clean Next.js build plus bundle budget;
+  the deployment runbook defines separated environments, the complete runtime
+  variable contract, smoke/alert checks, immutable web rollback, database
+  forward fixes, and the P9.2 handoff. Server instrumentation records safe
+  structured route metadata for unhandled request errors without raw errors,
+  URLs, queries, or headers.
+- P9.1 local validation: formatting, lint, strict typecheck, 73/73 unit and
+  component tests, 10/10 real-Supabase integration tests, 32/32 Playwright E2E,
+  accessibility, and security tests, 22 pgTAP files / 538 assertions,
+  production build, bundle budgets, repository policy, and whitespace checks
+  passed. A local production server returned healthy versioned/no-store
+  responses, 37 ms readiness, and successful English/Arabic routes.
+- P9.1 commit: `ace16b3`; Application CI run 30836747504 and Repository Policy
+  run 30836749288 passed.
 
 - P8.4 delivery: readiness now uses a bounded existence probe instead of an
   exact row count and aborts stalled dependencies within three seconds. Safe
@@ -549,10 +564,20 @@ or committing deployment credentials.
 - The HTTPS OAuth credential still lacks GitHub `workflow` scope, but the
   installed GitHub connector is an authorized publishing path for workflow
   changes. No immediate owner action is required for P2.3.
-- Deployment credentials, production/staging Supabase project selection,
-  domain configuration, and first-admin identity are not present. These become
-  owner actions only when Phase 9 needs them; all repository work continues in
-  the meantime.
+- **P9.2 owner blocker:** no Vercel CLI/link, Vercel deployment secrets, or
+  staging Supabase configuration is present. The owner must first approve the
+  Saudi legal/privacy assessment and hosting/data-region outcome, then
+  provision a separate staging Supabase project through migration `0053` and a
+  Vercel staging project with environment-scoped
+  `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`,
+  `APP_VERSION`, and `LOG_LEVEL`. Deployment authorization may be supplied by
+  an owner-authenticated Vercel link or the equivalent scoped Vercel token,
+  organization ID, and project ID. P9.3 additionally requires an intended
+  staging administrator account whose identity the owner verifies in Supabase;
+  no email or UUID belongs in the repository or chat.
+- **Exact resume point:** deploy the current green `main` commit to the
+  provisioned staging environment under P9.2, then execute P9.3 health,
+  readiness, critical-journey, and first-administrator bootstrap verification.
 - Existing repository-settings actions remain: branch protection, dependency
   graph/Dependency Review enablement, and optional Claude Review credentials.
 

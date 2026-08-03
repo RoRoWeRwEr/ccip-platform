@@ -44,13 +44,14 @@ branch, Draft PR, or manual merge.
 | Frontend | **Phase 8 complete** | Public, comparison/calculation, recommendation, authentication/user, and governed administration phases are complete; P8.1–P8.4 quality, accessibility, responsive, security, performance, and resilience reviews are green. |
 | Recommendation experience | **Phase 5 complete** | Deterministic fixed-valuation ranking, the bilingual guest journey, and the ownership-scoped authenticated history/save boundary are green over migration 0052's publication-safe candidate interface. |
 | Authentication and user features | **Phase 6 complete** | Bilingual identity, profile, collections, saved cards, engine-owned comparisons, bounded recommendation history, lifecycle disclosure, and the phase review are green. |
-| Deployment | **Not started** | CI validates database changes but does not deploy a live environment. |
+| Deployment | **P9.1 complete; P9.2 externally blocked** | Vercel configuration, environment contract, safe request-error observability, production smoke procedure, bundle gate, and rollback runbook are complete. No staging projects or deployment credentials are configured. |
 
 ## Next approved action
 
 Execute the next unfinished application milestone recorded in
 `docs/EXECUTION_STATUS.md`. The Database Phase roadmap is complete through
-`0053`; P9.1 deployment readiness is the next active delivery.
+`0053`; P9.2 staging deployment is the next active delivery after its recorded
+owner-controlled inputs are available.
 
 ## Current blockers
 
@@ -58,6 +59,11 @@ Execute the next unfinished application milestone recorded in
 - Claude Code workflow activation requires verification of `ANTHROPIC_API_KEY`; until then it remains manual and gated.
 - Dependency Review requires enabling GitHub's dependency graph and setting `DEPENDENCY_REVIEW_ENABLED=true`.
 - The first-platform-administrator bootstrap procedure has not been manually exercised against a real local or staging Supabase project.
+- P9.2 requires the owner-controlled legal/privacy and hosting/data-region
+  decision, separate staging Supabase and Vercel projects, scoped deployment
+  authorization, and an owner-verified staging administrator identity. Exact
+  non-secret inputs and the resume point are recorded in
+  `docs/EXECUTION_STATUS.md` and `docs/DEPLOYMENT_RUNBOOK.md`.
 
 ## Migration 0049 delivery record
 

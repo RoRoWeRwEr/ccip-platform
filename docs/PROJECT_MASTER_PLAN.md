@@ -95,12 +95,12 @@ about current production performance. The detailed measurement contract is in
 
 ## Planning baseline and roadmap logic
 
-As verified on 2026-08-03, 26 of 30 roadmap milestones are complete (Phase 1 as
+As verified on 2026-08-03, 27 of 30 roadmap milestones are complete (Phase 1 as
 one foundation milestone, P2.1–P2.4, P3.1–P3.4, P4.1–P4.3, P5.1–P5.3, and
-P6.1–P6.3, P7.1–P7.4, and P8.1–P8.4), so milestone-count progress is **87%**. This is a transparent planning
+P6.1–P6.3, P7.1–P7.4, P8.1–P8.4, and P9.1), so milestone-count progress is **90%**. This is a transparent planning
 measure, not an effort-spent estimate; milestones vary substantially in size.
-P8.4 is delivered at `566c818`; Application CI run 30835970031 and Repository
-Policy run 30835970048 passed.
+P9.1 is delivered at `ace16b3`; Application CI run 30836747504 and Repository
+Policy run 30836749288 passed.
 
 The critical path is P4 comparison/calculation → P5 recommendation → P6
 authenticated persistence → P7 governed administration → P8 integrated
@@ -270,7 +270,8 @@ server-only and use the anonymous/authenticated clients for RLS-enforced paths.
 
 ## Current next milestone
 
-The next unfinished milestone is **P9.1 deployment readiness**. Phase 8's
-automated quality, accessibility, responsive, security, performance, and
-resilience gates are complete and green.
+The next unfinished milestone is **P9.2 staging deployment**. P9.1's deployment
+contract, configuration, observability, production smoke check, and rollback
+runbook are complete and green; owner-controlled staging resources and legal/
+region decisions are the recorded external blocker.
 `docs/EXECUTION_STATUS.md` is the live source for the exact current task.
