@@ -95,12 +95,12 @@ about current production performance. The detailed measurement contract is in
 
 ## Planning baseline and roadmap logic
 
-As verified on 2026-08-03, 18 of 30 roadmap milestones are complete (Phase 1 as
+As verified on 2026-08-03, 19 of 30 roadmap milestones are complete (Phase 1 as
 one foundation milestone, P2.1–P2.4, P3.1–P3.4, P4.1–P4.3, P5.1–P5.3, and
-P6.1–P6.3), so milestone-count progress is **60%**. This is a transparent planning
+P6.1–P6.3, and P7.1), so milestone-count progress is **63%**. This is a transparent planning
 measure, not an effort-spent estimate; milestones vary substantially in size.
-P6.3 is delivered at `fd0a61b`; Application CI run 30826150480 and Repository
-Policy run 30826150439 passed.
+P7.1 is delivered at `33c72ae`; Application CI run 30827126503 and Repository
+Policy run 30827126415 passed.
 
 The critical path is P4 comparison/calculation → P5 recommendation → P6
 authenticated persistence → P7 governed administration → P8 integrated
@@ -270,7 +270,6 @@ server-only and use the anonymous/authenticated clients for RLS-enforced paths.
 
 ## Current next milestone
 
-The next unfinished milestone is **P7.1 admin authorization shell**. Phase 6
-identity, owner-scoped saved items, and recommendation history are complete and
-green.
+The next unfinished milestone is **P7.2 provenance and merchant management**.
+P7.1's protected GLOBAL/BANK authorization shell is complete and green.
 `docs/EXECUTION_STATUS.md` is the live source for the exact current task.

@@ -1,9 +1,9 @@
 # CCIP v1 Execution Status
 
-**Last verified:** 2026-08-03 at P6.3 commit `fd0a61b`.
-Repository Policy run 30826150439 and Application CI run 30826150480 passed.
+**Last verified:** 2026-08-03 at P7.1 commit `33c72ae`.
+Repository Policy run 30827126415 and Application CI run 30827126503 passed.
 
-**Program progress:** 18 of 30 roadmap milestones complete = **60%**.
+**Program progress:** 19 of 30 roadmap milestones complete = **63%**.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -19,22 +19,32 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 | 4 — Comparison and Calculation | Complete | P4.1–P4.3 and the phase review are complete; Application CI run 30815813577 and Repository Policy run 30815813897 passed for `8e723b5`. |
 | 5 — Recommendation | Complete | P5.1 engine, P5.2 bilingual recommendation journey, P5.3 ownership-scoped persistence boundary, and the phase review are complete and green. |
 | 6 — Authentication and User Features | Complete | P6.1–P6.3 and the phase review are complete and green. |
-| 7 — Catalog Administration | In progress | Database authorization/workflows exist; P7.1 admin authorization shell is next. |
+| 7 — Catalog Administration | In progress | P7.1 protected GLOBAL/BANK authorization shell is complete and green; P7.2 is next. |
 | 8 — Quality and Security | Not started | Database validation exists; application gates do not. |
 | 9 — Staging and Deployment | Not started | No application deployment configuration or credentials observed. |
 | 10 — CCIP v1 Completion | Not started | Depends on phases 1–9. |
 
 ## Current task
 
-Execute **P7.1 Admin Authorization Shell** as the next unfinished milestone.
+Execute **P7.2 Provenance and Merchant Management** as the next unfinished milestone.
 
 ## Exact next task
 
-Implement a protected administration shell that displays the signed-in
-administrator's effective GLOBAL/BANK catalog scope without privileged
-credentials or client-supplied authorization claims.
+Implement scope-correct controlled provenance and merchant management
+interfaces with input validation, audit feedback, and cross-bank denial tests.
 
 ## Current validation and CI
+
+- P7.1 delivery: the protected bilingual admin route evaluates platform and
+  catalog access through migration `0049`'s scope-aware database functions,
+  displays effective GLOBAL or BANK access, denies users without active scope,
+  and uses neither privileged credentials nor browser-provided authorization
+  claims. Assignment history remains visible only to platform administrators.
+- P7.1 local validation: formatting, lint, strict typecheck, 58/58 unit and
+  component tests, 10/10 real-Supabase integration tests, production build,
+  repository policy, and whitespace checks passed.
+- P7.1 commit: `33c72ae`; Application CI run 30827126503 and Repository Policy
+  run 30827126415 passed.
 
 - P3.4 commit: `1c269bf`; Application CI run 30810879333 and Repository Policy
   run 30810879203 passed.
