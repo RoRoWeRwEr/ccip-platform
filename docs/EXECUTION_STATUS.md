@@ -1,9 +1,9 @@
 # CCIP v1 Execution Status
 
-**Last verified:** 2026-08-03 at P7.4 commit `9203d1b`.
-Repository Policy run 30832605351 and Application CI run 30832606308 passed.
+**Last verified:** 2026-08-03 at P8.1 commit `0aacc6b`.
+Repository Policy run 30833382295 and Application CI run 30833381859 passed.
 
-**Program progress:** 22 of 30 roadmap milestones complete = **73%**.
+**Program progress:** 23 of 30 roadmap milestones complete = **77%**.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -20,20 +20,31 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 | 5 — Recommendation | Complete | P5.1 engine, P5.2 bilingual recommendation journey, P5.3 ownership-scoped persistence boundary, and the phase review are complete and green. |
 | 6 — Authentication and User Features | Complete | P6.1–P6.3 and the phase review are complete and green. |
 | 7 — Catalog Administration | Complete | P7.1–P7.4 and the architecture/security/performance/testing review are complete and green. |
-| 8 — Quality and Security | In progress | P8.1 automated quality gate is next. |
+| 8 — Quality and Security | In progress | P8.1 automated quality gate is complete and green; P8.2 is next. |
 | 9 — Staging and Deployment | Not started | No application deployment configuration or credentials observed. |
 | 10 — CCIP v1 Completion | Not started | Depends on phases 1–9. |
 
 ## Current task
 
-Execute **P8.1 Automated Quality Gate** as the next unfinished milestone.
+Execute **P8.2 Accessibility and Responsive Review** as the next unfinished milestone.
 
 ## Exact next task
 
-Add comprehensive unit, integration, and E2E coverage for critical public,
-authenticated-user, and administrator journeys.
+Run automated and manual keyboard, screen-reader semantics, focus, contrast,
+RTL/LTR, zoom, and responsive review across critical journeys; fix findings.
 
 ## Current validation and CI
+
+- P8.1 delivery: Playwright now enforces eight Chromium desktop/mobile checks
+  covering bilingual direction, public discovery/calculation/recommendation
+  entry paths, protected account/admin redirects, and secret-free health
+  behavior. Application CI installs Chromium and blocks on E2E failures.
+- P8.1 local validation: formatting, lint, strict typecheck, 69/69 unit and
+  component tests, 10/10 real-Supabase integration tests, 8/8 Playwright E2E
+  tests, 22 pgTAP files / 538 assertions, production build, repository policy,
+  and whitespace checks passed.
+- P8.1 commit: `0aacc6b`; Application CI run 30833381859 and Repository Policy
+  run 30833382295 passed.
 
 - P7.4 delivery: only database-verified platform administrators see or operate
   assignment administration. Creation attaches an explicit BANK/GLOBAL scope
