@@ -1,9 +1,9 @@
 # CCIP v1 Execution Status
 
-**Last verified:** 2026-08-03 at P6.2 commit `a0df930`.
-Repository Policy run 30825461124 and Application CI run 30825461049 passed.
+**Last verified:** 2026-08-03 at P6.3 commit `fd0a61b`.
+Repository Policy run 30826150439 and Application CI run 30826150480 passed.
 
-**Program progress:** 17 of 30 roadmap milestones complete = **57%**.
+**Program progress:** 18 of 30 roadmap milestones complete = **60%**.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -18,20 +18,21 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 | 3 — Public Catalog | Complete | P3.1–P3.4 and the phase review are complete; Application CI run 30810879333 and Repository Policy run 30810879203 passed for `1c269bf`. |
 | 4 — Comparison and Calculation | Complete | P4.1–P4.3 and the phase review are complete; Application CI run 30815813577 and Repository Policy run 30815813897 passed for `8e723b5`. |
 | 5 — Recommendation | Complete | P5.1 engine, P5.2 bilingual recommendation journey, P5.3 ownership-scoped persistence boundary, and the phase review are complete and green. |
-| 6 — Authentication and User Features | In progress | P6.1 identity and P6.2 owner-scoped profile/saved items are complete and green; P6.3 user history is next. |
-| 7 — Catalog Administration | Not started | Database authorization/workflows exist; no admin UI exists. |
+| 6 — Authentication and User Features | Complete | P6.1–P6.3 and the phase review are complete and green. |
+| 7 — Catalog Administration | In progress | Database authorization/workflows exist; P7.1 admin authorization shell is next. |
 | 8 — Quality and Security | Not started | Database validation exists; application gates do not. |
 | 9 — Staging and Deployment | Not started | No application deployment configuration or credentials observed. |
 | 10 — CCIP v1 Completion | Not started | Depends on phases 1–9. |
 
 ## Current task
 
-Execute **P6.3 User History** as the next unfinished milestone.
+Execute **P7.1 Admin Authorization Shell** as the next unfinished milestone.
 
 ## Exact next task
 
-Expose owner-scoped recommendation history, document privacy-aware lifecycle
-behavior supported by the schema, and extend RLS integration evidence.
+Implement a protected administration shell that displays the signed-in
+administrator's effective GLOBAL/BANK catalog scope without privileged
+credentials or client-supplied authorization claims.
 
 ## Current validation and CI
 
@@ -146,6 +147,17 @@ behavior supported by the schema, and extend RLS integration evidence.
   passed.
 - P6.2 commit: `a0df930`; Application CI run 30825461049 and Repository Policy
   run 30825461124 passed.
+- P6.3 delivery: the protected account route exposes bounded, visible,
+  owner-RLS recommendation history and bilingual lifecycle disclosure. Saved
+  item removal remains an active-item lifecycle; engine/audit history remains
+  read-only under governed backend retention, and the UI does not claim an
+  unavailable deletion-request workflow.
+- P6.3 local validation: formatting, lint, strict typecheck, 53/53 unit and
+  component tests, 10/10 real-Supabase integration tests, production build,
+  offline zero-vulnerability npm audit, repository policy, Markdown links,
+  workflow YAML, and whitespace checks passed.
+- P6.3 commit: `fd0a61b`; Application CI run 30826150480 and Repository Policy
+  run 30826150439 passed.
 - Database completion commit: `ed2b6c5` (migration `0051`).
 - Migration `0050` Database CI: success, run 30801523652.
 - Migration `0050` Repository Policy: success, run 30801523667.
@@ -158,6 +170,33 @@ behavior supported by the schema, and extend RLS integration evidence.
   effective/future/expired/scheduled windows, drafts/rejection, reward filters,
   sorting, pagination, RLS isolation, suspension, rollback, and archival.
 - Open PRs: Dependabot #7–#9 and #15; none blocks direct-to-main execution.
+
+## Phase 6 completion review
+
+- **Architecture and schema:** Supabase SSR/browser clients remain the single
+  identity boundary. Migration `0053` closes the profile bootstrap gap with no
+  new table, while account data uses typed repositories over existing owner
+  RLS. Engine-owned recommendations/comparisons remain read-only.
+- **Security and privacy:** callbacks accept only local continuation paths;
+  private pages are server-authenticated and no-indexed; errors do not enumerate
+  accounts; runtime clients never receive service-role credentials. Profile,
+  collection, saved-card, comparison, and recommendation reads are owner
+  isolated. Minimal saved snapshots contain only public fields.
+- **Performance and resilience:** account reads run in bounded parallel queries
+  (100 saved cards, 50 comparisons, 50 recommendation runs). Empty states avoid
+  dependent result queries, and failures use generic non-sensitive messages.
+- **UX and accessibility:** signup, login, recovery, profile, saved items, and
+  history are bilingual and RTL/LTR capable, use semantic native controls,
+  explicit labels/status regions, keyboard focus styles, and honest empty and
+  lifecycle states.
+- **Testing and documentation:** 53 unit/component and 10 real-Supabase
+  integration tests pass, plus 538 database assertions. Auth session lifecycle,
+  recovery non-enumeration, profile provisioning, cross-user isolation, saved
+  item wiring, safe redirects, and history presentation are covered.
+- **Technical debt:** no Blocking Phase 6 issue remains. User-facing deletion
+  requests and engine-run creation are not authorized by the present schema;
+  the UI states that limitation rather than adding unsafe writes. A governed
+  deletion-request workflow requires a future approved requirement and policy.
 
 ## Phase 5 completion review
 
