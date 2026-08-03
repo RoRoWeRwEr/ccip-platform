@@ -1,7 +1,8 @@
 # Project Status
 
-**Last verified:** 2026-08-03 with migration `0052` locally validated for P5.2;
-Database CI run 30809941780 and Repository Policy run 30809941903 passed.
+**Last verified:** 2026-08-03 after migration `0052` commit `075c531`;
+Database CI run 30817298193, Application CI run 30817297971, and Repository
+Policy run 30817297958 passed.
 
 This dashboard reports observed states only. Repository and GitHub state override prior chat or stale documentation.
 
@@ -38,7 +39,7 @@ branch, Draft PR, or manual merge.
 | Catalog admin authorization | **Complete (`0049`)** | Audited scope assignments attach GLOBAL/BANK scope to existing CATALOG_ADMINISTRATOR role assignments; bank ownership resolves through typed bank/card relationships across `0046`–`0048`; shared merchants and loyalty programs require GLOBAL scope; reviewers and final approvers must be in scope; no blanket core-catalog write grant was added. |
 | Published card detail | **Complete (`0050`)** | `get_published_card_detail(text)` exposes only currently effective PUBLISHED snapshot fields, safe verified provenance, and independently published governed relationships to `anon`/`authenticated`; drafts, workflow records, internal metadata, and unpublished children remain hidden. |
 | Published card list/search | **Complete (`0051`)** | `search_published_cards(...)` filters, sorts, counts, and paginates effective published card snapshots and independently published rewards through an explicit allowlist; anonymous/authenticated callers receive execute only. |
-| Published recommendation candidates | **Complete locally (`0052`)** | A default-false core flag plus explicit effective-snapshot eligibility gates a bounded array of migration 0050 detail projections; no private governance data or direct table access is exposed. |
+| Published recommendation candidates | **Complete (`0052`)** | A default-false core flag plus explicit effective-snapshot eligibility gates a bounded array of migration 0050 detail projections; no private governance data or direct table access is exposed. |
 | Application foundation | **Complete** | Next.js/Supabase runtime, typed repositories, health/readiness, bilingual routing, logging, security headers, and application CI are delivered. |
 | Frontend | **Phase 4 complete** | P4.1 comparison, P4.2 bilingual spending calculator, P4.3 fixed-point numeric hardening, and the Phase 4 review are green. |
 | Recommendation engine | **P5.1 complete** | Pure deterministic fixed-valuation ranking, constraints, confidence, reasons, assumptions, and approved tie-breakers are green; P5.2 public journey is next. |

@@ -60,7 +60,7 @@ out of sync with reality.
 | 0049 | `create_catalog_admin_authorization` | 720 | merged | catalog_administrator_scope_assignments |
 | 0050 | `create_published_card_detail_interface` | 374 | merged | — (read-only `get_published_card_detail(text)` function) |
 | 0051 | `create_published_card_search_interface` | 216 | merged | — (read-only `search_published_cards(...)` function and partial published-read index) |
-| 0052 | `create_published_recommendation_candidates` | 54 | current | — (fail-closed card eligibility flag, read-only candidate function, and partial candidate index) |
+| 0052 | `create_published_recommendation_candidates` | 54 | merged | — (fail-closed card eligibility flag, read-only candidate function, and partial candidate index) |
 
 **Database Phase total:** 52 migrations, 111 tables, 35,273 lines.
 
