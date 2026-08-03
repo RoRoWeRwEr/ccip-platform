@@ -1,9 +1,9 @@
 # CCIP v1 Execution Status
 
-**Last verified:** 2026-08-03 at P4.2 commit `65a3c72`.
-Repository Policy run 30815068138 and Application CI run 30815068208 passed.
+**Last verified:** 2026-08-03 at P4.3 commit `8e723b5`.
+Repository Policy run 30815813897 and Application CI run 30815813577 passed.
 
-**Program progress:** 11 of 30 roadmap milestones complete = **37%**.
+**Program progress:** 12 of 30 roadmap milestones complete = **40%**.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -16,8 +16,8 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 | 1 — Database Foundation | Complete | 51 migrations, 111 RLS-enabled tables, 20 pgTAP files / 506 assertions. Migration 0051 closes the P3.4 publication-aware list/search boundary without changing the 0050 detail interface. |
 | 2 — Application Foundation | Complete | P2.1–P2.4 and the phase review are complete and green. |
 | 3 — Public Catalog | Complete | P3.1–P3.4 and the phase review are complete; Application CI run 30810879333 and Repository Policy run 30810879203 passed for `1c269bf`. |
-| 4 — Comparison and Calculation | In progress | P4.1 comparison and P4.2 spending calculator are complete. P4.2 is green at `65a3c72`; P4.3 numeric hardening is next. |
-| 5 — Recommendation | Not started | Schema and DES exist; no runtime engine exists. |
+| 4 — Comparison and Calculation | Complete | P4.1–P4.3 and the phase review are complete; Application CI run 30815813577 and Repository Policy run 30815813897 passed for `8e723b5`. |
+| 5 — Recommendation | In progress | P5.1 deterministic recommendation domain engine is next. |
 | 6 — Authentication and User Features | Not started | Supabase identity/RLS schema exists; no UI exists. |
 | 7 — Catalog Administration | Not started | Database authorization/workflows exist; no admin UI exists. |
 | 8 — Quality and Security | Not started | Database validation exists; application gates do not. |
@@ -26,13 +26,13 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 
 ## Current task
 
-Execute **P4.3 Numeric Hardening** as the next unfinished milestone.
+Execute **P5.1 Recommendation Domain Engine** as the next unfinished milestone.
 
 ## Exact next task
 
-Harden calculator numeric boundaries, caps, rounding, currency precision, and
-edge cases with property-oriented tests that prevent non-finite or corrupted
-negative values.
+Implement the pure deterministic spending-profile, eligibility, fixed monetary
+valuation, annual-fee, goal-alignment, and net-value ranking engine specified by
+the DES, with documented tie-breakers and explanation output.
 
 ## Current validation and CI
 
@@ -55,6 +55,17 @@ negative values.
   YAML lint, and whitespace checks passed.
 - P4.2 commit: `65a3c72`; Application CI run 30815068208 and Repository Policy
   run 30815068138 passed.
+- P4.3 delivery: calculator arithmetic uses bounded BigInt fixed-point units,
+  halala half-up monetary rounding, published reward rounding and shared caps,
+  period-aware minimums, fail-closed unsupported tier/transaction cases, and a
+  fully bilingual limitation trace. Extreme input combinations remain finite,
+  bounded, non-negative where required, and deterministic.
+- P4.3 local validation: formatting, lint, strict typecheck, 33/33 unit and
+  component tests, 6/6 real-Supabase integration tests, production build,
+  offline zero-vulnerability npm audit, repository policy, Markdown links,
+  YAML lint, and whitespace checks passed.
+- P4.3 commit: `8e723b5`; Application CI run 30815813577 and Repository Policy
+  run 30815813897 passed.
 - Database completion commit: `ed2b6c5` (migration `0051`).
 - Migration `0050` Database CI: success, run 30801523652.
 - Migration `0050` Repository Policy: success, run 30801523667.
@@ -67,6 +78,33 @@ negative values.
   effective/future/expired/scheduled windows, drafts/rejection, reward filters,
   sorting, pagination, RLS isolation, suspension, rollback, and archival.
 - Open PRs: Dependabot #7–#9 and #15; none blocks direct-to-main execution.
+
+## Phase 4 completion review
+
+- **Architecture and schema:** comparison and calculation remain pure
+  application features over migration `0050`'s publication-safe detail RPC;
+  no migration, direct table access, privileged client, or duplicated
+  publication logic was introduced.
+- **Security and privacy:** guest calculations use shareable bounded query
+  inputs and store no spending profile or personal data. Existing RLS and
+  grants are unchanged, and malformed numeric or slug inputs fail closed.
+- **Performance and numeric correctness:** selection is bounded to one detail
+  lookup and 50 options. BigInt fixed-point arithmetic prevents binary-float
+  money corruption; category splitting cannot multiply a shared rule cap, and
+  every public numeric result is finite and bounded.
+- **UX and accessibility:** comparison and calculator journeys are bilingual,
+  RTL/LTR responsive, server-rendered, keyboard-native, shareable, and expose
+  formulas, publication context, assumptions, exclusions from value, empty
+  states, and partial-rule limitations.
+- **Testing and documentation:** 33 unit/component and 6 real-Supabase
+  integration tests pass. Edge-oriented combinations cover NaN, infinities,
+  negatives, maxima, determinism, caps, rounding, minima, and halala precision;
+  authoritative status documents match the delivered behavior.
+- **Technical debt:** no Blocking Phase 4 debt remains. Published tier details
+  and transaction/day evidence are unavailable through the current safe read
+  interface, so those cases correctly return zero with disclosure rather than
+  inventing value. Production-scale usability evidence remains a later phase
+  gate.
 - Migration 0050 local validation: clean replay of all 50 migrations; 19 pgTAP
   files / 467 assertions; warning/error database lint; repository policy;
   Markdown links; workflow-equivalent YAML lint; and whitespace checks passed.
