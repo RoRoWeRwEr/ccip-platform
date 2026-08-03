@@ -1,9 +1,9 @@
 # CCIP v1 Execution Status
 
-**Last verified:** 2026-08-03 at P4.3 commit `8e723b5`.
-Repository Policy run 30815813897 and Application CI run 30815813577 passed.
+**Last verified:** 2026-08-03 at P5.1 commit `b2adc3e`.
+Repository Policy run 30816437457 and Application CI run 30816437847 passed.
 
-**Program progress:** 12 of 30 roadmap milestones complete = **40%**.
+**Program progress:** 13 of 30 roadmap milestones complete = **43%**.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -17,7 +17,7 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 | 2 — Application Foundation | Complete | P2.1–P2.4 and the phase review are complete and green. |
 | 3 — Public Catalog | Complete | P3.1–P3.4 and the phase review are complete; Application CI run 30810879333 and Repository Policy run 30810879203 passed for `1c269bf`. |
 | 4 — Comparison and Calculation | Complete | P4.1–P4.3 and the phase review are complete; Application CI run 30815813577 and Repository Policy run 30815813897 passed for `8e723b5`. |
-| 5 — Recommendation | In progress | P5.1 deterministic recommendation domain engine is next. |
+| 5 — Recommendation | In progress | P5.1 deterministic recommendation domain engine is complete and green at `b2adc3e`; P5.2 recommendation journey is next. |
 | 6 — Authentication and User Features | Not started | Supabase identity/RLS schema exists; no UI exists. |
 | 7 — Catalog Administration | Not started | Database authorization/workflows exist; no admin UI exists. |
 | 8 — Quality and Security | Not started | Database validation exists; application gates do not. |
@@ -26,13 +26,13 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 
 ## Current task
 
-Execute **P5.1 Recommendation Domain Engine** as the next unfinished milestone.
+Execute **P5.2 Recommendation Journey** as the next unfinished milestone.
 
 ## Exact next task
 
-Implement the pure deterministic spending-profile, eligibility, fixed monetary
-valuation, annual-fee, goal-alignment, and net-value ranking engine specified by
-the DES, with documented tie-breakers and explanation output.
+Build the bilingual public recommendation journey for goal, spending,
+constraints, ranked results, confidence, reasons, and assumptions over the P5.1
+engine and publication-safe catalog boundaries.
 
 ## Current validation and CI
 
@@ -66,6 +66,18 @@ the DES, with documented tie-breakers and explanation output.
   YAML lint, and whitespace checks passed.
 - P4.3 commit: `8e723b5`; Application CI run 30815813577 and Repository Policy
   run 30815813897 passed.
+- P5.1 delivery: a pure deterministic engine filters explicit published,
+  available, recommendation-eligible candidates; applies salary, bank, and fee
+  constraints; uses fixed per-reward valuations and hardened annual value; and
+  ranks by net value, reward value, lower fee, goal score, then stable name/ID.
+  Results include rank, confidence, top categories, reasons, assumptions, and
+  publication context.
+- P5.1 local validation: formatting, lint, strict typecheck, 36/36 unit and
+  component tests, 6/6 real-Supabase integration tests, production build,
+  offline zero-vulnerability npm audit, repository policy, Markdown links,
+  YAML lint, and whitespace checks passed.
+- P5.1 commit: `b2adc3e`; Application CI run 30816437847 and Repository Policy
+  run 30816437457 passed.
 - Database completion commit: `ed2b6c5` (migration `0051`).
 - Migration `0050` Database CI: success, run 30801523652.
 - Migration `0050` Repository Policy: success, run 30801523667.

@@ -40,14 +40,14 @@ branch, Draft PR, or manual merge.
 | Published card list/search | **Complete (`0051`)** | `search_published_cards(...)` filters, sorts, counts, and paginates effective published card snapshots and independently published rewards through an explicit allowlist; anonymous/authenticated callers receive execute only. |
 | Application foundation | **Complete** | Next.js/Supabase runtime, typed repositories, health/readiness, bilingual routing, logging, security headers, and application CI are delivered. |
 | Frontend | **Phase 4 complete** | P4.1 comparison, P4.2 bilingual spending calculator, P4.3 fixed-point numeric hardening, and the Phase 4 review are green. |
-| Operational AI/recommendation service | **Not started** | Recommendation schema exists; no running model or API exists. |
+| Recommendation engine | **P5.1 complete** | Pure deterministic fixed-valuation ranking, constraints, confidence, reasons, assumptions, and approved tie-breakers are green; P5.2 public journey is next. |
 | Deployment | **Not started** | CI validates database changes but does not deploy a live environment. |
 
 ## Next approved action
 
 Execute the next unfinished application milestone recorded in
 `docs/EXECUTION_STATUS.md`. The Database Phase roadmap is complete through
-`0051`; P5.1 recommendation domain engine is the next active delivery.
+`0051`; P5.2 recommendation journey is the next active delivery.
 
 ## Current blockers
 
