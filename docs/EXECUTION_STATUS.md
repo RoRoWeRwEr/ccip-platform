@@ -1,9 +1,9 @@
 # CCIP v1 Execution Status
 
-**Last verified:** 2026-08-03 at P7.2 commit `401c391`.
-Repository Policy run 30827995285 and Application CI run 30827993947 passed.
+**Last verified:** 2026-08-03 at P7.3 commit `4cd8f03`.
+Repository Policy run 30832018829 and Application CI run 30832017518 passed.
 
-**Program progress:** 20 of 30 roadmap milestones complete = **67%**.
+**Program progress:** 21 of 30 roadmap milestones complete = **70%**.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -19,22 +19,32 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 | 4 — Comparison and Calculation | Complete | P4.1–P4.3 and the phase review are complete; Application CI run 30815813577 and Repository Policy run 30815813897 passed for `8e723b5`. |
 | 5 — Recommendation | Complete | P5.1 engine, P5.2 bilingual recommendation journey, P5.3 ownership-scoped persistence boundary, and the phase review are complete and green. |
 | 6 — Authentication and User Features | Complete | P6.1–P6.3 and the phase review are complete and green. |
-| 7 — Catalog Administration | In progress | P7.1–P7.2 are complete and green; P7.3 publication workflow is next. |
+| 7 — Catalog Administration | In progress | P7.1–P7.3 are complete and green; P7.4 assignment administration is next. |
 | 8 — Quality and Security | Not started | Database validation exists; application gates do not. |
 | 9 — Staging and Deployment | Not started | No application deployment configuration or credentials observed. |
 | 10 — CCIP v1 Completion | Not started | Depends on phases 1–9. |
 
 ## Current task
 
-Execute **P7.3 Publication Workflow** as the next unfinished milestone.
+Execute **P7.4 Assignment Administration** as the next unfinished milestone.
 
 ## Exact next task
 
-Implement draft, submission, reviewer/final approval, scheduling, publication,
-unpublication, rollback, and history through migrations `0048`–`0049`'s
-controlled workflow functions.
+Implement platform-administrator-only BANK/GLOBAL assignment creation,
+revocation, lifecycle history, and privilege-escalation denial tests.
 
 ## Current validation and CI
+
+- P7.3 delivery: the bilingual administrator surface creates scope-checked
+  drafts and performs submission, separated reviewer/final approval,
+  scheduling, publication, suspension/archive, rollback, and history entirely
+  through migrations `0048`–`0049`'s controlled state-machine functions.
+- P7.3 local validation: formatting, lint, strict typecheck, 65/65 unit and
+  component tests, 10/10 real-Supabase integration tests, 22 pgTAP files / 538
+  assertions, production build, repository policy, and whitespace checks
+  passed.
+- P7.3 commit: `4cd8f03`; Application CI run 30832017518 and Repository Policy
+  run 30832018829 passed.
 
 - P7.2 delivery: bounded bilingual forms create BANK/CARD official-source
   provenance through target-scoped RLS and shared merchants through GLOBAL-only
