@@ -16,6 +16,7 @@
     "test": "vitest run",
     "test:integration": "vitest run --config vitest.integration.config.ts",
     "test:e2e": "playwright test",
+    "verify:bundle": "node scripts/verify_bundle_budget.mjs",
     "test:watch": "vitest"
   },
   "dependencies": {

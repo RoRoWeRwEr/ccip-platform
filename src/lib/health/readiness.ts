@@ -4,7 +4,9 @@ import type { Database } from "@/types/database";
 
 const READINESS_TIMEOUT_MS = 3_000;
 
-export async function checkReadiness(): Promise<{
+export async function checkReadiness(
+  options: { timeoutMs?: number } = {},
+): Promise<{
   ready: true;
   latencyMs: number;
 }> {
@@ -21,13 +23,17 @@ export async function checkReadiness(): Promise<{
     },
   );
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), READINESS_TIMEOUT_MS);
+  const timeout = setTimeout(
+    () => controller.abort(),
+    options.timeoutMs ?? READINESS_TIMEOUT_MS,
+  );
   const startedAt = performance.now();
 
   try {
     const { error } = await client
       .from("countries")
-      .select("id", { head: true, count: "exact" })
+      .select("id", { head: true })
+      .limit(1)
       .abortSignal(controller.signal);
     if (error) throw error;
     return {
