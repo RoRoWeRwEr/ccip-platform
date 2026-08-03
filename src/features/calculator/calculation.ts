@@ -101,10 +101,12 @@ function meetsMinimum(
 export function calculateAnnualCardValue(
   card: CardDetail,
   monthlySpending: MonthlySpending,
-  sarPerRewardUnit: number,
+  sarPerRewardUnit: number | Readonly<Record<string, number>>,
 ): CalculationResult {
+  const defaultValuation =
+    typeof sarPerRewardUnit === "number" ? sarPerRewardUnit : 0;
   const valuationMicroSar = boundedScaled(
-    sarPerRewardUnit,
+    defaultValuation,
     RATE_SCALE,
     100n * RATE_SCALE,
   );
@@ -199,10 +201,26 @@ export function calculateAnnualCardValue(
     card.rewardRules.length > 0 &&
     card.rewardRules.every((rule) => rule.rewardType === "CASHBACK");
   const appliedValuation = cashbackParity ? RATE_SCALE : valuationMicroSar;
-  const rewardValueHalalas = divideHalfUp(
-    annualRewardMicroUnits * appliedValuation * MONEY_SCALE,
-    RATE_SCALE * RATE_SCALE,
-  );
+  const rewardValueHalalas = internalResults.reduce((total, result) => {
+    if (!result.rule) return total;
+    const valuation =
+      result.rule.rewardType === "CASHBACK"
+        ? RATE_SCALE
+        : boundedScaled(
+            typeof sarPerRewardUnit === "number"
+              ? sarPerRewardUnit
+              : (sarPerRewardUnit[result.rule.rewardType] ?? 0),
+            RATE_SCALE,
+            100n * RATE_SCALE,
+          );
+    return (
+      total +
+      divideHalfUp(
+        result.rewardMicroUnits * valuation * MONEY_SCALE,
+        RATE_SCALE * RATE_SCALE,
+      )
+    );
+  }, 0n);
   const annualFeeHalalas = boundedScaled(
     card.annualFee,
     MONEY_SCALE,
