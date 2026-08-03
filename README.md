@@ -25,8 +25,11 @@ It provides Arabic/English locale routes, RTL/LTR document direction,
 responsive design tokens, typed browser/server Supabase clients, checked-in
 database types, publication-aware catalog repositories, bounded pagination,
 unit and local-Supabase integration tests, production build validation, and
-Application CI. Catalog screens, comparison, recommendation,
-authentication, user, and administration product features are still unfinished;
+Application CI. The bilingual public experience now includes the homepage,
+bank/card browsing, and publication-governed card detail routes for fees,
+benefits, rewards, eligibility, loyalty, merchants, provenance, and effective
+publication information. Search/filtering, comparison, recommendation,
+authentication, user, and administration product features remain unfinished;
 their database capabilities must not be described as working product surfaces.
 See
 [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) for the current,

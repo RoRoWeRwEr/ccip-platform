@@ -114,3 +114,5 @@ Execute the next unfinished application milestone recorded in
   behavioral pgTAP suites; first-admin bootstrap remains an operational staging
   exercise; production-scale query-plan evidence remains unavailable.
 - **Next action:** resume P3.3 using the new anonymous read interface.
+- **GitHub Actions:** Repository Policy run 30801523667 and Database CI run
+  30801523652 both completed successfully at delivery HEAD `90aa6c1`.

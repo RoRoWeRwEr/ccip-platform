@@ -14197,6 +14197,10 @@ export type Database = {
           window_seconds: number
         }[]
       }
+      get_published_card_detail: {
+        Args: { requested_slug: string }
+        Returns: Json
+      }
       has_active_catalog_scope: {
         Args: { requested_bank_id: string }
         Returns: boolean

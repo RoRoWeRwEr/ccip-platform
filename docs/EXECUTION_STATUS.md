@@ -1,8 +1,7 @@
 # CCIP v1 Execution Status
 
-**Last verified:** 2026-08-03 at migration `0050` commit `191945f`, after its
-complete local validation and before delivery CI. P3.3 remains the active
-application milestone.
+**Last verified:** 2026-08-03 after migration `0050` delivery HEAD `90aa6c1`.
+Database CI run 30801523652 and Repository Policy run 30801523667 passed.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -14,7 +13,7 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 |---|---|---|
 | 1 — Database Foundation | Complete | 50 migrations, 111 RLS-enabled tables, 19 pgTAP files / 467 assertions. Migration 0050 closes the P3.3 published-detail read gap; delivery CI is monitored before P3.3 resumes. |
 | 2 — Application Foundation | Complete | P2.1–P2.4 and the phase review are complete and green. |
-| 3 — Public Catalog | In progress | P3.1–P3.2 are complete and green. P3.3 card details is active. |
+| 3 — Public Catalog | In progress | P3.1–P3.3 are complete locally. P3.3 delivery CI is pending; P3.4 follows when green. |
 | 4 — Comparison and Calculation | Not started | Schema/design exist; no runtime implementation exists. |
 | 5 — Recommendation | Not started | Schema and DES exist; no runtime engine exists. |
 | 6 — Authentication and User Features | Not started | Supabase identity/RLS schema exists; no UI exists. |
@@ -25,20 +24,19 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 
 ## Current task
 
-Complete **P3.3 Card details**: fees, benefits, reward rules, eligibility,
-loyalty, merchant, provenance, and publication information.
+Complete **P3.4 Search and filters** after the P3.3 delivery is green: text
+search and useful bank, network, fee, reward, persona, and eligibility filters
+with shareable state.
 
 ## Exact next task
 
-Complete **P3.4 Search and filters** after P3.3 is green: text search and useful
-bank, network, fee, reward, persona, and eligibility filters with shareable state.
+Complete the **Phase 3 review** after P3.4, then begin P4.1 multi-card comparison.
 
 ## Current validation and CI
 
 - Database completion commit: `191945f` (migration `0050`).
-- Previous Database CI: success, run 30519983707; migration `0050` delivery CI
-  is monitored before P3.3 resumes.
-- Latest pre-delivery Repository Policy: success, run 30528635251 at `ddb43ee`.
+- Migration `0050` Database CI: success, run 30801523652.
+- Migration `0050` Repository Policy: success, run 30801523667.
 - Open PRs: Dependabot #7–#9 and #15; none blocks direct-to-main execution.
 - Migration 0050 local validation: clean replay of all 50 migrations; 19 pgTAP
   files / 467 assertions; warning/error database lint; repository policy;
@@ -103,6 +101,18 @@ bank, network, fee, reward, persona, and eligibility filters with shareable stat
   production routes against local Supabase returned English/LTR and Arabic/RTL
   empty states under anonymous RLS, including safe invalid query handling.
   Application CI run 30527811656 and Repository Policy run 30527811581 passed.
+- P3.3 delivery: `/{locale}/cards/{slug}` reads only migration `0050`'s
+  snapshot-based RPC and validates the JSON boundary with Zod. The bilingual,
+  responsive detail view covers fees, benefits, reward targets, eligibility,
+  loyalty, related published merchants, verified provenance, publication
+  version/effective date, official application/terms links, partial-data
+  states, localized metadata, and invalid/unpublished 404 behavior. Unsafe URL
+  schemes are never rendered as links.
+- P3.3 local validation: formatting, lint, strict typecheck, 22/22 unit and
+  component tests, 4/4 real-Supabase integration tests, production build,
+  zero-vulnerability npm audit, repository policy, Markdown links, YAML lint,
+  and whitespace checks passed. The first sandboxed build was denied an
+  internal Turbopack worker port; the authorized identical rerun passed.
 
 ## Phase 2 completion review
 
