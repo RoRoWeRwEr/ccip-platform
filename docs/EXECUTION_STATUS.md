@@ -1,7 +1,7 @@
 # CCIP v1 Execution Status
 
-**Last verified:** 2026-08-03 at application HEAD `38ef60b` after the bounded
-migration `0051` and autonomous-decision-policy decisions were authorized.
+**Last verified:** 2026-08-03 after migration `0051` commit `ed2b6c5`.
+Database CI run 30809941780 and Repository Policy run 30809941903 passed.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -13,7 +13,7 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 |---|---|---|
 | 1 — Database Foundation | Complete | 51 migrations, 111 RLS-enabled tables, 20 pgTAP files / 506 assertions. Migration 0051 closes the P3.4 publication-aware list/search boundary without changing the 0050 detail interface. |
 | 2 — Application Foundation | Complete | P2.1–P2.4 and the phase review are complete and green. |
-| 3 — Public Catalog | In progress | P3.1–P3.3 are complete and green. P3.4 search and five safe public filters are delivered; migration 0051 is authorized for the remaining publication-aware reward/list boundary. |
+| 3 — Public Catalog | In progress | P3.1–P3.3 are complete and green. Migration 0051 is delivered and green; P3.4 must now integrate its reward/list search boundary. |
 | 4 — Comparison and Calculation | Not started | Schema/design exist; no runtime implementation exists. |
 | 5 — Recommendation | Not started | Schema and DES exist; no runtime engine exists. |
 | 6 — Authentication and User Features | Not started | Supabase identity/RLS schema exists; no UI exists. |
@@ -24,22 +24,21 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 
 ## Current task
 
-Deliver bounded forward migration `0051`: a publication-aware, read-only
-card-list/search model supporting P3.4 filtering, sorting, and pagination while
-preserving migrations `0001`–`0050`, RLS, and migration `0050`'s detail
-interface. The standing autonomous authority is recorded in
-`docs/AUTONOMOUS_DECISION_POLICY.md`.
+Complete P3.4 by integrating `search_published_cards(...)` into the typed public
+catalog repository and bilingual shareable filter UI, including reward
+filtering and stable sorting/pagination.
 
 ## Exact next task
 
-After migration `0051` passes local and remote validation, complete P3.4 and
-the Phase 3 review, then begin P4.1 multi-card comparison.
+Complete P3.4 and the Phase 3 review, then begin P4.1 multi-card comparison.
 
 ## Current validation and CI
 
-- Latest completed database commit before `0051`: `191945f` (migration `0050`); migration `0051` delivery SHA and CI runs will be recorded after push.
+- Database completion commit: `ed2b6c5` (migration `0051`).
 - Migration `0050` Database CI: success, run 30801523652.
 - Migration `0050` Repository Policy: success, run 30801523667.
+- Migration `0051` Database CI: success, run 30809941780.
+- Migration `0051` Repository Policy: success, run 30809941903.
 - Migration `0051` local validation: clean replay of all 51 migrations; 20
   pgTAP files / 506 assertions; warning/error database lint; repository policy;
   Markdown links; workflow YAML; and whitespace checks passed. Its 39 new

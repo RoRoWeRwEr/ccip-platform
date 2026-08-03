@@ -1,7 +1,7 @@
 # Project Status
 
-**Last verified:** 2026-08-03 against the local migration `0051` validation
-stack before its direct-to-main delivery.
+**Last verified:** 2026-08-03 after migration `0051` commit `ed2b6c5`;
+Database CI run 30809941780 and Repository Policy run 30809941903 passed.
 
 This dashboard reports observed states only. Repository and GitHub state override prior chat or stale documentation.
 
@@ -114,6 +114,30 @@ Execute the next unfinished application milestone recorded in
 - **Known residual risks:** migrations `0001`–`0041` still lack dedicated
   behavioral pgTAP suites; first-admin bootstrap remains an operational staging
   exercise; production-scale query-plan evidence remains unavailable.
+
+## Migration 0051 delivery record
+
+- **Migration commit:** `ed2b6c5`.
+- **Scope:** one publication-aware `search_published_cards(...)` interface, one
+  partial effective-publication index, 39 pgTAP assertions, synchronized
+  architecture/security/roadmap documentation, and no new table, RLS change,
+  core-catalog write grant, or change to migration `0050`.
+- **Local validation:** clean replay of migrations `0001`–`0051`; 20 pgTAP
+  files / 506 assertions passed; warning- and error-level database lint,
+  repository policy, Markdown links, YAML validation, and `git diff --check`
+  passed. Live review found 111/111 tables with RLS, zero invalid indexes, and
+  zero application `SECURITY DEFINER` functions executable by `PUBLIC`.
+- **GitHub Actions:** Database CI run 30809941780 and Repository Policy run
+  30809941903 completed successfully.
+- **Review:** snapshot allowlists prevent draft/internal leakage; reward
+  predicates run before pagination and require independently published rules;
+  stable tie-break ordering and bounded page sizes are enforced; the partial
+  index supports the effective-publication access path; naming, migration
+  order, RLS, grants, and the `0050` contract remain consistent.
+- **Known residual risks:** production-scale query-plan evidence is not yet
+  available; migrations `0001`–`0041` retain the documented historical
+  dedicated-test gap; first-admin bootstrap remains a staging exercise.
+- **Next action:** integrate the interface and complete P3.4.
 - **Next action:** resume P3.3 using the new anonymous read interface.
 - **GitHub Actions:** Repository Policy run 30801523667 and Database CI run
   30801523652 both completed successfully at delivery HEAD `90aa6c1`.
