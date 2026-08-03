@@ -1,9 +1,9 @@
 # CCIP v1 Execution Status
 
-**Last verified:** 2026-08-03 at P5.1 commit `b2adc3e`.
-Repository Policy run 30816437457 and Application CI run 30816437847 passed.
+**Last verified:** 2026-08-03 at P5.2 commit `1aa0855`.
+Repository Policy run 30817864232 and Application CI run 30817868298 passed.
 
-**Program progress:** 13 of 30 roadmap milestones complete = **43%**.
+**Program progress:** 14 of 30 roadmap milestones complete = **47%**.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -17,7 +17,7 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 | 2 — Application Foundation | Complete | P2.1–P2.4 and the phase review are complete and green. |
 | 3 — Public Catalog | Complete | P3.1–P3.4 and the phase review are complete; Application CI run 30810879333 and Repository Policy run 30810879203 passed for `1c269bf`. |
 | 4 — Comparison and Calculation | Complete | P4.1–P4.3 and the phase review are complete; Application CI run 30815813577 and Repository Policy run 30815813897 passed for `8e723b5`. |
-| 5 — Recommendation | In progress | P5.1 deterministic recommendation domain engine is complete and green at `b2adc3e`; P5.2 recommendation journey is next. |
+| 5 — Recommendation | In progress | P5.1 engine and P5.2 bilingual recommendation journey are complete and green; P5.3 persistence integration is next. |
 | 6 — Authentication and User Features | Not started | Supabase identity/RLS schema exists; no UI exists. |
 | 7 — Catalog Administration | Not started | Database authorization/workflows exist; no admin UI exists. |
 | 8 — Quality and Security | Not started | Database validation exists; application gates do not. |
@@ -26,13 +26,13 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 
 ## Current task
 
-Execute **P5.2 Recommendation Journey** as the next unfinished milestone.
+Execute **P5.3 Persistence Integration** as the next unfinished milestone.
 
 ## Exact next task
 
-Build the bilingual public recommendation journey for goal, spending,
-constraints, ranked results, confidence, reasons, and assumptions over the P5.1
-engine and publication-safe catalog boundaries.
+Integrate recommendation runs/history and saved results for authenticated users
+where supported by the existing schema and ownership RLS, while preserving the
+complete guest journey.
 
 ## Current validation and CI
 
@@ -89,6 +89,18 @@ engine and publication-safe catalog boundaries.
 - Migration `0052` commit: `075c531`; Database CI run 30817298193,
   Application CI run 30817297971, and Repository Policy run 30817297958
   passed.
+- P5.2 delivery: the bilingual server-rendered guest journey captures a required
+  goal, bounded monthly category spending, optional salary/fee constraints, and
+  explicit fixed points/miles valuations. It reads only migration `0052`
+  candidates and renders deterministic ranks, confidence, top categories,
+  reward/fee/net values, reasons, assumptions, publication context, safe empty
+  states, and detail links.
+- P5.2 local validation: formatting, lint, strict typecheck, 38/38 unit and
+  component tests, 7/7 real-Supabase integration tests, production build,
+  offline zero-vulnerability npm audit, repository policy, Markdown links,
+  YAML lint, and whitespace checks passed.
+- P5.2 commit: `1aa0855`; Application CI run 30817868298 and Repository Policy
+  run 30817864232 passed.
 - Database completion commit: `ed2b6c5` (migration `0051`).
 - Migration `0050` Database CI: success, run 30801523652.
 - Migration `0050` Repository Policy: success, run 30801523667.
