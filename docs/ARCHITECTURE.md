@@ -212,6 +212,13 @@ Published card list/search interface (0051)
   targets. Core rows validate active relationships only. A partial index
   supports effective published-version lookup; no table or write grant is
   added, and the 0050 detail function is unchanged.
+
+Published recommendation candidates (0052)
+  get_published_recommendation_candidates() — stable, read-only array of at
+  most 50 migration 0050 detail projections. A card must be active, available,
+  published, core-eligible, and explicitly marked recommendation-eligible in
+  its currently effective CARD snapshot. The flag defaults false; no direct
+  table read or write grant is added.
 ```
 
 ## The RLS and authorization model

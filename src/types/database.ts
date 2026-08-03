@@ -5236,6 +5236,7 @@ export type Database = {
           image_url: string | null
           is_active: boolean
           is_featured: boolean
+          is_recommendation_eligible: boolean
           loyalty_program_id: string | null
           minimum_salary: number | null
           name_ar: string
@@ -5266,6 +5267,7 @@ export type Database = {
           image_url?: string | null
           is_active?: boolean
           is_featured?: boolean
+          is_recommendation_eligible?: boolean
           loyalty_program_id?: string | null
           minimum_salary?: number | null
           name_ar: string
@@ -5296,6 +5298,7 @@ export type Database = {
           image_url?: string | null
           is_active?: boolean
           is_featured?: boolean
+          is_recommendation_eligible?: boolean
           loyalty_program_id?: string | null
           minimum_salary?: number | null
           name_ar?: string
@@ -14201,6 +14204,7 @@ export type Database = {
         Args: { requested_slug: string }
         Returns: Json
       }
+      get_published_recommendation_candidates: { Args: never; Returns: Json }
       has_active_catalog_scope: {
         Args: { requested_bank_id: string }
         Returns: boolean

@@ -212,7 +212,15 @@ require independently published rules, and pagination occurs after filtering.
 `PUBLIC` execute and direct catalog/governance table access remain revoked;
 there is no write path or RLS change.
 
-**Every application-defined function in the codebase — all 51 migrations,
+Migration `0052` adds `get_published_recommendation_candidates()`, a stable,
+read-only `SECURITY DEFINER` function with the same pinned and schema-qualified
+hardening. `PUBLIC` is revoked and only `anon`, `authenticated`, and
+`service_role` receive execute. It returns at most 50 migration `0050` detail
+projections and requires active/available/public core state plus a default-false
+core eligibility flag and an explicit true value in the effective published
+CARD snapshot. It adds no direct table grant or write path.
+
+**Every application-defined function in the codebase — all 52 migrations,
 `SECURITY DEFINER` or not — sets
 `SET search_path = pg_catalog`.** No exceptions
 found. This is an unusually disciplined baseline; keep it that way. Any

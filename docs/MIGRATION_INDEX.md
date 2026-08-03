@@ -60,8 +60,9 @@ out of sync with reality.
 | 0049 | `create_catalog_admin_authorization` | 720 | merged | catalog_administrator_scope_assignments |
 | 0050 | `create_published_card_detail_interface` | 374 | merged | — (read-only `get_published_card_detail(text)` function) |
 | 0051 | `create_published_card_search_interface` | 216 | merged | — (read-only `search_published_cards(...)` function and partial published-read index) |
+| 0052 | `create_published_recommendation_candidates` | 54 | current | — (fail-closed card eligibility flag, read-only candidate function, and partial candidate index) |
 
-**Database Phase total:** 51 migrations, 111 tables, 35,219 lines.
+**Database Phase total:** 52 migrations, 111 tables, 35,273 lines.
 
 ## `0042` revision note
 
@@ -155,3 +156,8 @@ migration was first drafted.
   sorts, counts, and paginates only effective published card, bank, and reward
   snapshots. It adds no table or write path and retains execute-only access for
   anonymous and authenticated readers.
+- `0052` depends on `0050` as its only detail projection and on `0048`'s
+  effective publication lifecycle. It adds a default-false defense-in-depth
+  eligibility flag to `cards`; the bounded candidate function requires both
+  that core flag and an explicit `is_recommendation_eligible: true` in the
+  effective CARD snapshot before returning the 0050 allowlisted detail.

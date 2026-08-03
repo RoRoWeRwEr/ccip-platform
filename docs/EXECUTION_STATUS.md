@@ -13,7 +13,7 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 
 | Phase | State | Evidence |
 |---|---|---|
-| 1 — Database Foundation | Complete | 51 migrations, 111 RLS-enabled tables, 20 pgTAP files / 506 assertions. Migration 0051 closes the P3.4 publication-aware list/search boundary without changing the 0050 detail interface. |
+| 1 — Database Foundation | Complete | 52 migrations, 111 RLS-enabled tables, 21 pgTAP files / 523 assertions. Migration 0052 adds the bounded dual-gated P5.2 recommendation candidate boundary. |
 | 2 — Application Foundation | Complete | P2.1–P2.4 and the phase review are complete and green. |
 | 3 — Public Catalog | Complete | P3.1–P3.4 and the phase review are complete; Application CI run 30810879333 and Repository Policy run 30810879203 passed for `1c269bf`. |
 | 4 — Comparison and Calculation | Complete | P4.1–P4.3 and the phase review are complete; Application CI run 30815813577 and Repository Policy run 30815813897 passed for `8e723b5`. |
@@ -78,6 +78,14 @@ engine and publication-safe catalog boundaries.
   YAML lint, and whitespace checks passed.
 - P5.1 commit: `b2adc3e`; Application CI run 30816437847 and Repository Policy
   run 30816437457 passed.
+- P5.2 prerequisite migration `0052` adds a default-false core eligibility flag
+  and bounded read-only candidate RPC. It requires an explicit true value in
+  the effective published CARD snapshot and returns only migration `0050`
+  detail projections; direct grants and write paths remain unchanged.
+- Migration `0052` local validation: clean replay of all 52 migrations; 21
+  pgTAP files / 523 assertions; warning/error database lint; regenerated typed
+  schema contract; repository policy; Markdown links; YAML; and whitespace
+  checks passed.
 - Database completion commit: `ed2b6c5` (migration `0051`).
 - Migration `0050` Database CI: success, run 30801523652.
 - Migration `0050` Repository Policy: success, run 30801523667.

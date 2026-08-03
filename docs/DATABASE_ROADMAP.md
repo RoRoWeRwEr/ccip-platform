@@ -91,8 +91,14 @@ for the next planning decision, not a backlog.
   allowlisted list/search function and a partial publication lookup index. It
   exposes only effective published card, bank, and independently published
   reward snapshots and adds no table or write grant.
-- **The current Database Phase roadmap is complete through `0051`.** No
-  migration after `0051` is approved or scheduled by this roadmap.
+- `0052` (`create_published_recommendation_candidates`): **autonomously
+  authorized during P5.2.** The existing public read boundaries did not expose
+  the approved `is_recommendation_eligible` gate. It adds a fail-closed core
+  flag and one bounded, execute-only candidate function requiring both the
+  core flag and an explicit true value in the effective published snapshot.
+  It adds no table, blanket read grant, write interface, or unrelated feature.
+- **The current Database Phase roadmap is complete through `0052`.** No
+  migration after `0052` is approved or scheduled by this roadmap.
 
 ## Why scoped authorization was deferred, not half-built
 
