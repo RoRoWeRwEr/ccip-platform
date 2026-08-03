@@ -2,6 +2,7 @@ import Link from "next/link";
 import type {
   BankSummary,
   CardSummary,
+  NetworkSummary,
 } from "@/features/catalog/data/repository";
 import type { Locale } from "@/lib/i18n";
 
@@ -21,6 +22,21 @@ interface CatalogCopy {
   next: string;
   page: string;
   viewDetails: string;
+  search: string;
+  network: string;
+  maxFee: string;
+  maxSalary: string;
+  persona: string;
+  applyFilters: string;
+  clearFilters: string;
+}
+
+export interface CatalogFilters {
+  q?: string;
+  network?: string;
+  fee?: string;
+  salary?: string;
+  persona?: string;
 }
 
 const copy: Record<Locale, CatalogCopy> = {
@@ -42,6 +58,13 @@ const copy: Record<Locale, CatalogCopy> = {
     next: "التالي",
     page: "صفحة",
     viewDetails: "عرض التفاصيل",
+    search: "ابحث باسم البطاقة",
+    network: "كل الشبكات",
+    maxFee: "أقصى رسوم سنوية",
+    maxSalary: "أقصى راتب مطلوب",
+    persona: "كل الفئات",
+    applyFilters: "تطبيق الفلاتر",
+    clearFilters: "مسح الفلاتر",
   },
   en: {
     title: "Saudi credit cards",
@@ -61,6 +84,13 @@ const copy: Record<Locale, CatalogCopy> = {
     next: "Next",
     page: "Page",
     viewDetails: "View details",
+    search: "Search card names",
+    network: "All networks",
+    maxFee: "Maximum annual fee",
+    maxSalary: "Maximum required salary",
+    persona: "All personas",
+    applyFilters: "Apply filters",
+    clearFilters: "Clear filters",
   },
 };
 
@@ -72,9 +102,16 @@ function formatSar(locale: Locale, value: number) {
   }).format(value);
 }
 
-function catalogHref(locale: Locale, page: number, bankSlug?: string) {
+function catalogHref(
+  locale: Locale,
+  page: number,
+  bankSlug?: string,
+  filters: CatalogFilters = {},
+) {
   const params = new URLSearchParams();
   if (bankSlug) params.set("bank", bankSlug);
+  for (const [key, value] of Object.entries(filters))
+    if (value) params.set(key, value);
   if (page > 1) params.set("page", String(page));
   const query = params.toString();
   return `/${locale}/cards${query ? `?${query}` : ""}`;
@@ -83,17 +120,21 @@ function catalogHref(locale: Locale, page: number, bankSlug?: string) {
 export function CatalogPage({
   locale,
   banks,
+  networks,
   cards,
   page,
   totalPages,
   selectedBank,
+  filters,
 }: Readonly<{
   locale: Locale;
   banks: BankSummary[];
+  networks: NetworkSummary[];
   cards: CardSummary[];
   page: number;
   totalPages: number;
   selectedBank?: string;
+  filters: CatalogFilters;
 }>) {
   const text = copy[locale];
 
@@ -109,13 +150,96 @@ export function CatalogPage({
         <p className="text-muted mt-4 text-lg leading-8">{text.description}</p>
       </header>
 
+      <form
+        action={`/${locale}/cards`}
+        method="get"
+        className="border-line mt-8 grid gap-3 rounded-3xl border bg-white p-5 sm:grid-cols-2 lg:grid-cols-3"
+      >
+        <label className="grid gap-2 text-sm font-bold">
+          <span>{text.search}</span>
+          <input
+            className="border-line min-h-11 rounded-xl border px-3"
+            type="search"
+            name="q"
+            defaultValue={filters.q}
+            maxLength={80}
+          />
+        </label>
+        <label className="grid gap-2 text-sm font-bold">
+          <span>{text.network}</span>
+          <select
+            className="border-line min-h-11 rounded-xl border px-3"
+            name="network"
+            defaultValue={filters.network ?? ""}
+          >
+            <option value="">{text.network}</option>
+            {networks.map((network) => (
+              <option key={network.id} value={network.slug}>
+                {locale === "ar" ? network.nameAr : network.nameEn}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="grid gap-2 text-sm font-bold">
+          <span>{text.persona}</span>
+          <select
+            className="border-line min-h-11 rounded-xl border px-3"
+            name="persona"
+            defaultValue={filters.persona ?? ""}
+          >
+            <option value="">{text.persona}</option>
+            <option value="GENERAL">General</option>
+            <option value="STUDENT">Student</option>
+            <option value="SALARY">Salary</option>
+            <option value="PRIVATE_BANKING">Private banking</option>
+            <option value="BUSINESS">Business</option>
+          </select>
+        </label>
+        <label className="grid gap-2 text-sm font-bold">
+          <span>{text.maxFee}</span>
+          <input
+            className="border-line min-h-11 rounded-xl border px-3"
+            type="number"
+            min="0"
+            max="1000000"
+            name="fee"
+            defaultValue={filters.fee}
+          />
+        </label>
+        <label className="grid gap-2 text-sm font-bold">
+          <span>{text.maxSalary}</span>
+          <input
+            className="border-line min-h-11 rounded-xl border px-3"
+            type="number"
+            min="0"
+            max="1000000"
+            name="salary"
+            defaultValue={filters.salary}
+          />
+        </label>
+        {selectedBank ? (
+          <input type="hidden" name="bank" value={selectedBank} />
+        ) : null}
+        <div className="flex items-end gap-2">
+          <button
+            className="bg-brand min-h-11 rounded-full px-5 font-bold text-white"
+            type="submit"
+          >
+            {text.applyFilters}
+          </button>
+          <Link className="catalog-filter" href={`/${locale}/cards`}>
+            {text.clearFilters}
+          </Link>
+        </div>
+      </form>
+
       <nav className="mt-9" aria-label={text.banksLabel}>
         <ul className="flex flex-wrap gap-2">
           <li>
             <Link
               aria-current={!selectedBank ? "page" : undefined}
               className="catalog-filter"
-              href={catalogHref(locale, 1)}
+              href={catalogHref(locale, 1, undefined, filters)}
             >
               {text.allBanks}
             </Link>
@@ -125,7 +249,7 @@ export function CatalogPage({
               <Link
                 aria-current={selectedBank === bank.slug ? "page" : undefined}
                 className="catalog-filter"
-                href={catalogHref(locale, 1, bank.slug)}
+                href={catalogHref(locale, 1, bank.slug, filters)}
               >
                 {locale === "ar" ? bank.nameAr : bank.nameEn}
               </Link>
@@ -218,7 +342,7 @@ export function CatalogPage({
           {page > 1 ? (
             <Link
               className="catalog-page-link"
-              href={catalogHref(locale, page - 1, selectedBank)}
+              href={catalogHref(locale, page - 1, selectedBank, filters)}
               rel="prev"
             >
               {text.previous}
@@ -234,7 +358,7 @@ export function CatalogPage({
           {page < totalPages ? (
             <Link
               className="catalog-page-link"
-              href={catalogHref(locale, page + 1, selectedBank)}
+              href={catalogHref(locale, page + 1, selectedBank, filters)}
               rel="next"
             >
               {text.next}

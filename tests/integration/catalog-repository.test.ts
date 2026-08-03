@@ -112,6 +112,7 @@ beforeAll(async () => {
       name_en: "Published Integration Card",
       published_at: new Date(Date.now() - 60_000).toISOString(),
       annual_fee: 500,
+      minimum_salary: 5000,
     },
     {
       id: ids.draftCard,
@@ -250,6 +251,25 @@ describe("public catalog repository against local RLS", () => {
     expect(page.items.map((card) => card.slug)).not.toContain(
       "integration-draft-card",
     );
+  });
+
+  it("applies localized text, network, fee, persona, and salary filters", async () => {
+    const page = await listPublicCards(publicClient, {
+      page: 1,
+      pageSize: 10,
+      search: "Published Integration",
+      locale: "en",
+      networkSlug: "integration-network",
+      maxAnnualFee: 500,
+      targetUser: "GENERAL",
+      maxMinimumSalary: 10_000,
+    });
+    expect(page.items.map((card) => card.slug)).toContain(
+      "integration-published-card",
+    );
+    await expect(
+      listPublicCards(publicClient, { search: "no-match", locale: "en" }),
+    ).resolves.toMatchObject({ items: [] });
   });
 
   it("loads only approved snapshot data through the anonymous RPC", async () => {

@@ -38,7 +38,7 @@ branch, Draft PR, or manual merge.
 | Catalog admin authorization | **Complete (`0049`)** | Audited scope assignments attach GLOBAL/BANK scope to existing CATALOG_ADMINISTRATOR role assignments; bank ownership resolves through typed bank/card relationships across `0046`–`0048`; shared merchants and loyalty programs require GLOBAL scope; reviewers and final approvers must be in scope; no blanket core-catalog write grant was added. |
 | Published card detail | **Complete (`0050`)** | `get_published_card_detail(text)` exposes only currently effective PUBLISHED snapshot fields, safe verified provenance, and independently published governed relationships to `anon`/`authenticated`; drafts, workflow records, internal metadata, and unpublished children remain hidden. |
 | Application foundation | **Complete** | Next.js/Supabase runtime, typed repositories, health/readiness, bilingual routing, logging, security headers, and application CI are delivered. |
-| Frontend | **Phase 3 in progress** | P3.1 homepage and P3.2 catalog browsing are green; P3.3 card details resumes after this migration delivery. |
+| Frontend | **Phase 3 in progress** | P3.1 homepage, P3.2 browsing, and P3.3 card details are green. P3.4 search plus bank/network/fee/persona/salary filters are implemented locally; reward filtering requires the decision recorded in `docs/EXECUTION_STATUS.md`. |
 | Operational AI/recommendation service | **Not started** | Recommendation schema exists; no running model or API exists. |
 | Deployment | **Not started** | CI validates database changes but does not deploy a live environment. |
 

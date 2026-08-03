@@ -36,6 +36,11 @@ See
 factual status of every layer of the platform (database, tests, CI,
 security, API, frontend, AI/recommendation, deployment).
 
+Public catalog browsing also supports shareable localized-name, bank, network,
+annual-fee, persona, and minimum-salary filters. Publication-aware reward
+filtering remains unresolved because reward rules are not directly public and
+the approved `0050` interface is intentionally single-card detail only.
+
 ## Repository structure
 
 ```

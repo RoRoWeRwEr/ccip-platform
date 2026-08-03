@@ -16,6 +16,13 @@ export interface BankSummary {
   logoUrl: string | null;
 }
 
+export interface NetworkSummary {
+  id: string;
+  slug: string;
+  nameAr: string;
+  nameEn: string;
+}
+
 export interface CardSummary {
   id: string;
   slug: string;
@@ -338,9 +345,37 @@ export async function listPublicBanks(
   return makePage(items, count, pagination);
 }
 
+export async function listPublicNetworks(
+  client: CatalogClient,
+): Promise<NetworkSummary[]> {
+  const { data, error } = await client
+    .from("card_networks")
+    .select("id,slug,name_ar,name_en")
+    .eq("is_active", true)
+    .order("name_en")
+    .limit(50);
+  if (error) throw dependencyError("network query", error);
+  return (data ?? []).map((network) => ({
+    id: network.id,
+    slug: network.slug,
+    nameAr: network.name_ar,
+    nameEn: network.name_en,
+  }));
+}
+
 export async function listPublicCards(
   client: CatalogClient,
-  input: { page?: unknown; pageSize?: unknown; bankSlug?: string } = {},
+  input: {
+    page?: unknown;
+    pageSize?: unknown;
+    bankSlug?: string;
+    networkSlug?: string;
+    search?: string;
+    locale?: "ar" | "en";
+    maxAnnualFee?: number;
+    targetUser?: Database["public"]["Enums"]["target_user_type"];
+    maxMinimumSalary?: number;
+  } = {},
 ): Promise<Page<CardSummary>> {
   const pagination = parsePagination(input);
   const { from, to } = toRange(pagination);
@@ -359,6 +394,18 @@ export async function listPublicCards(
     .range(from, to);
 
   if (input.bankSlug) query = query.eq("banks.slug", input.bankSlug);
+  if (input.networkSlug)
+    query = query.eq("card_networks.slug", input.networkSlug);
+  if (input.search)
+    query = query.ilike(
+      input.locale === "ar" ? "name_ar" : "name_en",
+      `%${input.search.replaceAll("%", "\\%").replaceAll("_", "\\_")}%`,
+    );
+  if (input.maxAnnualFee !== undefined)
+    query = query.lte("annual_fee", input.maxAnnualFee);
+  if (input.targetUser) query = query.eq("target_user", input.targetUser);
+  if (input.maxMinimumSalary !== undefined)
+    query = query.lte("minimum_salary", input.maxMinimumSalary);
   const { data, error, count } = await query;
   if (error) throw dependencyError("card query", error);
 

@@ -13,7 +13,7 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 |---|---|---|
 | 1 — Database Foundation | Complete | 50 migrations, 111 RLS-enabled tables, 19 pgTAP files / 467 assertions. Migration 0050 closes the P3.3 published-detail read gap; delivery CI is monitored before P3.3 resumes. |
 | 2 — Application Foundation | Complete | P2.1–P2.4 and the phase review are complete and green. |
-| 3 — Public Catalog | In progress | P3.1–P3.3 are complete locally. P3.3 delivery CI is pending; P3.4 follows when green. |
+| 3 — Public Catalog | In progress | P3.1–P3.3 are complete and green. P3.4 search and five safe public filters are implemented locally; the reward-filter decision remains. |
 | 4 — Comparison and Calculation | Not started | Schema/design exist; no runtime implementation exists. |
 | 5 — Recommendation | Not started | Schema and DES exist; no runtime engine exists. |
 | 6 — Authentication and User Features | Not started | Supabase identity/RLS schema exists; no UI exists. |
@@ -24,13 +24,16 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 
 ## Current task
 
-Complete **P3.4 Search and filters** after the P3.3 delivery is green: text
-search and useful bank, network, fee, reward, persona, and eligibility filters
-with shareable state.
+Resolve the **P3.4 reward-filter boundary**. Localized search plus bank,
+network, annual-fee, persona, and minimum-salary filters are implemented and
+validated. Reward rules are not anonymously readable and migration `0050` is
+single-card detail only, so a correct result-set reward filter requires either
+an explicitly authorized forward read-model migration or a P3.4 scope revision.
 
 ## Exact next task
 
-Complete the **Phase 3 review** after P3.4, then begin P4.1 multi-card comparison.
+After that decision, complete P3.4 and the Phase 3 review, then begin P4.1
+multi-card comparison.
 
 ## Current validation and CI
 
@@ -113,6 +116,16 @@ Complete the **Phase 3 review** after P3.4, then begin P4.1 multi-card compariso
   zero-vulnerability npm audit, repository policy, Markdown links, YAML lint,
   and whitespace checks passed. The first sandboxed build was denied an
   internal Turbopack worker port; the authorized identical rerun passed.
+- P3.3 CI: Application CI run 30802355076 and Repository Policy run
+  30802355180 passed at `53b39f9`.
+- P3.4 safe implementation: localized name search and bank, network,
+  annual-fee ceiling, persona, and minimum-salary ceiling filters use bounded,
+  validated inputs and reversible GET URLs. Search uses a locale-specific
+  column and escaped wildcard characters instead of raw PostgREST `or` syntax.
+- P3.4 local validation: formatting, lint, strict typecheck, 23/23 unit and
+  component tests, 5/5 real-Supabase integration tests, production build,
+  zero-vulnerability npm audit, repository policy, Markdown links, YAML lint,
+  and whitespace checks passed.
 
 ## Phase 2 completion review
 
@@ -145,6 +158,12 @@ Complete the **Phase 3 review** after P3.4, then begin P4.1 multi-card compariso
 
 ## Blockers and owner-only actions
 
+- **P3.4 reward-filter decision:** anonymous callers cannot query
+  `reward_rules`, and `get_published_card_detail(text)` cannot provide a
+  correctly paginated result-set filter. Do not weaken RLS, fetch with a
+  service role, filter only the current page, or invent migration `0051`.
+  Resume after explicit authority either for a bounded forward published-list
+  read model or to remove the reward filter from P3.4 acceptance.
 - The P3.3 public-detail authorization blocker is resolved by the explicit
   migration `0050` decision. The application must use
   `get_published_card_detail(text)` and must not introduce a public service-role
