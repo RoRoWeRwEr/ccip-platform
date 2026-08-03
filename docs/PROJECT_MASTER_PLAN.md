@@ -95,12 +95,12 @@ about current production performance. The detailed measurement contract is in
 
 ## Planning baseline and roadmap logic
 
-As verified on 2026-08-03, 21 of 30 roadmap milestones are complete (Phase 1 as
+As verified on 2026-08-03, 22 of 30 roadmap milestones are complete (Phase 1 as
 one foundation milestone, P2.1–P2.4, P3.1–P3.4, P4.1–P4.3, P5.1–P5.3, and
-P6.1–P6.3, and P7.1–P7.3), so milestone-count progress is **70%**. This is a transparent planning
+P6.1–P6.3, and P7.1–P7.4), so milestone-count progress is **73%**. This is a transparent planning
 measure, not an effort-spent estimate; milestones vary substantially in size.
-P7.3 is delivered at `4cd8f03`; Application CI run 30832017518 and Repository
-Policy run 30832018829 passed.
+P7.4 is delivered at `9203d1b`; Application CI run 30832606308 and Repository
+Policy run 30832605351 passed.
 
 The critical path is P4 comparison/calculation → P5 recommendation → P6
 authenticated persistence → P7 governed administration → P8 integrated
@@ -270,6 +270,7 @@ server-only and use the anonymous/authenticated clients for RLS-enforced paths.
 
 ## Current next milestone
 
-The next unfinished milestone is **P7.4 assignment administration**. P7.1–P7.3's
-scope-aware administration and controlled publication surfaces are complete and green.
+The next unfinished milestone is **P8.1 automated quality gate**. Phase 7's
+scope-aware administration, controlled publication, assignment lifecycle, and
+completion review are complete and green.
 `docs/EXECUTION_STATUS.md` is the live source for the exact current task.
