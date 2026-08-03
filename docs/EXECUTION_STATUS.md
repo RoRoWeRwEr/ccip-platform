@@ -11,7 +11,7 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 
 | Phase | State | Evidence |
 |---|---|---|
-| 1 — Database Foundation | Complete | 50 migrations, 111 RLS-enabled tables, 19 pgTAP files / 467 assertions. Migration 0050 closes the P3.3 published-detail read gap; delivery CI is monitored before P3.3 resumes. |
+| 1 — Database Foundation | Complete | 51 migrations, 111 RLS-enabled tables, 20 pgTAP files / 506 assertions. Migration 0051 closes the P3.4 publication-aware list/search boundary without changing the 0050 detail interface. |
 | 2 — Application Foundation | Complete | P2.1–P2.4 and the phase review are complete and green. |
 | 3 — Public Catalog | In progress | P3.1–P3.3 are complete and green. P3.4 search and five safe public filters are delivered; migration 0051 is authorized for the remaining publication-aware reward/list boundary. |
 | 4 — Comparison and Calculation | Not started | Schema/design exist; no runtime implementation exists. |
@@ -37,9 +37,15 @@ the Phase 3 review, then begin P4.1 multi-card comparison.
 
 ## Current validation and CI
 
-- Database completion commit: `191945f` (migration `0050`).
+- Latest completed database commit before `0051`: `191945f` (migration `0050`); migration `0051` delivery SHA and CI runs will be recorded after push.
 - Migration `0050` Database CI: success, run 30801523652.
 - Migration `0050` Repository Policy: success, run 30801523667.
+- Migration `0051` local validation: clean replay of all 51 migrations; 20
+  pgTAP files / 506 assertions; warning/error database lint; repository policy;
+  Markdown links; workflow YAML; and whitespace checks passed. Its 39 new
+  assertions cover grants/function hardening, anonymous/authenticated reads,
+  effective/future/expired/scheduled windows, drafts/rejection, reward filters,
+  sorting, pagination, RLS isolation, suspension, rollback, and archival.
 - Open PRs: Dependabot #7–#9 and #15; none blocks direct-to-main execution.
 - Migration 0050 local validation: clean replay of all 50 migrations; 19 pgTAP
   files / 467 assertions; warning/error database lint; repository policy;
@@ -149,7 +155,7 @@ the Phase 3 review, then begin P4.1 multi-card comparison.
 - **Testing and operations:** 14 unit and 4 database-backed integration tests
   pass locally and in Application CI; the production build and repository
   policy pass. Health/readiness behavior was verified in P2.3. Integration CI
-  now exercises all 50 migrations and anonymous public RLS before application
+  now exercises all 51 migrations and anonymous public RLS before application
   tests.
 - **Documentation and technical debt:** README and technical architecture match
   the implemented runtime. No Blocking Phase 2 debt remains. Non-blocking

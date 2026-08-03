@@ -6,7 +6,7 @@ CCIP v1 is a modular monolith: one Next.js TypeScript application provides
 server-rendered public pages, interactive client components, route handlers,
 authentication callbacks, and privileged server-only orchestration. Supabase
 provides PostgreSQL, Auth, RLS, and the controlled database functions already
-implemented by migrations `0001`–`0050`.
+implemented by migrations `0001`–`0051`.
 
 ```text
 Browser
@@ -49,6 +49,9 @@ server-only secret or privileged client into browser bundles.
   `get_published_card_detail(text)` function. It projects only approved fields
   from currently effective `PUBLISHED` snapshots and never requires a public
   service-role client or direct governance-table access.
+- Card-list search, filtering, sorting, and pagination use migration `0051`'s
+  `search_published_cards(...)` execute-only snapshot boundary. Reward filters
+  run in the database before pagination and never require a service-role client.
 - `src/types/database.ts` is the checked-in generated contract for the full
   schema. Supabase browser, server, proxy, readiness, and repository clients
   use that contract instead of untyped queries.
@@ -139,5 +142,8 @@ server-only secret or privileged client into browser bundles.
 
 Create an ADR before introducing a separate backend runtime, privileged worker,
 external search/index, paid monitoring vendor, state-management framework,
-native app, or new database migration. The ADR must show the measured problem,
+native app, or a database design that materially changes the approved
+architecture. Routine bounded forward migrations authorized by
+`docs/AUTONOMOUS_DECISION_POLICY.md` require synchronized roadmap and status
+documentation but not a separate ADR. An ADR must show the measured problem,
 alternatives, security/operational effects, and rollback path.

@@ -22,7 +22,7 @@ defined in `docs/AUTONOMOUS_DECISION_POLICY.md`.
 ## Delivery principles
 
 - Prefer a usable vertical slice over speculative infrastructure.
-- Preserve migrations `0001`–`0050`; never rewrite published history.
+- Preserve migrations `0001`–`0051`; never rewrite published history.
 - Do not add a migration unless application implementation proves a concrete
   schema gap. Document the gap and migration justification here first.
 - Public catalog access remains available without authentication. User and
@@ -53,7 +53,7 @@ server-only and use the anonymous/authenticated clients for RLS-enforced paths.
 
 ### Phase 1 — Database Foundation — Complete
 
-- Migrations `0001`–`0050`, 111 tables, full RLS coverage.
+- Migrations `0001`–`0051`, 111 tables, full RLS coverage.
 - Database CI and Repository Policy green for the completion delivery.
 - BANK/GLOBAL catalog authorization and controlled publication lifecycle in
   place.
@@ -62,6 +62,10 @@ server-only and use the anonymous/authenticated clients for RLS-enforced paths.
   relationships together. Migration `0050` was explicitly authorized as a
   bounded execute-only published card-detail interface with no new table or
   core-catalog write grant.
+- P3.4 proved that correct reward filtering, sorting, and pagination require a
+  result-set read boundary. Migration `0051` adds that bounded execute-only
+  published list/search interface without altering `0050` or granting table
+  writes.
 
 ### Phase 2 — Application Foundation
 

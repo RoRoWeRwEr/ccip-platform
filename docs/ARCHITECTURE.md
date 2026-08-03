@@ -1,7 +1,7 @@
 # Database Architecture
 
 This describes the actual, current state of `supabase/migrations/` —
-merged through `0050`. It is derived directly from reading
+merged through `0051`. It is derived directly from reading
 every migration file and from live-executing the full migration sequence
 against PostgreSQL 16 (and, since `0042` merged, against a real
 Supabase local stack via Database CI); it is not aspirational.
@@ -202,6 +202,16 @@ Published card-detail interface (0050)
   merchant. Safe verified provenance is included without exposing workflow
   comments, assignments, audit rows, or internal metadata. No write path is
   added.
+
+Published card list/search interface (0051)
+  search_published_cards(...) — stable, bounded JSON model for P3.4 search,
+  filtering, sorting, counts, and pagination. Card, bank, and reward values
+  come only from currently effective PUBLISHED snapshots through explicit
+  field allowlists. Reward predicates run before pagination and only consider
+  independently published, currently valid rules and snapshot-approved
+  targets. Core rows validate active relationships only. A partial index
+  supports effective published-version lookup; no table or write grant is
+  added, and the 0050 detail function is unchanged.
 ```
 
 ## The RLS and authorization model
@@ -259,7 +269,7 @@ Migration `0043` follows that same design through
 
 ## Reproducibility
 
-The full sequence `0001`→`0050` has been verified to apply cleanly,
+The full sequence `0001`→`0051` has been verified to apply cleanly,
 in order, against an empty database with zero errors. Current Supabase CLI
 replay emits only the pre-existing `0041` redundant privilege revoke/grant
 warnings — both in the hand-built PostgreSQL 16 stand-in used for the

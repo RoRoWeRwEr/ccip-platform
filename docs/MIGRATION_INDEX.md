@@ -59,8 +59,9 @@ out of sync with reality.
 | 0048 | `create_catalog_publication_governance` | 379 | merged | catalog_publication_versions, catalog_publication_requests, catalog_publication_events |
 | 0049 | `create_catalog_admin_authorization` | 720 | merged | catalog_administrator_scope_assignments |
 | 0050 | `create_published_card_detail_interface` | 374 | merged | — (read-only `get_published_card_detail(text)` function) |
+| 0051 | `create_published_card_search_interface` | 216 | merged | — (read-only `search_published_cards(...)` function and partial published-read index) |
 
-**Database Phase total:** 50 migrations, 111 tables, 35,003 lines.
+**Database Phase total:** 51 migrations, 111 tables, 35,219 lines.
 
 ## `0042` revision note
 
@@ -149,3 +150,8 @@ migration was first drafted.
   `SECURITY DEFINER` function returns only explicit fields from currently
   effective `PUBLISHED` snapshots. Anonymous and authenticated callers receive
   execute-only access; underlying administrative tables remain protected.
+- `0051` depends on `0050` remaining the stable detail interface and on
+  `0048`'s immutable publication snapshots. Its list/search function filters,
+  sorts, counts, and paginates only effective published card, bank, and reward
+  snapshots. It adds no table or write path and retains execute-only access for
+  anonymous and authenticated readers.

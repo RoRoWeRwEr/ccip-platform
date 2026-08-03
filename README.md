@@ -10,7 +10,7 @@ and business requirements.
 
 ## Current implementation status: public catalog experience in progress
 
-Migrations `0001`–`0050` complete the current database roadmap: 111 tables covering the
+Migrations `0001`–`0051` complete the current database roadmap: 111 tables covering the
 card/bank/reward catalog, customer financial and spending profiles, the
 recommendation engine, comparisons, notifications, bank applications,
 partnerships/commissions, a full governance/audit/compliance layer, a
@@ -38,8 +38,8 @@ security, API, frontend, AI/recommendation, deployment).
 
 Public catalog browsing also supports shareable localized-name, bank, network,
 annual-fee, persona, and minimum-salary filters. Publication-aware reward
-filtering remains unresolved because reward rules are not directly public and
-the approved `0050` interface is intentionally single-card detail only.
+filtering is served by migration `0051`'s bounded publication-aware list/search
+interface; migration `0050` remains the single-card detail interface.
 
 ## Repository structure
 
@@ -71,8 +71,8 @@ docs/
 decisions/                  Reserved for architecture decision records; currently empty
 glossary/                   Reserved for a project glossary; currently empty
 supabase/
-  migrations/                50 SQL migrations (0001–0050)
-  tests/database/            pgTAP test suite (currently covers migrations 0042–0050)
+  migrations/                51 SQL migrations (0001–0051)
+  tests/database/            pgTAP test suite (currently covers migrations 0042–0051)
 src/
   app/                       Next.js App Router and bilingual route foundation
   features/catalog/data/     Typed, RLS-aware public catalog repositories

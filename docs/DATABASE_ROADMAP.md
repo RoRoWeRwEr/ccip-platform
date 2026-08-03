@@ -85,8 +85,14 @@ for the next planning decision, not a backlog.
   provenance, and related merchant data without privileged credentials. The
   migration adds one read-only, allowlisted function over currently effective
   `PUBLISHED` snapshots. It adds no table, write grant, or unrelated feature.
-- **The current Database Phase roadmap is complete through `0050`.** No
-  migration after `0050` is approved or scheduled by this roadmap.
+- `0051` (`create_published_card_search_interface`): **authorized during P3.4.**
+  Correct reward filtering before pagination could not use the direct anonymous
+  RLS surface or `0050`'s single-card function. This migration adds one bounded,
+  allowlisted list/search function and a partial publication lookup index. It
+  exposes only effective published card, bank, and independently published
+  reward snapshots and adds no table or write grant.
+- **The current Database Phase roadmap is complete through `0051`.** No
+  migration after `0051` is approved or scheduled by this roadmap.
 
 ## Why scoped authorization was deferred, not half-built
 
@@ -135,8 +141,10 @@ contains only a placeholder. Validated against what's actually built:
 3. `0049` replaced that interim gate with the approved explicit GLOBAL/BANK
    authorization model.
 4. `0050` closed the P3.3 read-boundary gap with a snapshot-based, read-only
-   published card-detail function and completed the revised Database Phase.
-5. Warehouse, analytics, ML, search, and catch-all "platform finalization"
+   published card-detail function.
+5. `0051` closed the P3.4 result-set reward-filter gap with a snapshot-based,
+   read-only list/search function and completed the revised Database Phase.
+6. Warehouse, analytics, ML, and catch-all "platform finalization"
    remain explicitly deferred and unscheduled. Any future database work needs
    a new bounded roadmap decision based on application-layer demand.
 
