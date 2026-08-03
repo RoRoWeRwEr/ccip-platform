@@ -1,9 +1,9 @@
 # CCIP v1 Execution Status
 
-**Last verified:** 2026-08-03 at P5.2 commit `1aa0855`.
-Repository Policy run 30817864232 and Application CI run 30817868298 passed.
+**Last verified:** 2026-08-03 at P5.3 commit `71a1b01`.
+Repository Policy run 30822900731 and Application CI run 30822898794 passed.
 
-**Program progress:** 14 of 30 roadmap milestones complete = **47%**.
+**Program progress:** 15 of 30 roadmap milestones complete = **50%**.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -17,8 +17,8 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 | 2 — Application Foundation | Complete | P2.1–P2.4 and the phase review are complete and green. |
 | 3 — Public Catalog | Complete | P3.1–P3.4 and the phase review are complete; Application CI run 30810879333 and Repository Policy run 30810879203 passed for `1c269bf`. |
 | 4 — Comparison and Calculation | Complete | P4.1–P4.3 and the phase review are complete; Application CI run 30815813577 and Repository Policy run 30815813897 passed for `8e723b5`. |
-| 5 — Recommendation | In progress | P5.1 engine and P5.2 bilingual recommendation journey are complete and green; P5.3 persistence integration is next. |
-| 6 — Authentication and User Features | Not started | Supabase identity/RLS schema exists; no UI exists. |
+| 5 — Recommendation | Complete | P5.1 engine, P5.2 bilingual recommendation journey, P5.3 ownership-scoped persistence boundary, and the phase review are complete and green. |
+| 6 — Authentication and User Features | In progress | Supabase identity/RLS schema exists; P6.1 authentication journeys are next. |
 | 7 — Catalog Administration | Not started | Database authorization/workflows exist; no admin UI exists. |
 | 8 — Quality and Security | Not started | Database validation exists; application gates do not. |
 | 9 — Staging and Deployment | Not started | No application deployment configuration or credentials observed. |
@@ -26,13 +26,13 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 
 ## Current task
 
-Execute **P5.3 Persistence Integration** as the next unfinished milestone.
+Execute **P6.1 Authentication Journeys** as the next unfinished milestone.
 
 ## Exact next task
 
-Integrate recommendation runs/history and saved results for authenticated users
-where supported by the existing schema and ownership RLS, while preserving the
-complete guest journey.
+Implement secure signup, verification, login, logout, password recovery,
+callback handling, and session refresh over the existing Supabase identity
+boundary.
 
 ## Current validation and CI
 
@@ -101,6 +101,18 @@ complete guest journey.
   YAML lint, and whitespace checks passed.
 - P5.2 commit: `1aa0855`; Application CI run 30817868298 and Repository Policy
   run 30817864232 passed.
+- P5.3 delivery: authenticated clients can read only their RLS-visible
+  recommendation runs and visible results and can save an owned result through
+  `user_saved_cards`; guests remain ephemeral and no service-role or direct
+  privileged browser write path was introduced.
+- P5.3 local validation: formatting, lint, strict typecheck, 42/42 unit and
+  component tests, 7/7 real-Supabase integration tests, production build,
+  offline zero-vulnerability npm audit, repository policy, Markdown links,
+  workflow YAML, and whitespace checks passed. The first sandboxed build was
+  denied an internal Turbopack worker port; the identical authorized build
+  passed.
+- P5.3 commit: `71a1b01`; Application CI run 30822898794 and Repository Policy
+  run 30822900731 passed.
 - Database completion commit: `ed2b6c5` (migration `0051`).
 - Migration `0050` Database CI: success, run 30801523652.
 - Migration `0050` Repository Policy: success, run 30801523667.
@@ -113,6 +125,36 @@ complete guest journey.
   effective/future/expired/scheduled windows, drafts/rejection, reward filters,
   sorting, pagination, RLS isolation, suspension, rollback, and archival.
 - Open PRs: Dependabot #7–#9 and #15; none blocks direct-to-main execution.
+
+## Phase 5 completion review
+
+- **Architecture and schema:** the deterministic recommendation engine remains
+  application-domain code over migration `0052`'s bounded publication-safe
+  candidate RPC. P5.3 reuses existing typed RLS tables and adds no migration,
+  privileged browser client, duplicated publication logic, or blanket grant.
+- **Security and privacy:** guest inputs and results remain ephemeral.
+  Authenticated history is ownership-filtered by RLS, requests only visible
+  results and explicit columns, and caps run retrieval at 50. Saves use the
+  signed-in user identity and the existing collection/result ownership checks;
+  service-role credentials remain test/backend-only.
+- **Performance and resilience:** candidate retrieval, result ranking, and
+  history reads are bounded. Deterministic fixed-point value calculations and
+  safe dependency errors remain unchanged, while empty guest/authenticated
+  states avoid unnecessary dependent queries.
+- **UX and accessibility:** the public recommendation journey remains fully
+  bilingual, RTL/LTR responsive, keyboard-native, and transparent about
+  reasons, assumptions, confidence, publication context, and limitations.
+  Authenticated history/save presentation is intentionally deferred to the
+  Phase 6 identity shell rather than exposing an incomplete sign-in path.
+- **Testing and documentation:** 42 unit/component and 7 real-Supabase
+  integration tests pass. Persistence tests cover guest ephemerality,
+  authenticated mapping, bounded visible-result reads, authentication denial,
+  and ownership-protected save payloads; existing database tests retain the
+  cross-user RLS evidence.
+- **Technical debt:** no Blocking Phase 5 debt remains. Recommendation-run
+  creation is still a trusted backend responsibility by schema design; the
+  browser does not receive an unsafe substitute. Phase 6 owns identity UI,
+  saved-item presentation, and user lifecycle behavior.
 
 ## Phase 4 completion review
 

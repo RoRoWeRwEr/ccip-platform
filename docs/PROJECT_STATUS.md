@@ -42,14 +42,14 @@ branch, Draft PR, or manual merge.
 | Published recommendation candidates | **Complete (`0052`)** | A default-false core flag plus explicit effective-snapshot eligibility gates a bounded array of migration 0050 detail projections; no private governance data or direct table access is exposed. |
 | Application foundation | **Complete** | Next.js/Supabase runtime, typed repositories, health/readiness, bilingual routing, logging, security headers, and application CI are delivered. |
 | Frontend | **Phase 4 complete** | P4.1 comparison, P4.2 bilingual spending calculator, P4.3 fixed-point numeric hardening, and the Phase 4 review are green. |
-| Recommendation experience | **P5.1–P5.2 complete** | Deterministic fixed-valuation ranking and the bilingual guest journey are green over migration 0052's publication-safe candidate boundary; P5.3 persistence is next. |
+| Recommendation experience | **Phase 5 complete** | Deterministic fixed-valuation ranking, the bilingual guest journey, and the ownership-scoped authenticated history/save boundary are green over migration 0052's publication-safe candidate interface. |
 | Deployment | **Not started** | CI validates database changes but does not deploy a live environment. |
 
 ## Next approved action
 
 Execute the next unfinished application milestone recorded in
 `docs/EXECUTION_STATUS.md`. The Database Phase roadmap is complete through
-`0052`; P5.3 persistence integration is the next active delivery.
+`0052`; P6.1 authentication journeys is the next active delivery.
 
 ## Current blockers
 
