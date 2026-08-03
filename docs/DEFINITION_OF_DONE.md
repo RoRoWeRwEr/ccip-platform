@@ -11,6 +11,8 @@ A milestone is complete only when:
 - security, privacy, RTL/LTR, mobile, error, empty, loading, and edge-input
   behavior have been reviewed proportionate to the change;
 - authoritative documentation and `docs/EXECUTION_STATUS.md` are current;
+- assumptions and escalations comply with
+  `docs/AUTONOMOUS_DECISION_POLICY.md`;
 - the complete diff has no known Blocking issue;
 - the cohesive change is committed and pushed directly to `main`;
 - all triggered required GitHub Actions are green, with failures corrected by
@@ -25,8 +27,9 @@ Passing CI alone does not make a milestone complete.
 A phase is complete when every milestone in that phase meets the milestone
 definition, cross-milestone integration works, documentation describes actual
 behavior, and a phase review records architecture, security, UX/accessibility,
-performance, testing, and technical-debt findings. In-scope Blocking findings
-must be fixed before the next phase.
+performance, testing, documentation, and technical-debt findings. In-scope
+Blocking findings must be fixed before the next phase, using autonomous
+forward fixes where authorized by `docs/AUTONOMOUS_DECISION_POLICY.md`.
 
 ## CCIP v1 done
 

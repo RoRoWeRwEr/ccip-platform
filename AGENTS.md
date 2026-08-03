@@ -17,6 +17,10 @@ Before planning or editing:
 6. Inspect all workflows under `.github/workflows/` and the files relevant to the task.
 7. Reconcile documentation with the actual tree and GitHub state; report discrepancies before work.
 
+Standing decision authority and the narrow cases that require owner input are
+defined in `docs/AUTONOMOUS_DECISION_POLICY.md`. Apply that policy throughout
+planning and delivery.
+
 ## Non-negotiable engineering rules
 
 - Merged migrations are historical records. Never rewrite, rename, reorder, or delete them. Correct prior behavior only with a new, documented migration.
@@ -40,7 +44,9 @@ The repository owner has authorized a validated direct-to-main delivery workflow
 7. If GitHub Actions fails, stop all subsequent migration work and fix the failure with a forward-fix commit on `main`. Never force-push, rewrite history, or modify a merged migration.
 8. Record the delivery: commit SHA, exact files changed, local test results, CI conclusion, known risks, and the single next approved action.
 9. After every five successfully delivered migrations, stop and conduct the comprehensive review described in `docs/DEVELOPMENT_WORKFLOW.md` before starting a sixth.
-10. Stop after the authorized task. Do not begin the next migration or an adjacent feature in the same delivery.
+10. End each database delivery after its single authorized migration; begin any
+    subsequent migration only as a new atomic delivery. Autonomous application
+    execution then continues from the next unfinished roadmap milestone.
 
 A GitHub Issue, branch, or PR may still be opened for a genuinely exceptional case (see `docs/DEVELOPMENT_WORKFLOW.md`), but it is never required and never substitutes for steps 4–9 above.
 
@@ -56,10 +62,10 @@ to the next unfinished milestone. The database-only one-migration rule still
 applies whenever a delivery contains a migration; application milestones must
 also remain cohesive and reviewable.
 
-Stop only for a genuine unresolved business decision, an unavailable
-credential or required external-account action, or a destructive production
-action. Record external blockers precisely and continue every other executable
-task. Context or session limits are not completion: finish the current safe
-atomic operation, commit and push it, update `docs/EXECUTION_STATUS.md` with the
-exact resume point, and provide one resume instruction without leaving
-undocumented local changes.
+Use `docs/AUTONOMOUS_DECISION_POLICY.md` to resolve routine technical choices
+without owner interruption and to identify the limited decisions that require
+the owner. Record external blockers precisely and continue every other
+executable task. Context or session limits are not completion: finish the
+current safe atomic operation, commit and push it, update
+`docs/EXECUTION_STATUS.md` with the exact resume point, and provide one resume
+instruction without leaving undocumented local changes.

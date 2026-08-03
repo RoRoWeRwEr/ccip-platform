@@ -7,8 +7,9 @@ For the owner-authorized CCIP v1 execution program, Claude must also read
 next unfinished milestone, implement it without waiting for routine owner
 confirmation, test it, commit and push directly to `main`, monitor CI,
 forward-fix failures, update the status ledger, and continue to the next
-milestone. Stop only for a genuine unresolved business decision, unavailable
-credential or external-account action, or destructive production action.
+milestone. `docs/AUTONOMOUS_DECISION_POLICY.md` provides standing authority for
+routine technical decisions and defines the limited cases that require the
+owner.
 
 ## When delivering a migration
 
@@ -40,7 +41,9 @@ For each finding, cite the exact file and line, explain the impact, and propose 
 
 ## Boundaries
 
-- Do not imply an owner authorization broader than what was explicitly given for the current task. The direct-to-main workflow is a standing authorization for routine, one-migration-at-a-time delivery only — it does not extend to scope changes, design decisions, or further governance changes without a separate, explicit request.
+- Apply `docs/AUTONOMOUS_DECISION_POLICY.md`: make pre-authorized technical
+  decisions autonomously, while escalating only its expressly listed product,
+  security, destructive, policy, cost, credential, or irreconcilable cases.
 - When reviewing, do not silently modify database design. Review and explain proposed changes; implementation belongs in a separately requested and separately reviewed change.
 - Do not rewrite merged migrations. Do not begin a subsequent migration within the same task.
 - Never force-push, rewrite history, or bypass a failing required check, whether delivering or reviewing.

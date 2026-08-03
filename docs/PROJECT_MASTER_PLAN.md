@@ -16,6 +16,9 @@ status update. Stop only for a genuine unresolved business decision, an
 unavailable credential or external-account action, or a destructive production
 action requiring explicit approval.
 
+Standing technical decision authority and the exact escalation boundary are
+defined in `docs/AUTONOMOUS_DECISION_POLICY.md`.
+
 ## Delivery principles
 
 - Prefer a usable vertical slice over speculative infrastructure.
@@ -164,5 +167,9 @@ server-only and use the anonymous/authenticated clients for RLS-enforced paths.
 
 ## Current next milestone
 
-The next unfinished milestone is **P2.1**, followed immediately by **P2.2**.
+The next unfinished milestone is **P3.4**. Its approved reward filtering cannot
+be correct through migration `0050`'s single-card detail function or the direct
+anonymous RLS surface. A bounded forward migration `0051` is therefore
+authorized to provide a publication-aware, read-only card-list/search model;
+after its atomic database delivery, P3.4 resumes immediately.
 `docs/EXECUTION_STATUS.md` is the live source for the exact current task.
