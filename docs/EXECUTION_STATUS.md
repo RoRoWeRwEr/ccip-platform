@@ -1,9 +1,9 @@
 # CCIP v1 Execution Status
 
-**Last verified:** 2026-08-03 at P8.1 commit `0aacc6b`.
-Repository Policy run 30833382295 and Application CI run 30833381859 passed.
+**Last verified:** 2026-08-03 at P8.2 commit `aeccb4a`.
+Repository Policy run 30834225757 and Application CI run 30834225028 passed.
 
-**Program progress:** 23 of 30 roadmap milestones complete = **77%**.
+**Program progress:** 24 of 30 roadmap milestones complete = **80%**.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -20,20 +20,31 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 | 5 — Recommendation | Complete | P5.1 engine, P5.2 bilingual recommendation journey, P5.3 ownership-scoped persistence boundary, and the phase review are complete and green. |
 | 6 — Authentication and User Features | Complete | P6.1–P6.3 and the phase review are complete and green. |
 | 7 — Catalog Administration | Complete | P7.1–P7.4 and the architecture/security/performance/testing review are complete and green. |
-| 8 — Quality and Security | In progress | P8.1 automated quality gate is complete and green; P8.2 is next. |
+| 8 — Quality and Security | In progress | P8.1–P8.2 are complete and green; P8.3 security review is next. |
 | 9 — Staging and Deployment | Not started | No application deployment configuration or credentials observed. |
 | 10 — CCIP v1 Completion | Not started | Depends on phases 1–9. |
 
 ## Current task
 
-Execute **P8.2 Accessibility and Responsive Review** as the next unfinished milestone.
+Execute **P8.3 Security Review** as the next unfinished milestone.
 
 ## Exact next task
 
-Run automated and manual keyboard, screen-reader semantics, focus, contrast,
-RTL/LTR, zoom, and responsive review across critical journeys; fix findings.
+Review auth/session boundaries, RLS and authorization, secrets, dependencies,
+headers, input validation, abuse cases, and error disclosure; fix findings.
 
 ## Current validation and CI
+
+- P8.2 delivery: automated WCAG A/AA scans cover seven critical bilingual
+  routes on desktop and mobile alongside keyboard skip-link, 200% zoom,
+  RTL/LTR, and overflow checks. The review fixed 3.3:1 homepage accent contrast
+  and made every main landmark programmatically focusable.
+- P8.2 local validation: formatting, lint, strict typecheck, 69/69 unit and
+  component tests, 10/10 real-Supabase integration tests, 26/26 Playwright E2E
+  and accessibility tests, 22 pgTAP files / 538 assertions, production build,
+  repository policy, and whitespace checks passed.
+- P8.2 commit: `aeccb4a`; Application CI run 30834225028 and Repository Policy
+  run 30834225757 passed.
 
 - P8.1 delivery: Playwright now enforces eight Chromium desktop/mobile checks
   covering bilingual direction, public discovery/calculation/recommendation
