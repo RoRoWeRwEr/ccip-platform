@@ -523,7 +523,12 @@ export async function getPublicCardBySlug(
   const parsed = publishedCardDetailSchema.safeParse(data);
   if (!parsed.success)
     throw dependencyError("published card detail validation", parsed.error);
-  const value = parsed.data;
+  return mapPublishedCardDetail(parsed.data);
+}
+
+function mapPublishedCardDetail(
+  value: z.infer<typeof publishedCardDetailSchema>,
+): CardDetail {
   return {
     id: value.card.id,
     slug: value.card.slug,
@@ -645,4 +650,17 @@ export async function getPublicCardBySlug(
         }
       : null,
   };
+}
+
+export async function listRecommendationCandidates(
+  client: CatalogClient,
+): Promise<CardDetail[]> {
+  const { data, error } = await client.rpc(
+    "get_published_recommendation_candidates",
+  );
+  if (error) throw dependencyError("recommendation candidate query", error);
+  const parsed = z.array(publishedCardDetailSchema).safeParse(data);
+  if (!parsed.success)
+    throw dependencyError("recommendation candidate validation", parsed.error);
+  return parsed.data.map(mapPublishedCardDetail);
 }

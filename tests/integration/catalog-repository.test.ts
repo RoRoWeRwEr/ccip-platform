@@ -2,6 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import {
   getPublicCardBySlug,
+  listRecommendationCandidates,
   listPublicBanks,
   listPublicCards,
 } from "@/features/catalog/data/repository";
@@ -353,5 +354,11 @@ describe("public catalog repository against local RLS", () => {
     await expect(
       getPublicCardBySlug(publicClient, "integration-draft-card"),
     ).resolves.toBeNull();
+  });
+
+  it("fails closed when no published card has dual recommendation eligibility", async () => {
+    await expect(listRecommendationCandidates(publicClient)).resolves.toEqual(
+      [],
+    );
   });
 });
