@@ -1,7 +1,8 @@
 # Project Status
 
-**Last verified:** 2026-08-03 against the local migration `0050` validation
-stack and the latest observed GitHub Actions state before delivery.
+**Last verified:** 2026-08-03 against migration commit `191945f`, the local
+`0050` validation stack, and the latest observed GitHub Actions state before
+delivery.
 
 This dashboard reports observed states only. Repository and GitHub state override prior chat or stale documentation.
 
@@ -87,6 +88,14 @@ Execute the next unfinished application milestone recorded in
 
 ## Migration 0050 delivery record
 
+- **Migration commit:** `191945f`.
+- **Changed files:** `README.md`; `docs/ARCHITECTURE.md`;
+  `docs/DATABASE_ROADMAP.md`; `docs/EXECUTION_STATUS.md`;
+  `docs/MIGRATION_INDEX.md`; `docs/PROJECT_MASTER_PLAN.md`;
+  `docs/PROJECT_STATUS.md`; `docs/SECURITY_MODEL.md`;
+  `docs/TECHNICAL_ARCHITECTURE.md`;
+  `supabase/migrations/0050_create_published_card_detail_interface.sql`;
+  `supabase/tests/database/0050_published_card_detail_interface_test.sql`.
 - **Scope:** one read-only `get_published_card_detail(text)` interface, its 41
   pgTAP assertions, synchronized architecture/security/roadmap documentation,
   and no new table or core-catalog write grant.

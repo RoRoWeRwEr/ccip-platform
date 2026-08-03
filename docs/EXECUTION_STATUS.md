@@ -1,8 +1,8 @@
 # CCIP v1 Execution Status
 
-**Last verified:** 2026-07-30 at P3.2 commit
-`436b0bf07cf7e2f75878087708a1f638fba1fc1c`. Application CI run 30527811656
-and Repository Policy run 30527811581 completed successfully.
+**Last verified:** 2026-08-03 at migration `0050` commit `191945f`, after its
+complete local validation and before delivery CI. P3.3 remains the active
+application milestone.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -35,10 +35,11 @@ bank, network, fee, reward, persona, and eligibility filters with shareable stat
 
 ## Current validation and CI
 
-- Database completion commit: `0fada5a3d91c8c7e2a76fcd317cdb2f55c41f139`.
-- Database CI: success, run 30519983707.
-- Latest Repository Policy: success, run 30527811581 at `436b0bf`.
-- Open PRs: Dependabot #7, #8, and #9; none block direct-to-main execution.
+- Database completion commit: `191945f` (migration `0050`).
+- Previous Database CI: success, run 30519983707; migration `0050` delivery CI
+  is monitored before P3.3 resumes.
+- Latest pre-delivery Repository Policy: success, run 30528635251 at `ddb43ee`.
+- Open PRs: Dependabot #7–#9 and #15; none blocks direct-to-main execution.
 - Migration 0050 local validation: clean replay of all 50 migrations; 19 pgTAP
   files / 467 assertions; warning/error database lint; repository policy;
   Markdown links; workflow-equivalent YAML lint; and whitespace checks passed.
