@@ -116,13 +116,19 @@ server-only secret or privileged client into browser bundles.
 
 - `/api/health` proves the application process is responsive without leaking
   configuration. `/api/ready` may perform a bounded dependency check.
-- Logs are JSON in deployed environments and include correlation ID, route,
-  status, duration, and safe error code; tokens, cookies, credentials,
-  financial-profile values, and personal data are redacted.
+- Unhandled server request failures emit a structured `request_error` event
+  containing only the HTTP method and route template; raw errors, URLs, query
+  strings, and request headers are excluded.
+- Logs are structured JSON in deployed environments. Unhandled request events
+  include bounded route metadata; configured redaction protects tokens,
+  cookies, credentials, financial-profile values, and personal data.
 - Environment validation fails fast for required server values and validates
   public values separately.
 - Vercel preview/production deployments use environment-scoped secrets;
   Supabase local/staging/production projects remain separated.
+- `vercel.json` pins the framework, clean install, production build, and static
+  bundle budget. `docs/DEPLOYMENT_RUNBOOK.md` is the deploy, smoke, observability,
+  and forward-fix/rollback procedure.
 - GitHub Actions run policy, database checks when relevant, application lint,
   typecheck, unit/integration tests, and production build. E2E runs against a
   controlled test environment once its credentials are available.
