@@ -1,9 +1,9 @@
 # CCIP v1 Execution Status
 
-**Last verified:** 2026-08-03 at P6.1 commit `42acb5c`.
-Repository Policy run 30823716128 and Application CI run 30823715981 passed.
+**Last verified:** 2026-08-03 at P6.2 commit `a0df930`.
+Repository Policy run 30825461124 and Application CI run 30825461049 passed.
 
-**Program progress:** 16 of 30 roadmap milestones complete = **53%**.
+**Program progress:** 17 of 30 roadmap milestones complete = **57%**.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -18,7 +18,7 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 | 3 — Public Catalog | Complete | P3.1–P3.4 and the phase review are complete; Application CI run 30810879333 and Repository Policy run 30810879203 passed for `1c269bf`. |
 | 4 — Comparison and Calculation | Complete | P4.1–P4.3 and the phase review are complete; Application CI run 30815813577 and Repository Policy run 30815813897 passed for `8e723b5`. |
 | 5 — Recommendation | Complete | P5.1 engine, P5.2 bilingual recommendation journey, P5.3 ownership-scoped persistence boundary, and the phase review are complete and green. |
-| 6 — Authentication and User Features | In progress | P6.1 secure bilingual identity journeys are complete and green; P6.2 profile and saved items is next. |
+| 6 — Authentication and User Features | In progress | P6.1 identity and P6.2 owner-scoped profile/saved items are complete and green; P6.3 user history is next. |
 | 7 — Catalog Administration | Not started | Database authorization/workflows exist; no admin UI exists. |
 | 8 — Quality and Security | Not started | Database validation exists; application gates do not. |
 | 9 — Staging and Deployment | Not started | No application deployment configuration or credentials observed. |
@@ -26,12 +26,12 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 
 ## Current task
 
-Execute **P6.2 Profile and Saved Items** as the next unfinished milestone.
+Execute **P6.3 User History** as the next unfinished milestone.
 
 ## Exact next task
 
-Implement the authenticated user profile, saved cards, and saved comparisons
-through the existing owner-scoped RLS boundaries.
+Expose owner-scoped recommendation history, document privacy-aware lifecycle
+behavior supported by the schema, and extend RLS integration evidence.
 
 ## Current validation and CI
 
@@ -133,6 +133,19 @@ through the existing owner-scoped RLS boundaries.
   Markdown links; workflow YAML; and whitespace checks passed.
 - Migration `0053` commit: `f1d4531`; Database CI run 30824648050 and
   Repository Policy run 30824648182 passed.
+- P6.2 delivery: a protected bilingual no-index account route provides profile
+  updates, collection creation, saved-card listing/removal, and read-only
+  engine-owned comparison history. Published card detail can save or restore a
+  minimal allowlisted snapshot to Favorites through the authenticated session;
+  no service-role client or comparison-engine write was added.
+- P6.2 local validation: formatting, lint, strict typecheck, 53/53 unit and
+  component tests, 10/10 real-Supabase integration tests, production build,
+  offline zero-vulnerability npm audit, repository policy, Markdown links,
+  workflow YAML, and whitespace checks passed. The first sandboxed build was
+  denied an internal Turbopack worker port; the identical authorized build
+  passed.
+- P6.2 commit: `a0df930`; Application CI run 30825461049 and Repository Policy
+  run 30825461124 passed.
 - Database completion commit: `ed2b6c5` (migration `0051`).
 - Migration `0050` Database CI: success, run 30801523652.
 - Migration `0050` Repository Policy: success, run 30801523667.

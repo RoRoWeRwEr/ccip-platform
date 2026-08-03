@@ -43,14 +43,14 @@ branch, Draft PR, or manual merge.
 | Application foundation | **Complete** | Next.js/Supabase runtime, typed repositories, health/readiness, bilingual routing, logging, security headers, and application CI are delivered. |
 | Frontend | **Phase 4 complete** | P4.1 comparison, P4.2 bilingual spending calculator, P4.3 fixed-point numeric hardening, and the Phase 4 review are green. |
 | Recommendation experience | **Phase 5 complete** | Deterministic fixed-valuation ranking, the bilingual guest journey, and the ownership-scoped authenticated history/save boundary are green over migration 0052's publication-safe candidate interface. |
-| Authentication and user features | **P6.1 complete** | Bilingual signup, verification callback, login/logout, recovery/update, session refresh, safe redirects, and non-enumerating errors are green; P6.2 profile and saved items is next. |
+| Authentication and user features | **P6.1–P6.2 complete** | Bilingual identity journeys plus the protected owner-scoped profile, collections, saved cards, and engine-owned comparison history are green; P6.3 user history is next. |
 | Deployment | **Not started** | CI validates database changes but does not deploy a live environment. |
 
 ## Next approved action
 
 Execute the next unfinished application milestone recorded in
 `docs/EXECUTION_STATUS.md`. The Database Phase roadmap is complete through
-`0053`; P6.2 profile and saved items is the next active delivery.
+`0053`; P6.3 user history is the next active delivery.
 
 ## Current blockers
 
