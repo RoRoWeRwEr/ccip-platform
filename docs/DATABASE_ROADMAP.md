@@ -79,8 +79,14 @@ for the next planning decision, not a backlog.
   explicitly global, legacy unscoped catalog assignments fail closed, assigned
   reviewers/final approvers must hold matching scope, and no write access is
   added to earlier core catalog tables.
-- **The current Database Phase roadmap is complete through `0049`.** No
-  migration after `0049` is approved or scheduled by this roadmap.
+- `0050` (`create_published_card_detail_interface`): **authorized during P3.3
+  and merged.** Application implementation proved that anonymous reads could
+  not safely combine publication snapshots, reward rules, eligibility,
+  provenance, and related merchant data without privileged credentials. The
+  migration adds one read-only, allowlisted function over currently effective
+  `PUBLISHED` snapshots. It adds no table, write grant, or unrelated feature.
+- **The current Database Phase roadmap is complete through `0050`.** No
+  migration after `0050` is approved or scheduled by this roadmap.
 
 ## Why scoped authorization was deferred, not half-built
 
@@ -118,7 +124,7 @@ contains only a placeholder. Validated against what's actually built:
 | 0047 | `analytics_and_reporting` | Depends on `0046`; same premature-maturity concern. Note: the `REPORTING_VIEWER` role and `REPORTING_READ` permission already exist in `0042`'s seed data with nothing to gate yet — this is what would finally give that role a purpose. Sequence it here, not earlier. **Superseded in practice:** the actual `0047` delivered was `create_merchants`, a bounded canonical-merchant-identity foundation, at explicit task direction; `analytics_and_reporting` remains unbuilt and unscheduled — renumber it into a future slot if it is still wanted. |
 | 0048 | `ml_feature_store` | Speculative at the current product stage. `recommendation_models`/`recommendation_model_factors` (`0028`) already model a rules/scoring-based approach, not ML. **Superseded in practice:** the actual `0048` delivered catalog publication governance; an ML feature store remains unbuilt and unscheduled. |
 | 0049 | `search_and_indexing` | Search infrastructure was premature without production query volume. **Superseded in practice:** the actual `0049` delivered scoped catalog-administrator authorization and completed this roadmap; search remains unbuilt and unscheduled. |
-| 0050 | `platform_finalization` | Not a bounded migration — "finalization" is a milestone label, not a cohesive capability, and contradicts the repository's own rule against combining unrelated capabilities into one migration. Replace with whatever specific hardening tasks remain once `0043`–`0049` (revised) land — likely index tuning, `FORCE ROW LEVEL SECURITY` reconsideration, and connection/role-limit configuration — tracked as their own scoped items, not one catch-all migration. |
+| 0050 | `platform_finalization` | The catch-all proposal remained rejected. The number was instead used, after an explicit P3.3 application-proven decision, for the bounded `create_published_card_detail_interface` migration. |
 
 ## Completed sequencing
 
@@ -127,8 +133,10 @@ contains only a placeholder. Validated against what's actually built:
 2. `0046`–`0048` delivered source provenance, canonical merchants, and
    publication governance under an interim platform-wide catalog gate.
 3. `0049` replaced that interim gate with the approved explicit GLOBAL/BANK
-   authorization model and completed the current Database Phase.
-4. Warehouse, analytics, ML, search, and catch-all "platform finalization"
+   authorization model.
+4. `0050` closed the P3.3 read-boundary gap with a snapshot-based, read-only
+   published card-detail function and completed the revised Database Phase.
+5. Warehouse, analytics, ML, search, and catch-all "platform finalization"
    remain explicitly deferred and unscheduled. Any future database work needs
    a new bounded roadmap decision based on application-layer demand.
 

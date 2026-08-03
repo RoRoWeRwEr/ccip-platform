@@ -112,9 +112,9 @@ and succeeds updating `display_name`.
 
 ## `SECURITY DEFINER` usage
 
-There are 35 `SECURITY DEFINER` functions in the merged schema through
-`0049`: 3 from `0042`, 2 from `0043`, 4 from `0044`, 11 from `0045`,
-1 from `0046`, 1 from `0047`, 6 from `0048`, and 7 from `0049`. The three introduced
+There are 36 `SECURITY DEFINER` functions in the merged schema through
+`0050`: 3 from `0042`, 2 from `0043`, 4 from `0044`, 11 from `0045`,
+1 from `0046`, 1 from `0047`, 6 from `0048`, 7 from `0049`, and 1 from `0050`. The three introduced
 by `0042` are:
 
 - `has_active_platform_role(text)` and `has_active_platform_permission
@@ -194,7 +194,16 @@ assignment validation are internal and not executable by authenticated users.
 All seven schema-qualify references, pin `search_path = pg_catalog`, document
 their justification, and have explicit execute allowlists.
 
-**Every application-defined function in the codebase — all 49 merged migrations,
+Migration `0050` adds one stable, read-only `SECURITY DEFINER` function,
+`get_published_card_detail(text)`. Definer rights are required only to inspect
+0048 publication snapshots and safe verified provenance without granting
+callers access to administrative tables. The function pins `search_path` to
+`pg_catalog`, schema-qualifies every relation, revokes `PUBLIC`, grants execute
+only to `anon`, `authenticated`, and `service_role`, and returns an explicit
+public field allowlist. It performs no writes and preserves every existing RLS
+policy and table grant.
+
+**Every application-defined function in the codebase — all 50 merged migrations,
 `SECURITY DEFINER` or not — sets
 `SET search_path = pg_catalog`.** No exceptions
 found. This is an unusually disciplined baseline; keep it that way. Any

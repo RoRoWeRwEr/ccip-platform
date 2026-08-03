@@ -19,7 +19,7 @@ action requiring explicit approval.
 ## Delivery principles
 
 - Prefer a usable vertical slice over speculative infrastructure.
-- Preserve migrations `0001`–`0049`; never rewrite published history.
+- Preserve migrations `0001`–`0050`; never rewrite published history.
 - Do not add a migration unless application implementation proves a concrete
   schema gap. Document the gap and migration justification here first.
 - Public catalog access remains available without authentication. User and
@@ -50,10 +50,15 @@ server-only and use the anonymous/authenticated clients for RLS-enforced paths.
 
 ### Phase 1 — Database Foundation — Complete
 
-- Migrations `0001`–`0049`, 111 tables, full RLS coverage.
+- Migrations `0001`–`0050`, 111 tables, full RLS coverage.
 - Database CI and Repository Policy green for the completion delivery.
 - BANK/GLOBAL catalog authorization and controlled publication lifecycle in
   place.
+- P3.3 proved that the anonymous RLS surface could not safely expose
+  publication snapshots, rewards, eligibility, provenance, and merchant
+  relationships together. Migration `0050` was explicitly authorized as a
+  bounded execute-only published card-detail interface with no new table or
+  core-catalog write grant.
 
 ### Phase 2 — Application Foundation
 

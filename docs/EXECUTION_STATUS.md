@@ -12,7 +12,7 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 
 | Phase | State | Evidence |
 |---|---|---|
-| 1 — Database Foundation | Complete | 49 migrations, 111 RLS-enabled tables, 18 pgTAP files / 426 assertions; Database CI run 30519983707 and Repository Policy run 30520249357 succeeded. |
+| 1 — Database Foundation | Complete | 50 migrations, 111 RLS-enabled tables, 19 pgTAP files / 467 assertions. Migration 0050 closes the P3.3 published-detail read gap; delivery CI is monitored before P3.3 resumes. |
 | 2 — Application Foundation | Complete | P2.1–P2.4 and the phase review are complete and green. |
 | 3 — Public Catalog | In progress | P3.1–P3.2 are complete and green. P3.3 card details is active. |
 | 4 — Comparison and Calculation | Not started | Schema/design exist; no runtime implementation exists. |
@@ -39,6 +39,12 @@ bank, network, fee, reward, persona, and eligibility filters with shareable stat
 - Database CI: success, run 30519983707.
 - Latest Repository Policy: success, run 30527811581 at `436b0bf`.
 - Open PRs: Dependabot #7, #8, and #9; none block direct-to-main execution.
+- Migration 0050 local validation: clean replay of all 50 migrations; 19 pgTAP
+  files / 467 assertions; warning/error database lint; repository policy;
+  Markdown links; workflow-equivalent YAML lint; and whitespace checks passed.
+  The 41 new assertions cover anonymous/authenticated reads, draft and
+  unpublished rejection, effective windows, suspension, republish, rollback,
+  archival, RLS isolation, grants, and `SECURITY DEFINER` safety.
 - P2.1: repository policy, Markdown links, workflow-equivalent YAML lint, and
   whitespace checks passed locally; Repository Policy run 30522625364 passed.
 - P2.2 local validation: format, lint, strict typecheck, 2/2 unit assertions,
@@ -119,7 +125,7 @@ bank, network, fee, reward, persona, and eligibility filters with shareable stat
 - **Testing and operations:** 14 unit and 4 database-backed integration tests
   pass locally and in Application CI; the production build and repository
   policy pass. Health/readiness behavior was verified in P2.3. Integration CI
-  now exercises all 49 migrations and anonymous public RLS before application
+  now exercises all 50 migrations and anonymous public RLS before application
   tests.
 - **Documentation and technical debt:** README and technical architecture match
   the implemented runtime. No Blocking Phase 2 debt remains. Non-blocking
@@ -128,19 +134,10 @@ bank, network, fee, reward, persona, and eligibility filters with shareable stat
 
 ## Blockers and owner-only actions
 
-- **P3.3 public-detail authorization decision required:** the product roadmap
-  requires public reward rules, eligibility, provenance, publication, and
-  merchant detail. The implemented schema grants `anon` access to cards, fees,
-  benefits, and active merchant catalog rows, but not to `reward_rules` or
-  `card_eligibility_requirements`; provenance and publication-governance rows
-  are catalog-administrator-only; and no card-to-merchant relationship exists.
-  No existing public view or controlled read function closes this gap. A
-  service-role application client would violate the security model. Proceeding
-  therefore requires either explicit authorization to reopen the database
-  roadmap for a narrowly scoped forward migration, or an authoritative P3.3
-  scope revision that removes those inaccessible relationships. Until that
-  decision, `fbf2255` is the last complete green application milestone and the
-  working tree remains clean.
+- The P3.3 public-detail authorization blocker is resolved by the explicit
+  migration `0050` decision. The application must use
+  `get_published_card_detail(text)` and must not introduce a public service-role
+  client or direct governance-table reads.
 - The HTTPS OAuth credential still lacks GitHub `workflow` scope, but the
   installed GitHub connector is an authorized publishing path for workflow
   changes. No immediate owner action is required for P2.3.

@@ -6,7 +6,7 @@ CCIP v1 is a modular monolith: one Next.js TypeScript application provides
 server-rendered public pages, interactive client components, route handlers,
 authentication callbacks, and privileged server-only orchestration. Supabase
 provides PostgreSQL, Auth, RLS, and the controlled database functions already
-implemented by migrations `0001`–`0049`.
+implemented by migrations `0001`–`0050`.
 
 ```text
 Browser
@@ -45,6 +45,10 @@ server-only secret or privileged client into browser bundles.
 ## Data-access model
 
 - Public catalog reads use the Supabase anonymous role and existing public RLS.
+- Card-detail reads use migration `0050`'s
+  `get_published_card_detail(text)` function. It projects only approved fields
+  from currently effective `PUBLISHED` snapshots and never requires a public
+  service-role client or direct governance-table access.
 - `src/types/database.ts` is the checked-in generated contract for the full
   schema. Supabase browser, server, proxy, readiness, and repository clients
   use that contract instead of untyped queries.

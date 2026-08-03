@@ -8,9 +8,9 @@ benefits, and personalized recommendation logic. See
 [`docs/01-brd/BRD.md`](docs/01-brd/BRD.md) for the full product vision
 and business requirements.
 
-## Current implementation status: application foundation in progress
+## Current implementation status: public catalog experience in progress
 
-Migrations `0001`–`0049` complete the current database roadmap: 111 tables covering the
+Migrations `0001`–`0050` complete the current database roadmap: 111 tables covering the
 card/bank/reward catalog, customer financial and spending profiles, the
 recommendation engine, comparisons, notifications, bank applications,
 partnerships/commissions, a full governance/audit/compliance layer, a
@@ -63,8 +63,8 @@ docs/
 decisions/                  Reserved for architecture decision records; currently empty
 glossary/                   Reserved for a project glossary; currently empty
 supabase/
-  migrations/                49 SQL migrations (0001–0049)
-  tests/database/            pgTAP test suite (currently covers migrations 0042–0049)
+  migrations/                50 SQL migrations (0001–0050)
+  tests/database/            pgTAP test suite (currently covers migrations 0042–0050)
 src/
   app/                       Next.js App Router and bilingual route foundation
   features/catalog/data/     Typed, RLS-aware public catalog repositories

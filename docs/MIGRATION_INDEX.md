@@ -58,8 +58,9 @@ out of sync with reality.
 | 0047 | `create_merchants` | 1072 | merged | merchants, merchant_aliases, merchant_relationships, merchant_category_assignments, merchant_market_presence, merchant_domains |
 | 0048 | `create_catalog_publication_governance` | 379 | merged | catalog_publication_versions, catalog_publication_requests, catalog_publication_events |
 | 0049 | `create_catalog_admin_authorization` | 720 | merged | catalog_administrator_scope_assignments |
+| 0050 | `create_published_card_detail_interface` | 374 | merged | — (read-only `get_published_card_detail(text)` function) |
 
-**Database Phase total:** 49 migrations, 111 tables, 34,629 lines.
+**Database Phase total:** 50 migrations, 111 tables, 35,003 lines.
 
 ## `0042` revision note
 
@@ -142,3 +143,9 @@ migration was first drafted.
   catalog assignments fail closed, and replaces the interim authorization
   policies/functions across `0046`–`0048`. It adds no direct write grant to
   the earlier core catalog tables.
+- `0050` depends on `0048`'s immutable publication snapshots and lifecycle,
+  `0049`'s secured governance boundary, and typed catalog relationships through
+  `0047`. It adds no table and no write path. Its single allowlisted
+  `SECURITY DEFINER` function returns only explicit fields from currently
+  effective `PUBLISHED` snapshots. Anonymous and authenticated callers receive
+  execute-only access; underlying administrative tables remain protected.
