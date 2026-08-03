@@ -1,9 +1,9 @@
 # CCIP v1 Execution Status
 
-**Last verified:** 2026-08-03 at P8.3 commit `13dba91`.
-Repository Policy run 30835115999 and Application CI run 30835116115 passed.
+**Last verified:** 2026-08-03 at P8.4 commit `566c818`.
+Repository Policy run 30835970048 and Application CI run 30835970031 passed.
 
-**Program progress:** 25 of 30 roadmap milestones complete = **83%**.
+**Program progress:** 26 of 30 roadmap milestones complete = **87%**.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -20,20 +20,56 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 | 5 — Recommendation | Complete | P5.1 engine, P5.2 bilingual recommendation journey, P5.3 ownership-scoped persistence boundary, and the phase review are complete and green. |
 | 6 — Authentication and User Features | Complete | P6.1–P6.3 and the phase review are complete and green. |
 | 7 — Catalog Administration | Complete | P7.1–P7.4 and the architecture/security/performance/testing review are complete and green. |
-| 8 — Quality and Security | In progress | P8.1–P8.3 are complete and green; P8.4 performance and resilience is next. |
-| 9 — Staging and Deployment | Not started | No application deployment configuration or credentials observed. |
+| 8 — Quality and Security | Complete | P8.1–P8.4 and the phase review are complete and green. |
+| 9 — Staging and Deployment | Not started | P9.1 deployment readiness is next; no deployment credentials observed. |
 | 10 — CCIP v1 Completion | Not started | Depends on phases 1–9. |
 
 ## Current task
 
-Execute **P8.4 Performance and Resilience** as the next unfinished milestone.
+Execute **P9.1 Deployment Readiness** as the next unfinished milestone.
 
 ## Exact next task
 
-Review query plans where meaningful, bundle and page performance, caching
-correctness, rate/error behavior, and degraded dependency states; fix findings.
+Complete the environment contract, deployment configuration, runbooks,
+observability, rollback plan, and production-build verification without using
+or committing deployment credentials.
 
 ## Current validation and CI
+
+- P8.4 delivery: readiness now uses a bounded existence probe instead of an
+  exact row count and aborts stalled dependencies within three seconds. Safe
+  bilingual catalog retry states are covered. Application CI enforces measured
+  production static-asset budgets: 1,240,052 total bytes, 535,142-byte largest
+  JavaScript asset, and 28,094-byte largest stylesheet against 1,750,000,
+  650,000, and 100,000-byte limits respectively.
+- P8.4 local validation: formatting, lint, strict typecheck, 72/72 unit and
+  component tests, 10/10 real-Supabase integration tests, 32/32 Playwright E2E,
+  accessibility, and security tests, 22 pgTAP files / 538 assertions,
+  production build, bundle budgets, repository policy, and whitespace checks
+  passed.
+- P8.4 commit: `566c818`; Application CI run 30835970031 and Repository Policy
+  run 30835970048 passed.
+
+## Phase 8 completion review
+
+- **Architecture and security:** all public, authenticated, and administrative
+  journeys retain typed Supabase clients and database-enforced RLS/controlled
+  workflows. Browser security headers, safe redirects, secret-free errors, and
+  production dependency boundaries have automated coverage; no privileged key
+  enters browser code.
+- **Performance and resilience:** catalog queries remain bounded and use the
+  publication-read indexes introduced with migrations `0050`–`0052`; binary
+  readiness no longer requests an exact count. Operational routes are
+  non-cacheable, fail closed, and expose retry guidance. Static asset budgets
+  now prevent unreviewed bundle regression.
+- **UX and accessibility:** automated serious-impact Axe checks, keyboard skip
+  navigation, 200% zoom, desktop/mobile overflow, bilingual direction, and safe
+  localized degraded states cover the critical routes.
+- **Testing and technical debt:** 72 unit/component, 10 database-backed
+  integration, 32 browser, and 538 pgTAP assertions pass. Staging response
+  times, cache/CDN behavior, and dependency behavior remain P9 operational
+  evidence because local fixtures cannot represent deployed network and data
+  scale. No Blocking Phase 8 debt remains.
 
 - P8.3 delivery: production browser policy now adds same-origin resource
   isolation and disables DNS prefetching while local Supabase connectivity is

@@ -41,7 +41,7 @@ branch, Draft PR, or manual merge.
 | Published recommendation candidates | **Complete (`0052`)** | A default-false core flag plus explicit effective-snapshot eligibility gates a bounded array of migration 0050 detail projections; no private governance data or direct table access is exposed. |
 | User profile bootstrap | **Complete (`0053`)** | Existing and future auth users receive one minimal default profile through a hardened internal trigger; no auth metadata or broader profile grant is introduced. |
 | Application foundation | **Complete** | Next.js/Supabase runtime, typed repositories, health/readiness, bilingual routing, logging, security headers, and application CI are delivered. |
-| Frontend | **Phase 8 in progress** | Public, comparison/calculation, recommendation, authentication/user, and governed administration phases are complete; P8.1–P8.3 automated quality, accessibility, responsive, and security reviews are green. |
+| Frontend | **Phase 8 complete** | Public, comparison/calculation, recommendation, authentication/user, and governed administration phases are complete; P8.1–P8.4 quality, accessibility, responsive, security, performance, and resilience reviews are green. |
 | Recommendation experience | **Phase 5 complete** | Deterministic fixed-valuation ranking, the bilingual guest journey, and the ownership-scoped authenticated history/save boundary are green over migration 0052's publication-safe candidate interface. |
 | Authentication and user features | **Phase 6 complete** | Bilingual identity, profile, collections, saved cards, engine-owned comparisons, bounded recommendation history, lifecycle disclosure, and the phase review are green. |
 | Deployment | **Not started** | CI validates database changes but does not deploy a live environment. |
@@ -50,7 +50,7 @@ branch, Draft PR, or manual merge.
 
 Execute the next unfinished application milestone recorded in
 `docs/EXECUTION_STATUS.md`. The Database Phase roadmap is complete through
-`0053`; P8.4 performance and resilience is the next active delivery.
+`0053`; P9.1 deployment readiness is the next active delivery.
 
 ## Current blockers
 
