@@ -1,11 +1,9 @@
 # CCIP v1 Execution Status
 
 **Last verified:** 2026-08-03 at P4.1 commit `6e89fcb`.
-Repository Policy run 30811325643 passed; Application CI run 30811325652 is in
-progress.
+Repository Policy run 30811325643 and Application CI run 30811325652 passed.
 
-**Program progress:** 9 of 30 roadmap milestones complete = **30%**. P4.1 is
-committed and pushed but does not count until required CI is green.
+**Program progress:** 10 of 30 roadmap milestones complete = **33%**.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -18,7 +16,7 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 | 1 — Database Foundation | Complete | 51 migrations, 111 RLS-enabled tables, 20 pgTAP files / 506 assertions. Migration 0051 closes the P3.4 publication-aware list/search boundary without changing the 0050 detail interface. |
 | 2 — Application Foundation | Complete | P2.1–P2.4 and the phase review are complete and green. |
 | 3 — Public Catalog | Complete | P3.1–P3.4 and the phase review are complete; Application CI run 30810879333 and Repository Policy run 30810879203 passed for `1c269bf`. |
-| 4 — Comparison and Calculation | In progress | P4.1 multi-card comparison is committed at `6e89fcb`; Repository Policy passed and Application CI is in progress. |
+| 4 — Comparison and Calculation | In progress | P4.1 multi-card comparison is complete at `6e89fcb`; Repository Policy run 30811325643 and Application CI run 30811325652 passed. P4.2 is next. |
 | 5 — Recommendation | Not started | Schema and DES exist; no runtime engine exists. |
 | 6 — Authentication and User Features | Not started | Supabase identity/RLS schema exists; no UI exists. |
 | 7 — Catalog Administration | Not started | Database authorization/workflows exist; no admin UI exists. |
@@ -28,14 +26,12 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 
 ## Current task
 
-Finish delivery of **P4.1 multi-card comparison** by monitoring Application CI
-run 30811325652, forward-fixing any failure, and recording the final result.
+Execute **P4.2 Spending Calculator** as the next unfinished milestone.
 
 ## Exact next task
 
-Complete the P4.1 CI gate above. Stop this atomic delivery after P4.1 is
-recorded clean and name P4.2 as the next milestone; do not implement P4.2 until
-P4.1 has green CI evidence.
+Implement **P4.2 Spending Calculator** in the next atomic delivery. Do not begin
+it as part of the completed P4.1 delivery.
 
 ## Current validation and CI
 
@@ -46,6 +42,8 @@ P4.1 has green CI evidence.
   offline zero-vulnerability npm audit passed. The bilingual comparison route
   bounds selection to three unique valid slugs and reads selected cards only
   through migration `0050`'s publication-safe detail interface.
+- P4.1 commit: `6e89fcb`; Application CI run 30811325652 and Repository Policy
+  run 30811325643 passed.
 - Database completion commit: `ed2b6c5` (migration `0051`).
 - Migration `0050` Database CI: success, run 30801523652.
 - Migration `0050` Repository Policy: success, run 30801523667.
