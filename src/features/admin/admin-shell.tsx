@@ -1,5 +1,7 @@
 import type { Locale } from "@/lib/i18n";
 import type { AdminAuthorization } from "./authorization";
+import type { AdminWorkspace } from "./management";
+import { ManagementPanel } from "./management-panel";
 
 const copy = {
   en: {
@@ -33,7 +35,12 @@ const copy = {
 export function AdminShell({
   locale,
   authorization,
-}: Readonly<{ locale: Locale; authorization: AdminAuthorization }>) {
+  workspace,
+}: Readonly<{
+  locale: Locale;
+  authorization: AdminAuthorization;
+  workspace?: AdminWorkspace;
+}>) {
   const text = copy[locale];
   return (
     <main
@@ -78,6 +85,13 @@ export function AdminShell({
       <p className="text-muted mt-6 max-w-3xl text-sm leading-6">
         {text.safety}
       </p>
+      {workspace && (
+        <ManagementPanel
+          locale={locale}
+          authorization={authorization}
+          workspace={workspace}
+        />
+      )}
     </main>
   );
 }

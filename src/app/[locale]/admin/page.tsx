@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { AdminShell } from "@/features/admin/admin-shell";
 import { loadAdminAuthorization } from "@/features/admin/authorization";
+import { loadAdminWorkspace } from "@/features/admin/management";
 import { isLocale } from "@/lib/i18n";
 import { createClient } from "@/lib/supabase/server";
 
@@ -19,5 +20,12 @@ export default async function AdminRoute({
     redirect(`/${locale}/auth?next=${encodeURIComponent(`/${locale}/admin`)}`);
   const authorization = await loadAdminAuthorization(client);
   if (!authorization) notFound();
-  return <AdminShell locale={locale} authorization={authorization} />;
+  const workspace = await loadAdminWorkspace(client, authorization);
+  return (
+    <AdminShell
+      locale={locale}
+      authorization={authorization}
+      workspace={workspace}
+    />
+  );
 }
