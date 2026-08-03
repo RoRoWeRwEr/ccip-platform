@@ -23,7 +23,7 @@ test("keeps public decision-support journeys reachable", async ({ page }) => {
     "/en/recommendation",
   ]) {
     await page.goto(path);
-    await expect(page.locator("main")).toBeVisible();
+    await expect(page.locator("#main-content")).toBeVisible();
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   }
 });

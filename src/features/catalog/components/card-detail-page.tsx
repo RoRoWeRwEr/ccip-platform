@@ -90,6 +90,7 @@ export function CardDetailPage({
   return (
     <main
       id="main-content"
+      tabIndex={-1}
       className="mx-auto min-h-[70vh] max-w-6xl px-5 py-10 sm:px-8 lg:px-12"
     >
       <Link

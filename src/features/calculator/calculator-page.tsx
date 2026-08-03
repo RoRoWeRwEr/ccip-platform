@@ -154,6 +154,7 @@ export function CalculatorPage({
   return (
     <main
       id="main-content"
+      tabIndex={-1}
       className="mx-auto min-h-[70vh] max-w-7xl px-5 py-12 sm:px-8 lg:px-12"
     >
       <header className="max-w-3xl">

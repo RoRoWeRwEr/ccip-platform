@@ -53,6 +53,7 @@ export function AdminShell({
   return (
     <main
       id="main-content"
+      tabIndex={-1}
       className="mx-auto min-h-screen max-w-5xl px-5 py-12 sm:px-8"
     >
       <p className="text-brand text-sm font-bold">{text.eyebrow}</p>

@@ -122,7 +122,11 @@ export function AuthPage({
   const submitLabel = text[mode];
 
   return (
-    <main id="main-content" className="mx-auto max-w-3xl px-5 py-12 sm:px-8">
+    <main
+      id="main-content"
+      tabIndex={-1}
+      className="mx-auto max-w-3xl px-5 py-12 sm:px-8"
+    >
       <section className="border-line rounded-3xl border bg-white p-6 shadow-sm sm:p-10">
         <p className="text-brand text-sm font-bold tracking-wide uppercase">
           {text.eyebrow}

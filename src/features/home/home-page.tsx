@@ -8,7 +8,7 @@ export function HomePage({ locale }: Readonly<{ locale: Locale }>) {
 
   return (
     <div className="bg-canvas text-ink min-h-screen">
-      <main id="main-content">
+      <main id="main-content" tabIndex={-1}>
         <section className="relative overflow-hidden">
           <div
             className="bg-accent/10 absolute end-[-8rem] top-[-8rem] size-80 rounded-full blur-3xl"
@@ -159,7 +159,7 @@ export function HomePage({ locale }: Readonly<{ locale: Locale }>) {
                   className="rounded-3xl bg-white p-6 shadow-sm"
                 >
                   <p
-                    className="text-accent text-sm font-black"
+                    className="text-accent-deep text-sm font-black"
                     aria-hidden="true"
                   >
                     0{index + 1}

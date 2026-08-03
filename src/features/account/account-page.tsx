@@ -103,6 +103,7 @@ export function AccountPage({
   return (
     <main
       id="main-content"
+      tabIndex={-1}
       className="mx-auto max-w-5xl px-5 py-10 sm:px-8 lg:px-12"
     >
       <h1 className="text-4xl font-black">{text.title}</h1>
