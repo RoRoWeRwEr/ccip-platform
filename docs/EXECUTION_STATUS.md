@@ -1,9 +1,9 @@
 # CCIP v1 Execution Status
 
-**Last verified:** 2026-08-03 at P4.1 commit `6e89fcb`.
-Repository Policy run 30811325643 and Application CI run 30811325652 passed.
+**Last verified:** 2026-08-03 at P4.2 commit `65a3c72`.
+Repository Policy run 30815068138 and Application CI run 30815068208 passed.
 
-**Program progress:** 10 of 30 roadmap milestones complete = **33%**.
+**Program progress:** 11 of 30 roadmap milestones complete = **37%**.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -16,7 +16,7 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 | 1 — Database Foundation | Complete | 51 migrations, 111 RLS-enabled tables, 20 pgTAP files / 506 assertions. Migration 0051 closes the P3.4 publication-aware list/search boundary without changing the 0050 detail interface. |
 | 2 — Application Foundation | Complete | P2.1–P2.4 and the phase review are complete and green. |
 | 3 — Public Catalog | Complete | P3.1–P3.4 and the phase review are complete; Application CI run 30810879333 and Repository Policy run 30810879203 passed for `1c269bf`. |
-| 4 — Comparison and Calculation | In progress | P4.1 multi-card comparison is complete at `6e89fcb`; Repository Policy run 30811325643 and Application CI run 30811325652 passed. P4.2 is next. |
+| 4 — Comparison and Calculation | In progress | P4.1 comparison and P4.2 spending calculator are complete. P4.2 is green at `65a3c72`; P4.3 numeric hardening is next. |
 | 5 — Recommendation | Not started | Schema and DES exist; no runtime engine exists. |
 | 6 — Authentication and User Features | Not started | Supabase identity/RLS schema exists; no UI exists. |
 | 7 — Catalog Administration | Not started | Database authorization/workflows exist; no admin UI exists. |
@@ -26,12 +26,13 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 
 ## Current task
 
-Execute **P4.2 Spending Calculator** as the next unfinished milestone.
+Execute **P4.3 Numeric Hardening** as the next unfinished milestone.
 
 ## Exact next task
 
-Implement **P4.2 Spending Calculator** in the next atomic delivery. Do not begin
-it as part of the completed P4.1 delivery.
+Harden calculator numeric boundaries, caps, rounding, currency precision, and
+edge cases with property-oriented tests that prevent non-finite or corrupted
+negative values.
 
 ## Current validation and CI
 
@@ -44,6 +45,16 @@ it as part of the completed P4.1 delivery.
   through migration `0050`'s publication-safe detail interface.
 - P4.1 commit: `6e89fcb`; Application CI run 30811325652 and Repository Policy
   run 30811325643 passed.
+- P4.2 delivery: `/{locale}/calculator` uses publication-safe card details,
+  shareable bounded monthly category inputs, fixed valuation assumptions,
+  category/general published rules, minimums, caps, annual fees, and an
+  explicit bilingual calculation trace. Offers and benefits remain excluded.
+- P4.2 local validation: formatting, lint, strict typecheck, 30/30 unit and
+  component tests, 6/6 real-Supabase integration tests, production build,
+  offline zero-vulnerability npm audit, repository policy, Markdown links,
+  YAML lint, and whitespace checks passed.
+- P4.2 commit: `65a3c72`; Application CI run 30815068208 and Repository Policy
+  run 30815068138 passed.
 - Database completion commit: `ed2b6c5` (migration `0051`).
 - Migration `0050` Database CI: success, run 30801523652.
 - Migration `0050` Repository Policy: success, run 30801523667.

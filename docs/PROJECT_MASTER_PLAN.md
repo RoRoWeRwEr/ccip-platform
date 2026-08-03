@@ -95,9 +95,9 @@ about current production performance. The detailed measurement contract is in
 
 ## Planning baseline and roadmap logic
 
-As verified on 2026-08-03, 10 of 30 roadmap milestones are complete (Phase 1 as
-one foundation milestone, P2.1–P2.4, P3.1–P3.4, and P4.1), so milestone-count
-progress is **33%**. This is a transparent planning measure, not an
+As verified on 2026-08-03, 11 of 30 roadmap milestones are complete (Phase 1 as
+one foundation milestone, P2.1–P2.4, P3.1–P3.4, and P4.1–P4.2), so
+milestone-count progress is **37%**. This is a transparent planning measure, not an
 effort-spent estimate; milestones vary substantially in size. P3.4 is delivered
 at `1c269bf`; Application CI run 30810879333 and Repository Policy run
 30810879203 passed.
@@ -270,6 +270,6 @@ server-only and use the anonymous/authenticated clients for RLS-enforced paths.
 
 ## Current next milestone
 
-The next unfinished milestone is **P4.2 spending calculator**. P4.1 provides a
-bounded, shareable, publication-aware comparison of up to three cards.
+The next unfinished milestone is **P4.3 numeric hardening**. P4.2 provides a
+bilingual, shareable annual-value calculator over publication-safe card data.
 `docs/EXECUTION_STATUS.md` is the live source for the exact current task.
