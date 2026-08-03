@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { AdminShell } from "@/features/admin/admin-shell";
 import { loadAdminAuthorization } from "@/features/admin/authorization";
+import { loadAssignmentWorkspace } from "@/features/admin/assignments";
 import { loadAdminWorkspace } from "@/features/admin/management";
 import { loadPublicationWorkspace } from "@/features/admin/publication";
 import { isLocale } from "@/lib/i18n";
@@ -25,12 +26,16 @@ export default async function AdminRoute({
     loadAdminWorkspace(client, authorization),
     loadPublicationWorkspace(client),
   ]);
+  const assignments = authorization.isPlatformAdministrator
+    ? await loadAssignmentWorkspace(client)
+    : undefined;
   return (
     <AdminShell
       locale={locale}
       authorization={authorization}
       workspace={workspace}
       publication={publication}
+      assignments={assignments}
     />
   );
 }

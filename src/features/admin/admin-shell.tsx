@@ -1,5 +1,7 @@
 import type { Locale } from "@/lib/i18n";
 import type { AdminAuthorization } from "./authorization";
+import type { AssignmentWorkspace } from "./assignments";
+import { AssignmentPanel } from "./assignment-panel";
 import type { AdminWorkspace } from "./management";
 import { ManagementPanel } from "./management-panel";
 import type { PublicationWorkspace } from "./publication";
@@ -39,11 +41,13 @@ export function AdminShell({
   authorization,
   workspace,
   publication,
+  assignments,
 }: Readonly<{
   locale: Locale;
   authorization: AdminAuthorization;
   workspace?: AdminWorkspace;
   publication?: PublicationWorkspace;
+  assignments?: AssignmentWorkspace;
 }>) {
   const text = copy[locale];
   return (
@@ -101,6 +105,13 @@ export function AdminShell({
           locale={locale}
           targets={workspace.targets}
           workspace={publication}
+        />
+      )}
+      {workspace && assignments && (
+        <AssignmentPanel
+          locale={locale}
+          banks={workspace.targets}
+          assignments={assignments}
         />
       )}
     </main>
