@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { AccountPage } from "@/features/account/account-page";
 import { loadUserDashboard } from "@/features/account/data";
+import { listRecommendationHistory } from "@/features/recommendation/persistence";
 import { isLocale } from "@/lib/i18n";
 import { createClient } from "@/lib/supabase/server";
 
@@ -19,7 +20,11 @@ export default async function AccountRoute({
     redirect(
       `/${locale}/auth?next=${encodeURIComponent(`/${locale}/account`)}`,
     );
+  const [dashboard, history] = await Promise.all([
+    loadUserDashboard(client),
+    listRecommendationHistory(client),
+  ]);
   return (
-    <AccountPage locale={locale} dashboard={await loadUserDashboard(client)} />
+    <AccountPage locale={locale} dashboard={dashboard} history={history} />
   );
 }

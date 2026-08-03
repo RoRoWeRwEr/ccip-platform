@@ -46,6 +46,19 @@ describe("account page", () => {
             },
           ],
         }}
+        history={[
+          {
+            id: "run-1",
+            name: "Travel recommendation",
+            status: "completed",
+            startedAt: "2026-08-03T00:00:00Z",
+            completedAt: "2026-08-03T00:00:01Z",
+            cardsRecommended: 2,
+            topCardId: "card-1",
+            confidence: 0.9,
+            results: [],
+          },
+        ]}
       />,
     );
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
@@ -57,6 +70,10 @@ describe("account page", () => {
       "/en/cards/published-card",
     );
     expect(screen.getByText("Travel options")).toBeInTheDocument();
+    expect(screen.getByText("Travel recommendation")).toBeInTheDocument();
+    expect(
+      screen.getByText(/governed retention lifecycle/i),
+    ).toBeInTheDocument();
   });
 
   it("renders honest Arabic empty states", () => {
@@ -70,11 +87,12 @@ describe("account page", () => {
           savedCards: [],
           comparisons: [],
         }}
+        history={[]}
       />,
     );
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
       "حسابي",
     );
-    expect(screen.getAllByText("لا توجد عناصر بعد.")).toHaveLength(2);
+    expect(screen.getAllByText("لا توجد عناصر بعد.")).toHaveLength(3);
   });
 });

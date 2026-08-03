@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
+import type { RecommendationHistoryItem } from "@/features/recommendation/persistence";
 import { createClient } from "@/lib/supabase/browser";
 import {
   createCollection,
@@ -23,6 +24,10 @@ const copy = {
     create: "إنشاء مجموعة",
     saved: "البطاقات المحفوظة",
     comparisons: "المقارنات المحفوظة",
+    history: "سجل التوصيات",
+    historyCards: "بطاقات موصى بها",
+    privacy:
+      "سجل التوصيات للقراءة فقط ويخضع لدورة الاحتفاظ المحكومة في المنصة. إزالة بطاقة محفوظة تخفيها من العناصر النشطة ولا تحذف سجلات المحرك أو التدقيق. طلبات الحذف غير متاحة بعد في هذه الواجهة.",
     remove: "إزالة",
     empty: "لا توجد عناصر بعد.",
     success: "تم الحفظ.",
@@ -39,6 +44,10 @@ const copy = {
     create: "Create collection",
     saved: "Saved cards",
     comparisons: "Saved comparisons",
+    history: "Recommendation history",
+    historyCards: "recommended cards",
+    privacy:
+      "Recommendation history is read-only and follows the platform's governed retention lifecycle. Removing a saved card hides it from active saved items; it does not delete engine or audit history. Deletion requests are not yet available in this interface.",
     remove: "Remove",
     empty: "No items yet.",
     success: "Saved successfully.",
@@ -49,7 +58,12 @@ const copy = {
 export function AccountPage({
   locale,
   dashboard,
-}: Readonly<{ locale: Locale; dashboard: UserDashboard }>) {
+  history,
+}: Readonly<{
+  locale: Locale;
+  dashboard: UserDashboard;
+  history: RecommendationHistoryItem[];
+}>) {
   const text = copy[locale];
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
@@ -237,6 +251,34 @@ export function AccountPage({
               </li>
             ))}
           </ul>
+        ) : (
+          <p className="text-muted mt-4">{text.empty}</p>
+        )}
+      </section>
+
+      <section className="mt-8">
+        <h2 className="text-2xl font-bold">{text.history}</h2>
+        <p className="text-muted mt-3 max-w-3xl leading-7">{text.privacy}</p>
+        {history.length ? (
+          <ol className="mt-4 grid gap-4 sm:grid-cols-2">
+            {history.map((run) => (
+              <li
+                key={run.id}
+                className="border-line rounded-2xl border bg-white p-5"
+              >
+                <h3 className="font-bold">{run.name ?? run.status}</h3>
+                <p className="text-muted mt-2">
+                  {new Intl.DateTimeFormat(
+                    locale === "ar" ? "ar-SA" : "en-SA",
+                    { dateStyle: "medium", timeStyle: "short" },
+                  ).format(new Date(run.startedAt))}
+                </p>
+                <p className="text-muted mt-2">
+                  {run.cardsRecommended} {text.historyCards}
+                </p>
+              </li>
+            ))}
+          </ol>
         ) : (
           <p className="text-muted mt-4">{text.empty}</p>
         )}
