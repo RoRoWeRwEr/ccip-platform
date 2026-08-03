@@ -1,8 +1,7 @@
 # Project Status
 
-**Last verified:** 2026-08-03 after migration `0052` commit `075c531`;
-Database CI run 30817298193, Application CI run 30817297971, and Repository
-Policy run 30817297958 passed.
+**Last verified:** 2026-08-03 after migration `0053` commit `f1d4531`;
+Database CI run 30824648050 and Repository Policy run 30824648182 passed.
 
 This dashboard reports observed states only. Repository and GitHub state override prior chat or stale documentation.
 
