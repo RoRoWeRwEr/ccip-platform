@@ -62,6 +62,32 @@ export default async function CardsRoute({
   const search = one(query.q, 80);
   const fee = nonnegative(one(query.fee));
   const salary = nonnegative(one(query.salary));
+  const minReward = nonnegative(one(query.rewardValue));
+  const rewardRaw = one(query.reward);
+  const reward = [
+    "CASHBACK",
+    "POINTS",
+    "MILES",
+    "DISCOUNT",
+    "VOUCHER",
+  ].includes(rewardRaw ?? "")
+    ? (rewardRaw as "CASHBACK" | "POINTS" | "MILES" | "DISCOUNT" | "VOUCHER")
+    : undefined;
+  const sortRaw = one(query.sort);
+  const sort = [
+    "PUBLISHED_DESC",
+    "NAME_ASC",
+    "ANNUAL_FEE_ASC",
+    "ANNUAL_FEE_DESC",
+    "REWARD_VALUE_DESC",
+  ].includes(sortRaw ?? "")
+    ? (sortRaw as
+        | "PUBLISHED_DESC"
+        | "NAME_ASC"
+        | "ANNUAL_FEE_ASC"
+        | "ANNUAL_FEE_DESC"
+        | "REWARD_VALUE_DESC")
+    : undefined;
   const personaRaw = one(query.persona);
   const persona = [
     "GENERAL",
@@ -87,6 +113,9 @@ export default async function CardsRoute({
       maxAnnualFee: fee,
       targetUser: persona,
       maxMinimumSalary: salary,
+      rewardType: reward,
+      minRewardValue: minReward,
+      sort,
     }),
   ]);
 
@@ -105,6 +134,9 @@ export default async function CardsRoute({
         fee: fee?.toString(),
         salary: salary?.toString(),
         persona,
+        reward,
+        rewardValue: minReward?.toString(),
+        sort,
       }}
     />
   );

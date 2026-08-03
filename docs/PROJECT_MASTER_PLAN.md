@@ -19,6 +19,103 @@ action requiring explicit approval.
 Standing technical decision authority and the exact escalation boundary are
 defined in `docs/AUTONOMOUS_DECISION_POLICY.md`.
 
+## Project Objective and Public Value
+
+### Problem and people served
+
+Credit-card costs, eligibility conditions, rewards, exclusions, caps, and
+promotional terms are difficult to compare consistently. Information may be
+distributed across bank pages and terms, may change over time, and may be hard
+to interpret across Arabic and English. CCIP exists to reduce that information
+and comprehension gap for Saudi consumers: people choosing a first card,
+cashback and rewards users, frequent travelers, loyalty-program members, and
+people reviewing cards they already hold.
+
+### Service now and future potential
+
+The committed product currently offers a bilingual public shell, homepage,
+catalog browsing and filters, and publication-governed card detail pages.
+P3.4's final list/search integration is in progress. Through v1, the roadmap
+adds side-by-side comparison, bounded value calculation, deterministic and
+explainable recommendations, optional accounts and saved work, and governed
+catalog administration. Later possibilities may include change notifications,
+broader accessibility formats, and carefully governed multilingual decision
+support. Open banking, transaction ingestion, automated lending decisions,
+and regulated advice are explicitly outside v1 and require new owner, legal,
+privacy, security, and architecture decisions before entering scope.
+
+### Responsible-use principles
+
+- CCIP provides information and decision support, not regulated financial,
+  lending, legal, or tax advice.
+- Never promise approval, savings, credit improvement, eligibility, or a
+  financial outcome. Present estimates as conditional on source data and user
+  inputs.
+- Use official sources, expose provenance and effective dates, label missing or
+  uncertain data, and provide a correction path.
+- Explain calculations, ranking factors, assumptions, exclusions, and material
+  limitations in plain Arabic and English. Deterministic recommendations must
+  be reproducible from the same inputs and data version.
+- Minimize personal data, use it only for disclosed purposes, preserve guest
+  usefulness, enforce consent and user ownership, and avoid sensitive-trait
+  inference or sale of financial-profile data.
+- Test for systematically different quality or exclusion across user personas,
+  language, income bands, banks, networks, and reward types. Eligibility facts
+  may filter products only when sourced and explained; they must not become an
+  opaque proxy lending decision.
+- Design for keyboard, screen-reader, zoom, low-vision, mobile, RTL/LTR, and
+  plain-language use. Arabic and English must carry equivalent meaning and
+  critical capability.
+
+### Public and user value outcomes
+
+The v1 release gate measures value without claiming financial outcomes:
+
+1. At least 95% of published card records used in acceptance testing have an
+   official, verified provenance reference and visible effective date.
+2. At least 90% of moderated test participants can complete discovery,
+   comparison, and explanation tasks without facilitator correction; results
+   are reported separately for Arabic and English.
+3. 100% of recommendation results expose the material inputs, annual reward
+   estimate, annual fee, net-value method, assumptions, and deterministic
+   reasons required by the product contract.
+4. All critical Arabic and English journeys pass the accessibility and
+   functional gates in `docs/DEFINITION_OF_DONE.md`, with no unresolved
+   Blocking finding or known material meaning mismatch.
+5. Published factual corrections have an owner and audit trail, with a v1
+   target median resolution time of five business days or less from validation
+   of the error.
+6. Release evidence records zero known material privacy breach, secret
+   exposure, cross-user/cross-bank authorization failure, discriminatory
+   ranking defect, or misleading guaranteed-outcome claim.
+
+These are release targets to validate in staging/user research, not claims
+about current production performance. The detailed measurement contract is in
+`docs/DEFINITION_OF_DONE.md`.
+
+## Planning baseline and roadmap logic
+
+As verified on 2026-08-03, 9 of 30 roadmap milestones are complete (Phase 1 as
+one foundation milestone, P2.1–P2.4, and P3.1–P3.4), so milestone-count
+progress is **30%**. This is a transparent planning measure, not an
+effort-spent estimate; milestones vary substantially in size.
+
+The critical path is P3.4 → P4 comparison/calculation → P5 recommendation → P6
+authenticated persistence → P7 governed administration → P8 integrated
+quality/security → P9 staging and operational verification → P10 release
+review. Within that sequence, UX/accessibility design, test-fixture growth,
+security threat review, catalog data-quality preparation, and deployment
+runbook preparation can proceed in parallel when they do not change scope or
+duplicate the active milestone.
+
+Dependencies are explicit: P4 depends on a stable public card model; P5 depends
+on hardened P4 calculations; P6 depends on authenticated RLS paths; P7 depends
+on authentication plus migrations `0048`–`0049`; P8 requires all critical
+journeys; P9 requires owner-provided external accounts and credentials after
+repository readiness; and P10 depends on every prior phase. Verified facts,
+assumptions, and owner decisions are tracked in `docs/PROJECT_DASHBOARD.md` and
+`docs/DECISION_LOG.md`.
+
 ## Delivery principles
 
 - Prefer a usable vertical slice over speculative infrastructure.
@@ -171,7 +268,7 @@ server-only and use the anonymous/authenticated clients for RLS-enforced paths.
 
 ## Current next milestone
 
-The next unfinished milestone is **P3.4**. Migration `0051` now provides its
-publication-aware, read-only card-list/search boundary; the application must
-integrate that interface to complete reward filtering, sorting, and pagination.
+The next unfinished milestone is **P4.1 multi-card comparison**. Phase 3 is
+complete: migration `0051` supplies the publication-aware list/search boundary
+used by P3.4 reward filtering, sorting, and pagination.
 `docs/EXECUTION_STATUS.md` is the live source for the exact current task.

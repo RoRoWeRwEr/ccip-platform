@@ -33,10 +33,12 @@ const ids = {
   draftCard: "f1000000-0000-4000-8000-000000000006",
   fee: "f1000000-0000-4000-8000-000000000007",
   benefit: "f1000000-0000-4000-8000-000000000008",
+  reward: "f1000000-0000-4000-8000-000000000013",
   bankVersion: "f1000000-0000-4000-8000-000000000009",
   cardVersion: "f1000000-0000-4000-8000-000000000010",
   feeVersion: "f1000000-0000-4000-8000-000000000011",
   benefitVersion: "f1000000-0000-4000-8000-000000000012",
+  rewardVersion: "f1000000-0000-4000-8000-000000000014",
 };
 
 const publicationIds = [
@@ -44,6 +46,7 @@ const publicationIds = [
   ids.cardVersion,
   ids.feeVersion,
   ids.benefitVersion,
+  ids.rewardVersion,
 ];
 
 async function cleanup() {
@@ -56,6 +59,7 @@ async function cleanup() {
     .delete()
     .in("id", publicationIds);
   await admin.from("card_benefits").delete().eq("id", ids.benefit);
+  await admin.from("reward_rules").delete().eq("id", ids.reward);
   await admin.from("card_fees").delete().eq("id", ids.fee);
   await admin
     .from("cards")
@@ -146,6 +150,14 @@ beforeAll(async () => {
     is_featured: true,
   });
   if (benefitError) throw benefitError;
+  const { error: rewardError } = await admin.from("reward_rules").insert({
+    id: ids.reward,
+    card_id: ids.publishedCard,
+    reward_type: "POINTS",
+    calculation_method: "FIXED",
+    reward_value: 99,
+  });
+  if (rewardError) throw rewardError;
   const { error: versionError } = await admin
     .from("catalog_publication_versions")
     .insert([
@@ -177,6 +189,8 @@ beforeAll(async () => {
           name_ar: "بطاقة منشورة معتمدة",
           name_en: "Approved Integration Card",
           annual_fee: 500,
+          minimum_salary: 5000,
+          target_user: "GENERAL",
         },
       },
       {
@@ -207,6 +221,21 @@ beforeAll(async () => {
           name_ar: "ميزة اختبار معتمدة",
           name_en: "Approved integration benefit",
           is_featured: true,
+        },
+      },
+      {
+        id: ids.rewardVersion,
+        target_entity_type: "REWARD_RULE",
+        reward_rule_id: ids.reward,
+        version_number: 1,
+        change_summary: "Integration reward publication",
+        content_snapshot: {
+          id: ids.reward,
+          card_id: ids.publishedCard,
+          reward_type: "POINTS",
+          calculation_method: "FIXED",
+          reward_value: 2,
+          target_ids: [],
         },
       },
     ]);
@@ -257,7 +286,7 @@ describe("public catalog repository against local RLS", () => {
     const page = await listPublicCards(publicClient, {
       page: 1,
       pageSize: 10,
-      search: "Published Integration",
+      search: "Approved Integration",
       locale: "en",
       networkSlug: "integration-network",
       maxAnnualFee: 500,
@@ -270,6 +299,30 @@ describe("public catalog repository against local RLS", () => {
     await expect(
       listPublicCards(publicClient, { search: "no-match", locale: "en" }),
     ).resolves.toMatchObject({ items: [] });
+  });
+
+  it("filters published rewards before pagination and supports reward sorting", async () => {
+    await expect(
+      listPublicCards(publicClient, {
+        page: 1,
+        pageSize: 1,
+        rewardType: "POINTS",
+        minRewardValue: 2,
+        sort: "REWARD_VALUE_DESC",
+      }),
+    ).resolves.toMatchObject({
+      total: 1,
+      totalPages: 1,
+      items: [
+        {
+          slug: "integration-published-card",
+          rewardSummary: [{ rewardType: "POINTS", rewardValue: 2 }],
+        },
+      ],
+    });
+    await expect(
+      listPublicCards(publicClient, { rewardType: "CASHBACK" }),
+    ).resolves.toMatchObject({ total: 0, items: [] });
   });
 
   it("loads only approved snapshot data through the anonymous RPC", async () => {
@@ -289,7 +342,7 @@ describe("public catalog repository against local RLS", () => {
           featured: true,
         },
       ],
-      rewardRules: [],
+      rewardRules: [{ rewardType: "POINTS", rewardValue: 2 }],
       eligibility: [],
       merchants: [],
       provenance: null,

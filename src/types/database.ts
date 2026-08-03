@@ -14301,6 +14301,24 @@ export type Database = {
         }
         Returns: string
       }
+      search_published_cards: {
+        Args: {
+          requested_bank_slug?: string
+          requested_locale?: string
+          requested_max_annual_fee?: number
+          requested_maximum_salary?: number
+          requested_min_reward_value?: number
+          requested_network_slug?: string
+          requested_page?: number
+          requested_page_size?: number
+          requested_persona?: string
+          requested_reward_category_slug?: string
+          requested_reward_type?: string
+          requested_search?: string
+          requested_sort?: string
+        }
+        Returns: Json
+      }
       start_background_job_execution: {
         Args: { requested_execution_id: string; requested_lease_token: string }
         Returns: boolean

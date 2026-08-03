@@ -13,7 +13,7 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 |---|---|---|
 | 1 — Database Foundation | Complete | 51 migrations, 111 RLS-enabled tables, 20 pgTAP files / 506 assertions. Migration 0051 closes the P3.4 publication-aware list/search boundary without changing the 0050 detail interface. |
 | 2 — Application Foundation | Complete | P2.1–P2.4 and the phase review are complete and green. |
-| 3 — Public Catalog | In progress | P3.1–P3.3 are complete and green. Migration 0051 is delivered and green; P3.4 must now integrate its reward/list search boundary. |
+| 3 — Public Catalog | Complete | P3.1–P3.4 and the phase review are complete locally; delivery CI is monitored before P4.1 begins. |
 | 4 — Comparison and Calculation | Not started | Schema/design exist; no runtime implementation exists. |
 | 5 — Recommendation | Not started | Schema and DES exist; no runtime engine exists. |
 | 6 — Authentication and User Features | Not started | Supabase identity/RLS schema exists; no UI exists. |
@@ -24,13 +24,13 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 
 ## Current task
 
-Complete P3.4 by integrating `search_published_cards(...)` into the typed public
-catalog repository and bilingual shareable filter UI, including reward
-filtering and stable sorting/pagination.
+Deliver **P4.1 multi-card comparison** with a clear responsive attribute
+matrix, bounded shareable selection state, and publication-aware card data.
 
 ## Exact next task
 
-Complete P3.4 and the Phase 3 review, then begin P4.1 multi-card comparison.
+After the Phase 3 delivery CI is green, implement P4.1 without waiting for
+routine owner confirmation.
 
 ## Current validation and CI
 
@@ -123,14 +123,43 @@ Complete P3.4 and the Phase 3 review, then begin P4.1 multi-card comparison.
   internal Turbopack worker port; the authorized identical rerun passed.
 - P3.3 CI: Application CI run 30802355076 and Repository Policy run
   30802355180 passed at `53b39f9`.
-- P3.4 safe implementation: localized name search and bank, network,
-  annual-fee ceiling, persona, and minimum-salary ceiling filters use bounded,
-  validated inputs and reversible GET URLs. Search uses a locale-specific
-  column and escaped wildcard characters instead of raw PostgREST `or` syntax.
+- P3.4 delivery: card lists now use only migration `0051`'s snapshot-based RPC.
+  Localized search and bank, network, fee, persona, salary, reward-type, and
+  minimum-reward filters plus five stable sorts use bounded validated inputs
+  and reversible GET URLs. The regenerated database contract and Zod boundary
+  reject malformed RPC output.
 - P3.4 local validation: formatting, lint, strict typecheck, 23/23 unit and
-  component tests, 5/5 real-Supabase integration tests, production build,
-  zero-vulnerability npm audit, repository policy, Markdown links, YAML lint,
-  and whitespace checks passed.
+  component tests, 6/6 real-Supabase integration tests, production build,
+  offline zero-vulnerability npm audit, repository policy, Markdown links,
+  YAML lint, and whitespace checks passed. English and Arabic URLs restored
+  selected reward/sort state; a 390x844 Arabic browser review confirmed RTL,
+  localized labels, no horizontal overflow, and no console errors.
+
+## Phase 3 completion review
+
+- **Architecture:** public list and detail repositories use separate bounded
+  migration `0051` and `0050` snapshot interfaces. UI code remains isolated
+  from database naming through typed application DTOs; no service-role client
+  enters runtime code.
+- **Security and privacy:** anonymous execution exposes explicit published
+  allowlists only. Drafts, governance/audit data, unpublished rewards, and
+  internal snapshot keys remain inaccessible; direct RLS/table grants are
+  unchanged and inputs are bounded.
+- **Performance:** filters and counts execute before pagination, page size is
+  capped at 50, ordering has a stable UUID tie-breaker, and the effective
+  publication partial index supports the primary list path. Production-scale
+  query-plan tuning remains evidence-driven.
+- **UX and accessibility:** Arabic/English labels, RTL/LTR direction, semantic
+  forms/landmarks, keyboard-native controls, loading/empty/error states,
+  reversible URLs, and mobile no-overflow behavior are present. No Blocking
+  Phase 3 accessibility issue was found.
+- **Testing and documentation:** 23 unit/component and 6 database-backed
+  integration tests cover public catalog behavior; migration coverage is 506
+  pgTAP assertions. README, architecture, roadmap, status, and generated types
+  match the implementation.
+- **Technical debt:** no Blocking Phase 3 debt remains. Production-scale query
+  plans and staging catalog-content quality remain later operational evidence,
+  not reasons to expand Phase 3 scope.
 
 ## Phase 2 completion review
 
@@ -163,9 +192,8 @@ Complete P3.4 and the Phase 3 review, then begin P4.1 multi-card comparison.
 
 ## Blockers and owner-only actions
 
-- The P3.4 reward-filter decision is resolved: migration `0051` is explicitly
-  authorized as a bounded published-list read model. It must not weaken RLS,
-  use a public service-role client, or expose unpublished relationships.
+- The P3.4 reward-filter blocker is resolved and delivered through migration
+  `0051`; no owner action remains for Phase 3.
 - The P3.3 public-detail authorization blocker is resolved by the explicit
   migration `0050` decision. The application must use
   `get_published_card_detail(text)` and must not introduce a public service-role

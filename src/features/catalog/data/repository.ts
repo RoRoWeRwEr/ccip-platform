@@ -36,19 +36,17 @@ export interface CardSummary {
   publishedAt: string;
   bank: Pick<BankSummary, "id" | "slug" | "nameAr" | "nameEn" | "logoUrl">;
   network: {
-    id: string;
     slug: string;
     nameAr: string;
     nameEn: string;
     logoUrl: string | null;
   };
-  loyaltyProgram: {
-    id: string;
-    slug: string;
-    nameAr: string;
-    nameEn: string;
-    logoUrl: string | null;
-  } | null;
+  rewardSummary: Array<{
+    rewardType: string;
+    rewardValue: number;
+    calculationMethod: string;
+    rewardCategorySlug: string | null;
+  }>;
 }
 
 export interface CardDetail {
@@ -174,6 +172,60 @@ const nullableNumber = z
   .nullable()
   .optional()
   .transform((value) => value ?? null);
+const publishedCardSearchSchema = z.object({
+  items: z.array(
+    z.object({
+      card: z.object({
+        id: z.string().uuid(),
+        slug: z.string(),
+        name_ar: z.string(),
+        name_en: z.string(),
+        annual_fee: z.number().nonnegative(),
+        minimum_salary: nullableNumber,
+        image_url: nullableString,
+        card_tier: nullableString,
+        target_user: z.enum([
+          "GENERAL",
+          "STUDENT",
+          "SALARY",
+          "PRIVATE_BANKING",
+          "BUSINESS",
+        ]),
+      }),
+      bank: z.object({
+        id: z.string().uuid(),
+        slug: z.string(),
+        name_ar: z.string(),
+        name_en: z.string(),
+        logo_url: nullableString,
+      }),
+      network: z.object({
+        slug: z.string(),
+        name_ar: z.string(),
+        name_en: z.string(),
+        logo_url: nullableString,
+      }),
+      reward_summary: z.array(
+        z.object({
+          reward_type: z.string(),
+          reward_value: z.number().nonnegative(),
+          calculation_method: z.string(),
+          reward_category_slug: nullableString,
+        }),
+      ),
+      publication: z.object({
+        version_number: z.number().int().positive(),
+        effective_from: z.string(),
+        effective_until: nullableString,
+        published_at: z.string(),
+      }),
+    }),
+  ),
+  page: z.number().int().positive(),
+  page_size: z.number().int().min(1).max(50),
+  total_count: z.number().int().nonnegative(),
+  total_pages: z.number().int().nonnegative(),
+});
 const publishedCardDetailSchema = z.object({
   card: z.object({
     id: z.string().uuid(),
@@ -375,81 +427,82 @@ export async function listPublicCards(
     maxAnnualFee?: number;
     targetUser?: Database["public"]["Enums"]["target_user_type"];
     maxMinimumSalary?: number;
+    rewardType?: Database["public"]["Enums"]["reward_type"];
+    rewardCategorySlug?: string;
+    minRewardValue?: number;
+    sort?:
+      | "PUBLISHED_DESC"
+      | "NAME_ASC"
+      | "ANNUAL_FEE_ASC"
+      | "ANNUAL_FEE_DESC"
+      | "REWARD_VALUE_DESC";
   } = {},
 ): Promise<Page<CardSummary>> {
   const pagination = parsePagination(input);
-  const { from, to } = toRange(pagination);
-  let query = client
-    .from("cards")
-    .select(
-      "id,slug,name_ar,name_en,annual_fee,image_url,card_tier,target_user,minimum_salary,published_at,bank:banks!inner(id,slug,name_ar,name_en,logo_url),network:card_networks!inner(id,slug,name_ar,name_en,logo_url),loyalty_program:loyalty_programs(id,slug,name_ar,name_en,logo_url)",
-      { count: "exact" },
-    )
-    .eq("is_active", true)
-    .eq("availability_status", "AVAILABLE")
-    .not("published_at", "is", null)
-    .lte("published_at", new Date().toISOString())
-    .order("published_at", { ascending: false })
-    .order("id", { ascending: true })
-    .range(from, to);
-
-  if (input.bankSlug) query = query.eq("banks.slug", input.bankSlug);
-  if (input.networkSlug)
-    query = query.eq("card_networks.slug", input.networkSlug);
-  if (input.search)
-    query = query.ilike(
-      input.locale === "ar" ? "name_ar" : "name_en",
-      `%${input.search.replaceAll("%", "\\%").replaceAll("_", "\\_")}%`,
-    );
-  if (input.maxAnnualFee !== undefined)
-    query = query.lte("annual_fee", input.maxAnnualFee);
-  if (input.targetUser) query = query.eq("target_user", input.targetUser);
-  if (input.maxMinimumSalary !== undefined)
-    query = query.lte("minimum_salary", input.maxMinimumSalary);
-  const { data, error, count } = await query;
-  if (error) throw dependencyError("card query", error);
-
-  const items = (data ?? []).flatMap((card) => {
-    if (!card.published_at || !card.bank || !card.network) return [];
-    return [
-      {
-        id: card.id,
-        slug: card.slug,
-        nameAr: card.name_ar,
-        nameEn: card.name_en,
-        annualFee: card.annual_fee,
-        imageUrl: card.image_url,
-        cardTier: card.card_tier,
-        targetUser: card.target_user,
-        minimumSalary: card.minimum_salary,
-        publishedAt: card.published_at,
-        bank: {
-          id: card.bank.id,
-          slug: card.bank.slug,
-          nameAr: card.bank.name_ar,
-          nameEn: card.bank.name_en,
-          logoUrl: card.bank.logo_url,
-        },
-        network: {
-          id: card.network.id,
-          slug: card.network.slug,
-          nameAr: card.network.name_ar,
-          nameEn: card.network.name_en,
-          logoUrl: card.network.logo_url,
-        },
-        loyaltyProgram: card.loyalty_program
-          ? {
-              id: card.loyalty_program.id,
-              slug: card.loyalty_program.slug,
-              nameAr: card.loyalty_program.name_ar,
-              nameEn: card.loyalty_program.name_en,
-              logoUrl: card.loyalty_program.logo_url,
-            }
-          : null,
-      } satisfies CardSummary,
-    ];
+  const { data, error } = await client.rpc("search_published_cards", {
+    requested_locale: input.locale ?? "en",
+    requested_page: pagination.page,
+    requested_page_size: pagination.pageSize,
+    requested_sort: input.sort ?? "PUBLISHED_DESC",
+    ...(input.search ? { requested_search: input.search } : {}),
+    ...(input.bankSlug ? { requested_bank_slug: input.bankSlug } : {}),
+    ...(input.networkSlug ? { requested_network_slug: input.networkSlug } : {}),
+    ...(input.maxAnnualFee !== undefined
+      ? { requested_max_annual_fee: input.maxAnnualFee }
+      : {}),
+    ...(input.targetUser ? { requested_persona: input.targetUser } : {}),
+    ...(input.maxMinimumSalary !== undefined
+      ? { requested_maximum_salary: input.maxMinimumSalary }
+      : {}),
+    ...(input.rewardType ? { requested_reward_type: input.rewardType } : {}),
+    ...(input.rewardCategorySlug
+      ? { requested_reward_category_slug: input.rewardCategorySlug }
+      : {}),
+    ...(input.minRewardValue !== undefined
+      ? { requested_min_reward_value: input.minRewardValue }
+      : {}),
   });
-  return makePage(items, count, pagination);
+  if (error) throw dependencyError("published card search query", error);
+  const parsed = publishedCardSearchSchema.safeParse(data);
+  if (!parsed.success)
+    throw dependencyError("published card search validation", parsed.error);
+  return {
+    items: parsed.data.items.map((item) => ({
+      id: item.card.id,
+      slug: item.card.slug,
+      nameAr: item.card.name_ar,
+      nameEn: item.card.name_en,
+      annualFee: item.card.annual_fee,
+      imageUrl: item.card.image_url,
+      cardTier: item.card.card_tier,
+      targetUser: item.card.target_user,
+      minimumSalary: item.card.minimum_salary,
+      publishedAt: item.publication.published_at,
+      bank: {
+        id: item.bank.id,
+        slug: item.bank.slug,
+        nameAr: item.bank.name_ar,
+        nameEn: item.bank.name_en,
+        logoUrl: item.bank.logo_url,
+      },
+      network: {
+        slug: item.network.slug,
+        nameAr: item.network.name_ar,
+        nameEn: item.network.name_en,
+        logoUrl: item.network.logo_url,
+      },
+      rewardSummary: item.reward_summary.map((reward) => ({
+        rewardType: reward.reward_type,
+        rewardValue: reward.reward_value,
+        calculationMethod: reward.calculation_method,
+        rewardCategorySlug: reward.reward_category_slug,
+      })),
+    })),
+    page: parsed.data.page,
+    pageSize: parsed.data.page_size,
+    total: parsed.data.total_count,
+    totalPages: parsed.data.total_pages,
+  };
 }
 
 export async function getPublicCardBySlug(

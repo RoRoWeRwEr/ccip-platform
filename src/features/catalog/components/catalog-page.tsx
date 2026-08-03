@@ -27,8 +27,14 @@ interface CatalogCopy {
   maxFee: string;
   maxSalary: string;
   persona: string;
+  reward: string;
+  minReward: string;
+  sort: string;
   applyFilters: string;
   clearFilters: string;
+  personaOptions: Record<string, string>;
+  rewardOptions: Record<string, string>;
+  sortOptions: Record<string, string>;
 }
 
 export interface CatalogFilters {
@@ -37,6 +43,9 @@ export interface CatalogFilters {
   fee?: string;
   salary?: string;
   persona?: string;
+  reward?: string;
+  rewardValue?: string;
+  sort?: string;
 }
 
 const copy: Record<Locale, CatalogCopy> = {
@@ -63,8 +72,32 @@ const copy: Record<Locale, CatalogCopy> = {
     maxFee: "أقصى رسوم سنوية",
     maxSalary: "أقصى راتب مطلوب",
     persona: "كل الفئات",
+    reward: "كل أنواع المكافآت",
+    minReward: "أدنى قيمة للمكافأة",
+    sort: "ترتيب النتائج",
     applyFilters: "تطبيق الفلاتر",
     clearFilters: "مسح الفلاتر",
+    personaOptions: {
+      GENERAL: "عام",
+      STUDENT: "طلاب",
+      SALARY: "راتب",
+      PRIVATE_BANKING: "الخدمات المصرفية الخاصة",
+      BUSINESS: "أعمال",
+    },
+    rewardOptions: {
+      CASHBACK: "استرداد نقدي",
+      POINTS: "نقاط",
+      MILES: "أميال",
+      DISCOUNT: "خصم",
+      VOUCHER: "قسيمة",
+    },
+    sortOptions: {
+      PUBLISHED_DESC: "الأحدث نشراً",
+      NAME_ASC: "الاسم",
+      ANNUAL_FEE_ASC: "الرسوم: الأقل أولاً",
+      ANNUAL_FEE_DESC: "الرسوم: الأعلى أولاً",
+      REWARD_VALUE_DESC: "قيمة المكافأة",
+    },
   },
   en: {
     title: "Saudi credit cards",
@@ -89,8 +122,32 @@ const copy: Record<Locale, CatalogCopy> = {
     maxFee: "Maximum annual fee",
     maxSalary: "Maximum required salary",
     persona: "All personas",
+    reward: "All reward types",
+    minReward: "Minimum reward value",
+    sort: "Sort results",
     applyFilters: "Apply filters",
     clearFilters: "Clear filters",
+    personaOptions: {
+      GENERAL: "General",
+      STUDENT: "Student",
+      SALARY: "Salary",
+      PRIVATE_BANKING: "Private banking",
+      BUSINESS: "Business",
+    },
+    rewardOptions: {
+      CASHBACK: "Cashback",
+      POINTS: "Points",
+      MILES: "Miles",
+      DISCOUNT: "Discount",
+      VOUCHER: "Voucher",
+    },
+    sortOptions: {
+      PUBLISHED_DESC: "Newest published",
+      NAME_ASC: "Name",
+      ANNUAL_FEE_ASC: "Fee: low to high",
+      ANNUAL_FEE_DESC: "Fee: high to low",
+      REWARD_VALUE_DESC: "Reward value",
+    },
   },
 };
 
@@ -188,11 +245,52 @@ export function CatalogPage({
             defaultValue={filters.persona ?? ""}
           >
             <option value="">{text.persona}</option>
-            <option value="GENERAL">General</option>
-            <option value="STUDENT">Student</option>
-            <option value="SALARY">Salary</option>
-            <option value="PRIVATE_BANKING">Private banking</option>
-            <option value="BUSINESS">Business</option>
+            {Object.entries(text.personaOptions).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="grid gap-2 text-sm font-bold">
+          <span>{text.reward}</span>
+          <select
+            className="border-line min-h-11 rounded-xl border px-3"
+            name="reward"
+            defaultValue={filters.reward ?? ""}
+          >
+            <option value="">{text.reward}</option>
+            {Object.entries(text.rewardOptions).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="grid gap-2 text-sm font-bold">
+          <span>{text.minReward}</span>
+          <input
+            className="border-line min-h-11 rounded-xl border px-3"
+            type="number"
+            min="0"
+            max="1000000"
+            step="any"
+            name="rewardValue"
+            defaultValue={filters.rewardValue}
+          />
+        </label>
+        <label className="grid gap-2 text-sm font-bold">
+          <span>{text.sort}</span>
+          <select
+            className="border-line min-h-11 rounded-xl border px-3"
+            name="sort"
+            defaultValue={filters.sort ?? "PUBLISHED_DESC"}
+          >
+            {Object.entries(text.sortOptions).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
           </select>
         </label>
         <label className="grid gap-2 text-sm font-bold">

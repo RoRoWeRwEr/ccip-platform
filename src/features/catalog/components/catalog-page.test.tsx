@@ -35,13 +35,12 @@ const card: CardSummary = {
     logoUrl: null,
   },
   network: {
-    id: "network-1",
     slug: "visa",
     nameAr: "فيزا",
     nameEn: "Visa",
     logoUrl: null,
   },
-  loyaltyProgram: null,
+  rewardSummary: [],
 };
 
 describe("catalog browsing page", () => {
@@ -122,6 +121,9 @@ describe("catalog browsing page", () => {
           network: "visa",
           fee: "500",
           persona: "GENERAL",
+          reward: "POINTS",
+          rewardValue: "2",
+          sort: "REWARD_VALUE_DESC",
         }}
       />,
     );
@@ -130,6 +132,12 @@ describe("catalog browsing page", () => {
     ).toHaveValue("value");
     expect(screen.getByRole("combobox", { name: "All networks" })).toHaveValue(
       "visa",
+    );
+    expect(
+      screen.getByRole("combobox", { name: "All reward types" }),
+    ).toHaveValue("POINTS");
+    expect(screen.getByRole("combobox", { name: "Sort results" })).toHaveValue(
+      "REWARD_VALUE_DESC",
     );
     expect(
       screen.getByRole("link", { name: "Trusted Bank" }).getAttribute("href"),
