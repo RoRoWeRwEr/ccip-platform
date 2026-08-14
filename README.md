@@ -8,38 +8,86 @@ benefits, and personalized recommendation logic. See
 [`docs/01-brd/BRD.md`](docs/01-brd/BRD.md) for the full product vision
 and business requirements.
 
-## Current implementation status: public catalog experience in progress
+## Project Objective and Public Value
 
-Migrations `0001`–`0051` complete the current database roadmap: 111 tables covering the
-card/bank/reward catalog, customer financial and spending profiles, the
-recommendation engine, comparisons, notifications, bank applications,
-partnerships/commissions, a full governance/audit/compliance layer, a
-platform RBAC/identity model, feature flags, API-management metadata,
-background jobs, a catalog source-provenance layer, a canonical merchant
-catalog, catalog publication governance, and explicit BANK/GLOBAL catalog
-administrator authorization — with row-level security
-enabled on every table.
+CCIP helps people understand, compare, and manage credit-card products through
+clear, trustworthy, and personalized intelligence. It serves Saudi consumers,
+including people new to cards, cashback and rewards users, travelers, and
+loyalty-program members. The implemented bilingual experience provides public
+discovery and publication-governed card details, comparison and calculation,
+deterministic recommendations, authentication and account features, and
+scope-governed administration. Staging deployment and operational verification
+remain unfinished and must not be presented as complete.
+
+CCIP is decision support, not a bank, lender, credit bureau, or financial
+adviser. It does not guarantee savings, eligibility, approval, credit-score
+improvement, or any other financial outcome. Product information should come
+from official sources, carry provenance and effective-publication context, and
+make assumptions, uncertainty, missing data, and recommendation reasons clear.
+Personalization must be data-minimizing, consent-aware, secure, and subject to
+user control; sensitive data must never be sold or used to make lending
+decisions without a separately approved legal, product, and security basis.
+
+The long-term public-value ambition is an accessible Arabic/English service
+that helps people compare costs and benefits consistently, understand why an
+option may suit their stated needs, and notice when product information has
+changed. Progress is measured by verified catalog freshness and provenance,
+task completion and comprehension, accessible journey pass rates, explanation
+coverage, correction speed, bilingual parity, user trust, and the absence of
+material privacy, security, bias, or misleading-outcome incidents. Detailed
+strategy and safeguards are in
+[`docs/PROJECT_MASTER_PLAN.md`](docs/PROJECT_MASTER_PLAN.md),
+[`docs/DEFINITION_OF_DONE.md`](docs/DEFINITION_OF_DONE.md), and
+[`docs/RISK_REGISTER.md`](docs/RISK_REGISTER.md).
+
+## Current implementation status: staging inputs required
+
+Migrations `0001`–`0053` complete the current database roadmap: 53 migrations,
+111 tables, 22 pgTAP files, and 538 assertions covering the card/bank/reward
+catalog, customer financial and spending profiles, the recommendation engine,
+comparisons, notifications, bank applications, partnerships/commissions, a
+full governance/audit/compliance layer, a platform RBAC/identity model, feature
+flags, API-management metadata, background jobs, a catalog source-provenance
+layer, a canonical merchant catalog, catalog publication governance, and
+explicit BANK/GLOBAL catalog administrator authorization — with row-level
+security enabled on every table.
 
 The CCIP v1 application foundation is a Next.js TypeScript web application.
 It provides Arabic/English locale routes, RTL/LTR document direction,
 responsive design tokens, typed browser/server Supabase clients, checked-in
 database types, publication-aware catalog repositories, bounded pagination,
 unit and local-Supabase integration tests, production build validation, and
-Application CI. The bilingual public experience now includes the homepage,
-bank/card browsing, and publication-governed card detail routes for fees,
-benefits, rewards, eligibility, loyalty, merchants, provenance, and effective
-publication information. Search/filtering, comparison, recommendation,
-authentication, user, and administration product features remain unfinished;
-their database capabilities must not be described as working product surfaces.
+Application CI. The bilingual application includes public catalog discovery
+and detail, comparison and calculation, deterministic recommendations,
+authentication and user features, and scope-governed administration. Automated
+unit, integration, browser, accessibility, security, production-build, and
+bundle-budget gates are in place. Deployment readiness is complete; staging
+deployment and operational verification remain blocked on owner provisioning
+of the approved private Vercel/Supabase staging environment, scoped access and
+environment values, and an owner-verified administrator identity. Staging is
+limited to synthetic/test data and is not production or compliance approval.
 See
 [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) for the current,
 factual status of every layer of the platform (database, tests, CI,
 security, API, frontend, AI/recommendation, deployment).
 
-Public catalog browsing also supports shareable localized-name, bank, network,
-annual-fee, persona, and minimum-salary filters. Publication-aware reward
-filtering is served by migration `0051`'s bounded publication-aware list/search
-interface; migration `0050` remains the single-card detail interface.
+Public catalog browsing supports shareable localized-name, bank, network,
+annual-fee, persona, minimum-salary, reward-type, and minimum-reward filters,
+plus stable list sorting and pagination through migration `0051`'s bounded
+publication-aware list/search interface. Migration `0050` remains the
+single-card detail interface.
+
+CCIP v1 is **27 of 30 roadmap milestones complete (90%)**. P9.2 staging
+deployment is the exact next unfinished milestone once its owner-controlled
+inputs are available. See [`docs/EXECUTION_STATUS.md`](docs/EXECUTION_STATUS.md)
+for the authoritative resume point.
+
+The current regulatory assessment is AI-generated risk analysis, not legal
+advice or approval. Private staging is synthetic/test only. Production, real
+personal/financial data, application forwarding, bank-document collection,
+commissions, paid referrals, and bank integrations remain prohibited pending
+formal resolution of applicable legal, privacy, contractual, and SAMA
+requirements. See [`docs/DECISION_LOG.md`](docs/DECISION_LOG.md) D-010.
 
 ## Repository structure
 
@@ -60,7 +108,12 @@ docs/
   MIGRATION_INDEX.md         Every migration, in order, with what it created
   BOOTSTRAP_PLATFORM_ADMIN.md  How to safely assign the first platform administrator
   PROJECT_STATUS.md          Factual project dashboard across every layer
+  PROJECT_DASHBOARD.md       Program baseline, health score, critical path, forecast
+  DECISION_LOG.md            Verified decisions, assumptions, and owner decision batch
+  RISK_REGISTER.md           Active product, delivery, security, and public-value risks
+  AI_HANDOFF.md              Governance compatibility entry and no-duplicate-work notice
   AI_AGENT_HANDOFF.md        Canonical startup and session-resume protocol
+  CHANGELOG.md               Governance-document change history
   DEVELOPMENT_WORKFLOW.md    Cloud-first issue-to-merge workflow
   BRANCH_PROTECTION.md       Recommended main-branch ruleset
   01-brd/BRD.md              Original business requirements
@@ -71,8 +124,8 @@ docs/
 decisions/                  Reserved for architecture decision records; currently empty
 glossary/                   Reserved for a project glossary; currently empty
 supabase/
-  migrations/                51 SQL migrations (0001–0051)
-  tests/database/            pgTAP test suite (currently covers migrations 0042–0051)
+  migrations/                53 SQL migrations (0001–0053)
+  tests/database/            22 pgTAP files / 538 assertions (covers migrations 0042–0053)
 src/
   app/                       Next.js App Router and bilingual route foundation
   features/catalog/data/     Typed, RLS-aware public catalog repositories

@@ -1,9 +1,12 @@
 # Deployment and Rollback Runbook
 
 This is the repository-owned deployment contract for the CCIP Next.js web
-application. It prepares Vercel deployment without selecting a paid plan, data
-region, domain, or external account. Those choices and credentials remain
-owner-controlled.
+application. The owner approved Vercel and Supabase on 2026-08-12 for a
+private, non-production staging environment using synthetic/test data only.
+Paid plans, production region/domain/accounts, and credentials remain owner-
+controlled. Staging technical validation is not production approval or a claim
+of Saudi legal or regulatory compliance; production launch remains conditional
+on qualified Saudi legal/privacy review.
 
 ## Environment separation and contract
 
@@ -73,8 +76,18 @@ or mutate publication history directly.
 
 ## P9.2 credential handoff
 
-Staging deployment requires an owner-provisioned Vercel project and staging
-Supabase project, their environment-scoped browser-safe values, and deployment
-authorization. Hosting/data-region and legal/privacy choices must be resolved
-before staging is treated as launch-ready. P9.2 must record the exact missing
-owner actions if these inputs are unavailable and must never commit them.
+Staging deployment requires an owner-provisioned private Vercel project and
+separate staging Supabase project, their environment-scoped browser-safe
+values, and deployment authorization. Use synthetic/test data only; never
+connect staging to production data. P9.2 must record missing owner actions if
+these inputs are unavailable and must never commit them. Staging may be treated
+only as technical-validation evidence, never as production readiness or legal/
+regulatory approval.
+
+Frankfurt Supabase and Dubai Vercel are candidates for this synthetic staging
+exercise only. Before deployment, verify that fixtures, uploads, logs, backups,
+analytics, and administrator inputs contain no real personal, financial, bank-
+document, or production data. Stop and escalate any suspected leakage. Do not
+enable application forwarding, bank-document collection, commissions, paid
+referrals, or bank integrations in staging. Production regions and any cross-
+border transfer mechanism require qualified Saudi legal/privacy approval.

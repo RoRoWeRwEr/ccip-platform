@@ -9,6 +9,13 @@ This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
 milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 
+**Regulatory-risk boundary:** this ledger contains AI-generated risk analysis,
+not legal advice or regulatory approval. Private staging remains synthetic/test
+only. Production, real personal/financial data, application forwarding, bank-
+document collection, commissions, paid referrals, and bank integrations are
+prohibited until applicable legal, privacy, contractual, and SAMA requirements
+are formally resolved. See `docs/DECISION_LOG.md` D-010.
+
 ## Current state
 
 | Phase | State | Evidence |
@@ -21,7 +28,7 @@ milestone complete until `docs/DEFINITION_OF_DONE.md` is satisfied.
 | 6 — Authentication and User Features | Complete | P6.1–P6.3 and the phase review are complete and green. |
 | 7 — Catalog Administration | Complete | P7.1–P7.4 and the architecture/security/performance/testing review are complete and green. |
 | 8 — Quality and Security | Complete | P8.1–P8.4 and the phase review are complete and green. |
-| 9 — Staging and Deployment | In progress | P9.1 is complete and green. P9.2 is blocked on owner-controlled legal/region decisions, staging projects, and deployment credentials. |
+| 9 — Staging and Deployment | In progress | P9.1 is complete and green. Private Vercel/Supabase staging with synthetic/test data is approved; P9.2 remains blocked on staging project provisioning, scoped access/environment values, and the P9.3 administrator identity. Production approval remains pending qualified Saudi legal/privacy review. |
 | 10 — CCIP v1 Completion | Not started | Depends on phases 1–9. |
 
 ## Current task
@@ -30,9 +37,11 @@ Execute **P9.2 Staging Deployment** as the next unfinished milestone.
 
 ## Exact next task
 
-After the owner resolves the recorded legal/region decision and provisions the
-staging Vercel and Supabase resources, deploy the exact green `main` commit and
-record the deployment evidence. Do not commit credentials or personal IDs.
+After the owner provisions the approved private Vercel and Supabase staging
+resources and scoped access/environment values, deploy the exact green `main`
+commit using synthetic/test data only and record the deployment evidence. Do
+not commit credentials or personal IDs. This technical validation is not
+production approval or a claim of Saudi legal or regulatory compliance.
 
 ## Current validation and CI
 
@@ -564,15 +573,29 @@ record the deployment evidence. Do not commit credentials or personal IDs.
 - The HTTPS OAuth credential still lacks GitHub `workflow` scope, but the
   installed GitHub connector is an authorized publishing path for workflow
   changes. No immediate owner action is required for P2.3.
-- **P9.2 owner blocker:** no Vercel CLI/link, Vercel deployment secrets, or
-  staging Supabase configuration is present. The owner must first approve the
-  Saudi legal/privacy assessment and hosting/data-region outcome, then
+- **P9.2 owner decision (2026-08-12):** Vercel and Supabase are approved for a
+  private, non-production staging environment using synthetic/test data only.
+  This authorizes technical validation only; it is not production approval and
+  makes no claim of Saudi legal or regulatory compliance. Production launch
+  remains conditional on qualified Saudi legal/privacy review.
+- **Regulatory assessment (2026-08-14):** Frankfurt Supabase and Dubai Vercel
+  are technical staging candidates only, not approved production regions. The
+  planned application-forwarding plus CPA model has a material, unresolved
+  SAMA finance-aggregation licensing risk. Sandbox eligibility is unresolved
+  because SAMA's FAQ excludes propositions with an existing licensing path.
+  Qualified Saudi counsel or SAMA must resolve the licensing perimeter,
+  Sandbox route, controller/processor roles, lawful bases, transfer mechanism,
+  sensitive-data classification, retention, consent, contracts, and production
+  region before any gated capability or production use.
+- **P9.2 remaining owner blocker:** no Vercel CLI/link, Vercel deployment
+  secrets, or staging Supabase configuration is present. The owner must
   provision a separate staging Supabase project through migration `0053` and a
-  Vercel staging project with environment-scoped
+  private Vercel staging project with environment-scoped
   `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`,
   `APP_VERSION`, and `LOG_LEVEL`. Deployment authorization may be supplied by
   an owner-authenticated Vercel link or the equivalent scoped Vercel token,
-  organization ID, and project ID. P9.3 additionally requires an intended
+  organization ID, and project ID. Staging must contain synthetic/test data
+  only and must not point to production. P9.3 additionally requires an intended
   staging administrator account whose identity the owner verifies in Supabase;
   no email or UUID belongs in the repository or chat.
 - **Exact resume point:** deploy the current green `main` commit to the

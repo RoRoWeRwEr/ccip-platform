@@ -1,5 +1,32 @@
 # CCIP v1 Definition of Done
 
+## Public-value and responsible-use outcomes
+
+The v1 completion review must record evidence for each outcome below. These
+are release gates or measurement targets, not current-performance claims and
+not guarantees of savings, approval, eligibility, credit improvement, or any
+financial result.
+
+| Outcome | v1 measure and acceptance evidence |
+|---|---|
+| Trustworthy catalog | At least 95% of published card records in the release acceptance dataset have a visible effective date and a verified official-source provenance reference; every exception is labeled and risk-accepted. |
+| Task usefulness | At least 90% of moderated participants complete the critical discovery, comparison, and explanation tasks without facilitator correction; sample, method, and Arabic/English results are recorded separately. |
+| Explainability | 100% of recommendation results show material user inputs, catalog/data version or effective context, annual reward estimate, annual fee, net-value method, assumptions, limitations, and deterministic ranking reasons. |
+| Reproducibility | Identical accepted inputs and catalog version produce identical calculation and recommendation results in automated tests. |
+| Bilingual parity | Every critical journey and material disclaimer is available in Arabic and English with equivalent meaning; no known material untranslated or directionality defect remains. |
+| Accessibility | Critical journeys pass automated checks and documented manual keyboard, screen-reader, focus, contrast, 200% zoom, RTL/LTR, and 320px mobile reviews with no unresolved Blocking finding. |
+| Data control and privacy | Guest use remains meaningful; personal data collection is purpose-limited and documented; user-owned records pass positive and negative RLS tests; lifecycle/deletion behavior and consent are verified where implemented. |
+| Bias and consumer harm | Persona, language, income-band, bank, network, and reward-type test cases are reviewed for unexplained exclusion or systematically degraded results; all material findings are fixed or explicitly accepted by the owner before release. |
+| Correction responsiveness | Every validated catalog correction has an owner and audit trail; the staging operational exercise demonstrates intake-to-publication handling, with a target median resolution of five business days or less once production measurement begins. |
+| Safety | Release evidence records zero known material privacy breach, secret exposure, cross-user/cross-bank authorization failure, discriminatory ranking defect, or guaranteed-outcome claim. |
+
+CCIP must be described throughout the product as information and decision
+support, not a bank, lender, credit bureau, or regulated financial adviser.
+Estimates must be conditional on source data, user inputs, and stated
+assumptions. Any future use for lending decisions, open-banking data, or
+regulated advice requires a new owner-approved scope, legal/privacy assessment,
+security review, and Definition of Done update.
+
 ## Milestone done
 
 A milestone is complete only when:

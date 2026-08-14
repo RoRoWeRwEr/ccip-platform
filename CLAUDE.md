@@ -11,6 +11,11 @@ milestone. `docs/AUTONOMOUS_DECISION_POLICY.md` provides standing authority for
 routine technical decisions and defines the limited cases that require the
 owner.
 
+For program orientation, also read `docs/PROJECT_DASHBOARD.md`,
+`docs/DECISION_LOG.md`, and `docs/RISK_REGISTER.md`. They summarize the current
+baseline, assumptions, owner decision batch, health assessment, and risks, but
+`docs/EXECUTION_STATUS.md` remains the sole live execution resume point.
+
 ## When delivering a migration
 
 Follow the direct-to-main workflow in `AGENTS.md` and `docs/DEVELOPMENT_WORKFLOW.md` exactly: one cohesive migration per delivery, full local validation before pushing, push directly to `main` only with passing local checks and no known Blocking issues, forward-fix any CI failure, never force-push or rewrite a merged migration, never start a second migration in the same task, and record the delivery (commit SHA, files changed, local results, CI conclusion, risks, next action). After every five successfully delivered migrations, stop and run the comprehensive review below before continuing.

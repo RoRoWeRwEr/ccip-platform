@@ -93,6 +93,14 @@ These are release targets to validate in staging/user research, not claims
 about current production performance. The detailed measurement contract is in
 `docs/DEFINITION_OF_DONE.md`.
 
+Private staging may use synthetic/test data only. Production, real personal or
+financial data, application forwarding, bank-document collection, commissions,
+paid referrals, and bank integrations are outside the authorized execution
+boundary until their applicable legal, privacy, contractual, and SAMA
+requirements are formally resolved. This is an AI-generated risk control, not
+legal advice or a regulatory determination; `docs/DECISION_LOG.md` D-010 holds
+the fact/hypothesis/counsel-question separation.
+
 ## Planning baseline and roadmap logic
 
 As verified on 2026-08-03, 27 of 30 roadmap milestones are complete (Phase 1 as
@@ -121,7 +129,7 @@ assumptions, and owner decisions are tracked in `docs/PROJECT_DASHBOARD.md` and
 ## Delivery principles
 
 - Prefer a usable vertical slice over speculative infrastructure.
-- Preserve migrations `0001`–`0051`; never rewrite published history.
+- Preserve migrations `0001`–`0053`; never rewrite published history.
 - Do not add a migration unless application implementation proves a concrete
   schema gap. Document the gap and migration justification here first.
 - Public catalog access remains available without authentication. User and
@@ -152,7 +160,8 @@ server-only and use the anonymous/authenticated clients for RLS-enforced paths.
 
 ### Phase 1 — Database Foundation — Complete
 
-- Migrations `0001`–`0051`, 111 tables, full RLS coverage.
+- Migrations `0001`–`0053`, 53 migrations, 111 tables, 22 pgTAP files / 538
+  assertions, and full RLS coverage.
 - Database CI and Repository Policy green for the completion delivery.
 - BANK/GLOBAL catalog authorization and controlled publication lifecycle in
   place.
@@ -165,6 +174,10 @@ server-only and use the anonymous/authenticated clients for RLS-enforced paths.
   result-set read boundary. Migration `0051` adds that bounded execute-only
   published list/search interface without altering `0050` or granting table
   writes.
+- Migrations `0052` and `0053` were narrow application-enabling database
+  deliveries: `0052` added the bounded publication-safe recommendation-
+  candidate interface and `0053` added minimal internal user-profile bootstrap.
+  They did not reopen or broaden the completed database-foundation roadmap.
 
 ### Phase 2 — Application Foundation
 
@@ -272,6 +285,9 @@ server-only and use the anonymous/authenticated clients for RLS-enforced paths.
 
 The next unfinished milestone is **P9.2 staging deployment**. P9.1's deployment
 contract, configuration, observability, production smoke check, and rollback
-runbook are complete and green; owner-controlled staging resources and legal/
-region decisions are the recorded external blocker.
+runbook are complete and green. Private Vercel/Supabase staging using
+synthetic/test data is owner-approved for technical validation only; project
+provisioning, scoped access/environment values, and an owner-verified staging
+administrator remain the external blocker. Production approval remains
+conditional on qualified Saudi legal/privacy review.
 `docs/EXECUTION_STATUS.md` is the live source for the exact current task.
