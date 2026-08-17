@@ -21,3 +21,4 @@
 
 # Supabase CLI runtime state
 /supabase/.temp/
+.vercel
