@@ -24,14 +24,13 @@ Exact next execution work must always be copied from the newest verified
 
 ## Verified current handoff
 
-At `main` commit `420a886`, 27 of 30 roadmap milestones are complete (90%).
-Private Vercel/Supabase staging is approved for technical validation with
-synthetic/test data only. P9.2 remains blocked until the owner provisions the
-separate staging projects, scoped deployment authorization, required
-environment values, and an owner-verified staging administrator identity.
-After those inputs exist, deploy the exact green `main` commit, record non-
-secret evidence, and only then begin P9.3. Production approval and Saudi legal/
-regulatory compliance remain explicitly outside this staging decision.
+P9.2 deploys `main` commit
+`626ef83668e59c8bd406b3639b34bb410300db93` to the protected private Preview;
+28 of 30 roadmap milestones are complete (93%). P9.3 operational verification
+is the exact next atomic delivery and requires an independently owner-verified
+staging administrator identity for bootstrap. No email or UUID belongs in
+chat/source. Production approval and Saudi legal/regulatory compliance remain
+explicitly outside this staging decision.
 
 D-010 additionally prohibits production, real personal/financial data,
 application forwarding, bank-document collection, commissions, paid referrals,

@@ -1,8 +1,8 @@
 # Project Status
 
-**Last verified:** 2026-08-14 against `main` at `420a886`;
-Repository Policy run 30837249315 passed. P9.1 Application CI run 30836747504
-and Repository Policy run 30836749288 passed for `ace16b3`.
+**Last verified:** 2026-08-17 against deployed `main` commit
+`626ef83668e59c8bd406b3639b34bb410300db93`; Application CI run 32034124290
+and Repository Policy run 32034124293 passed.
 
 This dashboard reports observed states only. Repository and GitHub state override prior chat or stale documentation.
 
@@ -12,9 +12,9 @@ The Database Phase is complete and the owner-authorized CCIP v1 application
 execution program is active. `docs/PROJECT_MASTER_PLAN.md` is the authoritative
 roadmap and `docs/EXECUTION_STATUS.md` is the live milestone ledger.
 
-Program progress is **27 of 30 milestones complete (90%)**. Phases 1–8 and
-P9.1 are complete. P9.2 is the next unfinished milestone and is blocked on the
-owner-controlled inputs listed below.
+Program progress is **28 of 30 milestones complete (93%)**. Phases 1–8 and
+P9.1–P9.2 are complete. P9.3 operational verification is the next unfinished
+milestone and remains a separate delivery.
 
 Migrations `0001`–`0053` are immutable historical migrations. Migration
 `0051_create_published_card_search_interface.sql` completes the revised
@@ -47,15 +47,15 @@ branch, Draft PR, or manual merge.
 | Frontend | **Phase 8 complete** | Public, comparison/calculation, recommendation, authentication/user, and governed administration phases are complete; P8.1–P8.4 quality, accessibility, responsive, security, performance, and resilience reviews are green. |
 | Recommendation experience | **Phase 5 complete** | Deterministic fixed-valuation ranking, the bilingual guest journey, and the ownership-scoped authenticated history/save boundary are green over migration 0052's publication-safe candidate interface. |
 | Authentication and user features | **Phase 6 complete** | Bilingual identity, profile, collections, saved cards, engine-owned comparisons, bounded recommendation history, lifecycle disclosure, and the phase review are green. |
-| Deployment | **P9.1 complete; P9.2 provisioning blocked** | Private Vercel/Supabase staging with synthetic/test data is owner-approved for technical validation only. No staging projects or deployment credentials are configured; production approval remains pending qualified Saudi legal/privacy review. |
+| Deployment | **P9.1–P9.2 complete; P9.3 next** | Protected Vercel Preview `ccip-staging-9f4n3bllq-ro-ro4.vercel.app` deploys `626ef83668e59c8bd406b3639b34bb410300db93` in `fra1` against the separate Frankfurt Supabase staging project with synthetic/test data only. Production approval remains pending qualified Saudi legal/privacy review. |
 | Regulatory perimeter | **Production capabilities prohibited pending review** | Application forwarding plus CPA presents a material SAMA aggregation-licensing risk; Sandbox eligibility is unresolved. Real data, document collection, commissions/referrals, and bank integrations remain prohibited. This is AI-generated risk analysis, not legal advice or approval. |
 
 ## Next approved action
 
 Execute the next unfinished application milestone recorded in
 `docs/EXECUTION_STATUS.md`. The Database Phase roadmap is complete through
-`0053`; P9.2 staging deployment is the next active delivery after its recorded
-owner-controlled inputs are available.
+`0053`; P9.3 operational verification is the next active delivery and must not
+be folded into the completed P9.2 deployment record.
 
 ## Current blockers
 
@@ -63,13 +63,11 @@ owner-controlled inputs are available.
 - Claude Code workflow activation requires verification of `ANTHROPIC_API_KEY`; until then it remains manual and gated.
 - Dependency Review requires enabling GitHub's dependency graph and setting `DEPENDENCY_REVIEW_ENABLED=true`.
 - The first-platform-administrator bootstrap procedure has not been manually exercised against a real local or staging Supabase project.
-- P9.2 requires separate private staging Supabase and Vercel projects, scoped
-  deployment authorization/environment values, and an owner-verified staging
-  administrator identity. Vercel/Supabase staging is approved for synthetic/
-  test data technical validation only; it is not production or compliance
-  approval. Exact
-  non-secret inputs and the resume point are recorded in
-  `docs/EXECUTION_STATUS.md` and `docs/DEPLOYMENT_RUNBOOK.md`.
+- P9.2 deployment inputs are resolved and the protected synthetic staging
+  Preview is verified. P9.3 still requires an independently owner-verified
+  staging administrator identity before the bootstrap exercise. Staging is not
+  production or compliance approval; exact non-secret evidence and the resume
+  point are recorded in `docs/EXECUTION_STATUS.md`.
 - Qualified Saudi counsel or SAMA must resolve the aggregation licensing and
   Sandbox questions. Qualified Saudi legal/privacy review must resolve
   controller/processor roles, lawful bases, transfers, sensitive-data

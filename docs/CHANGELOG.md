@@ -3,6 +3,23 @@
 This changelog records material governance-document changes. Product and code
 delivery history remains in Git commits and `docs/EXECUTION_STATUS.md`.
 
+## Unreleased — 2026-08-17
+
+### Changed
+
+- Completed P9.2 private synthetic staging deployment and reconciled roadmap
+  reporting to **28/30 milestones (93%)**.
+- Recorded the single Vercel Authentication-protected Preview, `fra1` Function
+  placement, exact deployed commit, Preview-scoped variable names,
+  health/readiness and bilingual UI evidence, and zero warning/error runtime
+  logs without recording secret values.
+- Recorded the staging security forward fix from three newly disclosed
+  transitive advisories to a zero-vulnerability local/Vercel build, with green
+  Application CI and Repository Policy.
+- Set P9.3 operational verification as the exact next atomic delivery and kept
+  the owner-verified administrator identity, production, legal/privacy, and
+  real-data boundaries explicit.
+
 ## Unreleased — 2026-08-14
 
 ### Added

@@ -1,9 +1,10 @@
 # CCIP v1 Execution Status
 
-**Last verified:** 2026-08-03 at P9.1 commit `ace16b3`.
-Repository Policy run 30836749288 and Application CI run 30836747504 passed.
+**Last verified:** 2026-08-17 at P9.2 deployed commit
+`626ef83668e59c8bd406b3639b34bb410300db93`. Repository Policy run
+32034124293 and Application CI run 32034124290 passed.
 
-**Program progress:** 27 of 30 roadmap milestones complete = **90%**.
+**Program progress:** 28 of 30 roadmap milestones complete = **93%**.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -28,22 +29,48 @@ are formally resolved. See `docs/DECISION_LOG.md` D-010.
 | 6 — Authentication and User Features | Complete | P6.1–P6.3 and the phase review are complete and green. |
 | 7 — Catalog Administration | Complete | P7.1–P7.4 and the architecture/security/performance/testing review are complete and green. |
 | 8 — Quality and Security | Complete | P8.1–P8.4 and the phase review are complete and green. |
-| 9 — Staging and Deployment | In progress | P9.1 is complete and green. Private Vercel/Supabase staging with synthetic/test data is approved; P9.2 remains blocked on staging project provisioning, scoped access/environment values, and the P9.3 administrator identity. Production approval remains pending qualified Saudi legal/privacy review. |
+| 9 — Staging and Deployment | In progress | P9.1 and P9.2 are complete and green. A Vercel Authentication-protected Preview in `fra1` runs the exact green commit against the separate Frankfurt Supabase staging project with synthetic/test data only. P9.3 remains separate and production approval remains pending qualified Saudi legal/privacy review. |
 | 10 — CCIP v1 Completion | Not started | Depends on phases 1–9. |
 
 ## Current task
 
-Execute **P9.2 Staging Deployment** as the next unfinished milestone.
+Execute **P9.3 Operational verification** as the next unfinished milestone.
 
 ## Exact next task
 
-After the owner provisions the approved private Vercel and Supabase staging
-resources and scoped access/environment values, deploy the exact green `main`
-commit using synthetic/test data only and record the deployment evidence. Do
-not commit credentials or personal IDs. This technical validation is not
-production approval or a claim of Saudi legal or regulatory compliance.
+Begin P9.3 only as a new atomic delivery. Use the existing protected Preview to
+exercise the full health/readiness, critical-journey, observability, alert,
+rollback, and first-administrator bootstrap runbook. The intended staging
+administrator identity must be independently owner-verified in Supabase; its
+email and UUID must not enter chat, source, logs, or documentation. Do not
+enable production or use real personal/financial data.
 
 ## Current validation and CI
+
+- P9.2 deployment: protected Preview
+  `https://ccip-staging-9f4n3bllq-ro-ro4.vercel.app` (deployment
+  `dpl_EBSvYAnmRR3EJjatNLK38CCLCsEv`) was created at 2026-08-17T13:21:05Z by
+  `rorowerwer`. It deploys
+  `626ef83668e59c8bd406b3639b34bb410300db93`, uses Vercel Authentication with
+  Standard Protection, runs Functions in `fra1`, and has exactly four
+  Preview-scoped variables: `NEXT_PUBLIC_SUPABASE_URL`,
+  `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `APP_VERSION`, and `LOG_LEVEL`.
+- P9.2 verification: an unauthenticated request redirected to Vercel SSO with
+  `no-store` and `noindex`; `/api/health` and `/api/ready` returned 200 with the
+  exact commit, request IDs, `no-store`, `fra1`, and 453 ms Supabase readiness.
+  Ten English/Arabic routes rendered with correct LTR/RTL direction, meaningful
+  headings, no horizontal overflow, broken images, framework overlay, or
+  browser warning/error logs. Vercel reported no warning/error runtime logs.
+- P9.2 security forward fix: Vercel initially identified three high-severity
+  transitive dependency advisories. Commit
+  `626ef83668e59c8bd406b3639b34bb410300db93` pinned patched versions; local and
+  Vercel audits then reported zero vulnerabilities. Local format, lint,
+  typecheck, 73/73 unit tests, 32/32 E2E tests, production build, bundle budget,
+  repository policy, links, YAML, and whitespace passed. Application CI run
+  32034124290, including 10/10 local-Supabase integration tests, and Repository
+  Policy run 32034124293 passed. The owner-provided staging database evidence
+  separately confirmed migrations `0001`–`0053`, warning/error lint, and the
+  recorded RLS/function/index audit.
 
 - P9.1 delivery: `vercel.json` pins a clean Next.js build plus bundle budget;
   the deployment runbook defines separated environments, the complete runtime
@@ -587,20 +614,16 @@ production approval or a claim of Saudi legal or regulatory compliance.
   Sandbox route, controller/processor roles, lawful bases, transfer mechanism,
   sensitive-data classification, retention, consent, contracts, and production
   region before any gated capability or production use.
-- **P9.2 remaining owner blocker:** no Vercel CLI/link, Vercel deployment
-  secrets, or staging Supabase configuration is present. The owner must
-  provision a separate staging Supabase project through migration `0053` and a
-  private Vercel staging project with environment-scoped
-  `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`,
-  `APP_VERSION`, and `LOG_LEVEL`. Deployment authorization may be supplied by
-  an owner-authenticated Vercel link or the equivalent scoped Vercel token,
-  organization ID, and project ID. Staging must contain synthetic/test data
-  only and must not point to production. P9.3 additionally requires an intended
-  staging administrator account whose identity the owner verifies in Supabase;
-  no email or UUID belongs in the repository or chat.
-- **Exact resume point:** deploy the current green `main` commit to the
-  provisioned staging environment under P9.2, then execute P9.3 health,
-  readiness, critical-journey, and first-administrator bootstrap verification.
+- **P9.2 status:** complete. The separate staging Supabase and Vercel projects,
+  scoped values, authenticated deployment authorization, protection, region,
+  exact commit, and synthetic/test-only boundary were verified without
+  committing or printing secret values.
+- **P9.3 remaining owner blocker:** the intended staging administrator account
+  must be independently owner-verified in Supabase before the first-admin
+  bootstrap exercise. No email or UUID belongs in the repository or chat.
+- **Exact resume point:** start P9.3 as a new delivery against the protected
+  Preview; execute health, readiness, critical-journey, observability, alert,
+  rollback, and first-administrator bootstrap verification without real data.
 - Existing repository-settings actions remain: branch protection, dependency
   graph/Dependency Review enablement, and optional Claude Review credentials.
 

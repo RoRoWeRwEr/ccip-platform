@@ -1,5 +1,15 @@
 # CCIP v1 Assurance Dossier
 
+> **Point-in-time review notice (updated 2026-08-17):** This dossier preserves
+> the independent repository-only assessment made before a staging environment
+> existed. P9.2 subsequently completed at deployed commit
+> `626ef83668e59c8bd406b3639b34bb410300db93`; the protected Preview,
+> health/readiness, bilingual UI, `fra1`, runtime logs, and zero-vulnerability
+> build were verified. Current progress is 28/30 (93%), and P9.3 is next. Use
+> `docs/EXECUTION_STATUS.md` for the authoritative live state; unchecked and
+> blocking statements below describe the original assurance snapshot unless
+> explicitly updated.
+
 **Independent review date:** 2026-08-14  
 **Assurance baseline:** `65a5d1d1503f0045c48373f7860e904145eda03e` (`main`, `origin/main`, and local `HEAD`)  
 **Review posture:** repository, local synthetic/test execution, and GitHub evidence only; no implementation change, production data, production system, legal opinion, or regulatory approval

@@ -16,8 +16,9 @@ including people new to cards, cashback and rewards users, travelers, and
 loyalty-program members. The implemented bilingual experience provides public
 discovery and publication-governed card details, comparison and calculation,
 deterministic recommendations, authentication and account features, and
-scope-governed administration. Staging deployment and operational verification
-remain unfinished and must not be presented as complete.
+scope-governed administration. Private synthetic staging deployment is
+complete; P9.3 operational verification and production approval remain
+unfinished and must not be presented as complete.
 
 CCIP is decision support, not a bank, lender, credit bureau, or financial
 adviser. It does not guarantee savings, eligibility, approval, credit-score
@@ -40,7 +41,7 @@ strategy and safeguards are in
 [`docs/DEFINITION_OF_DONE.md`](docs/DEFINITION_OF_DONE.md), and
 [`docs/RISK_REGISTER.md`](docs/RISK_REGISTER.md).
 
-## Current implementation status: staging inputs required
+## Current implementation status: private staging deployed
 
 Migrations `0001`–`0053` complete the current database roadmap: 53 migrations,
 111 tables, 22 pgTAP files, and 538 assertions covering the card/bank/reward
@@ -61,11 +62,13 @@ Application CI. The bilingual application includes public catalog discovery
 and detail, comparison and calculation, deterministic recommendations,
 authentication and user features, and scope-governed administration. Automated
 unit, integration, browser, accessibility, security, production-build, and
-bundle-budget gates are in place. Deployment readiness is complete; staging
-deployment and operational verification remain blocked on owner provisioning
-of the approved private Vercel/Supabase staging environment, scoped access and
-environment values, and an owner-verified administrator identity. Staging is
-limited to synthetic/test data and is not production or compliance approval.
+bundle-budget gates are in place. Deployment readiness and P9.2 private
+staging deployment are complete. The protected Vercel Preview runs commit
+`626ef83668e59c8bd406b3639b34bb410300db93` in `fra1` against the separate
+Frankfurt Supabase staging project using Preview-scoped browser-safe values.
+P9.3 operational verification still requires the separately owner-verified
+administrator identity. Staging is limited to synthetic/test data and is not
+production or compliance approval.
 See
 [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) for the current,
 factual status of every layer of the platform (database, tests, CI,
@@ -77,10 +80,11 @@ plus stable list sorting and pagination through migration `0051`'s bounded
 publication-aware list/search interface. Migration `0050` remains the
 single-card detail interface.
 
-CCIP v1 is **27 of 30 roadmap milestones complete (90%)**. P9.2 staging
-deployment is the exact next unfinished milestone once its owner-controlled
-inputs are available. See [`docs/EXECUTION_STATUS.md`](docs/EXECUTION_STATUS.md)
-for the authoritative resume point.
+CCIP v1 is **28 of 30 roadmap milestones complete (93%)**. P9.3 operational
+verification is the exact next unfinished milestone; it must remain separate
+from the completed P9.2 deployment delivery. See
+[`docs/EXECUTION_STATUS.md`](docs/EXECUTION_STATUS.md) for the authoritative
+resume point.
 
 The current regulatory assessment is AI-generated risk analysis, not legal
 advice or approval. Private staging is synthetic/test only. Production, real
