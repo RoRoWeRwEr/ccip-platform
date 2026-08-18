@@ -39,13 +39,14 @@ Phase 10 technical review is complete, but the milestone remains open at
 
 ## Exact next task
 
-Execute the single Phase 10 owner acceptance package in
-`docs/PHASE_10_OWNER_ACCEPTANCE_PACKAGE.md`: curate and independently review
-the official-source acceptance catalog; run moderated Arabic/English research;
-obtain qualified Saudi legal/privacy/SAMA conclusions; and configure the alert
-receiver plus second-Preview rehearsal. Keep Production disabled and continue
-using synthetic/test data only. The package and blank evidence templates are
-preparation, not completion evidence.
+Owner review of the proposed 12-card, three-issuer official-source inventory in
+`docs/PHASE_10_LAUNCH_CATALOG_CANDIDATES.md` is the exact next task. Do not
+write any candidate to private staging. After owner approval, the appointed
+`INDEPENDENT-BILINGUAL-REVIEWER-01` must independently verify every source,
+date, bilingual fact, fee, eligibility condition, reward, benefit, limitation,
+and exception. Current prospective both-gates coverage is 6/12 (50%), below
+the 95% threshold; the catalog gate and Phase 10 remain open. Keep Production
+disabled and use no customer, personal, or financial data.
 
 ## Current validation and CI
 

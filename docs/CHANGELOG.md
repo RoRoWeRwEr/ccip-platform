@@ -7,6 +7,11 @@ delivery history remains in Git commits and `docs/EXECUTION_STATUS.md`.
 
 ### Changed
 
+- Recorded the owner catalog-lead and redacted independent bilingual reviewer
+  role codes, plus a proposed 12-card/three-issuer official-source inventory.
+  Conservative prospective provenance/effective-date coverage is 6/12 (50%);
+  no candidate was staged or accepted and both catalog and Phase 10 gates stay
+  open pending owner approval and independent review.
 - Added the execution-ready Phase 10 owner acceptance package: official-source
   catalog provenance and scoring, bilingual moderated-research scripts and
   acceptance sheets, qualified Saudi legal/privacy/SAMA evidence questions,

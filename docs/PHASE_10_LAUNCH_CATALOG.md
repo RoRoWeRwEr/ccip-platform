@@ -10,7 +10,9 @@ private staging and must not be represented as live or production-approved.
 
 ## Owner decisions required before curation
 
-1. Name a catalog lead and an independent bilingual reviewer.
+1. Catalog lead appointed: `OWNER-CATALOG-LEAD`. Independent bilingual reviewer
+   appointed by role code: `INDEPENDENT-BILINGUAL-REVIEWER-01`. Personal
+   information must not be committed or printed in chat.
 2. Approve the initial bank/card inclusion list. The recommended option is the
    smallest useful set whose required fields can be fully verified.
 3. Approve a restricted evidence location if source captures or correspondence
@@ -99,3 +101,6 @@ a systematically weak group.
 
 Catalog completion does not itself authorize Production or establish legal or
 regulatory approval.
+
+The current proposed, not-yet-approved research inventory is in
+[Phase 10 launch-catalog candidates](PHASE_10_LAUNCH_CATALOG_CANDIDATES.md).
