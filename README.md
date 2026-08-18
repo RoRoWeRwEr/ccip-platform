@@ -84,7 +84,9 @@ CCIP v1 is **29 of 30 roadmap milestones complete (97%)**. The Phase 10
 technical review is complete, but curated catalog, moderated research, and
 qualified legal/privacy/SAMA acceptance gates remain. See
 [`docs/EXECUTION_STATUS.md`](docs/EXECUTION_STATUS.md) for the authoritative
-resume point.
+resume point and
+[`docs/PHASE_10_OWNER_ACCEPTANCE_PACKAGE.md`](docs/PHASE_10_OWNER_ACCEPTANCE_PACKAGE.md)
+for the execution-ready human/external acceptance checklists.
 
 The current regulatory assessment is AI-generated risk analysis, not legal
 advice or approval. Private staging is synthetic/test only. Production, real

@@ -39,10 +39,13 @@ Phase 10 technical review is complete, but the milestone remains open at
 
 ## Exact next task
 
-Approve and schedule the single Phase 10 owner acceptance package recorded in
-`docs/CCIP_V1_COMPLETION_REPORT.md`: curated official-source launch catalog,
-moderated Arabic/English research, and qualified Saudi legal/privacy/SAMA
-review. Keep Production disabled and continue using synthetic/test data only.
+Execute the single Phase 10 owner acceptance package in
+`docs/PHASE_10_OWNER_ACCEPTANCE_PACKAGE.md`: curate and independently review
+the official-source acceptance catalog; run moderated Arabic/English research;
+obtain qualified Saudi legal/privacy/SAMA conclusions; and configure the alert
+receiver plus second-Preview rehearsal. Keep Production disabled and continue
+using synthetic/test data only. The package and blank evidence templates are
+preparation, not completion evidence.
 
 ## Current validation and CI
 

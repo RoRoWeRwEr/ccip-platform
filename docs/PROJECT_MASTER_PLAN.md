@@ -288,4 +288,7 @@ synthetic Preview. **Phase 10 — CCIP v1 Completion** remains unfinished: its
 technical review is complete, while curated-catalog, moderated-research, and
 qualified legal/privacy/SAMA acceptance gates remain. Production approval
 remains conditional on every Definition-of-Done gate.
+The execution-ready checklists and evidence templates are indexed by
+`docs/PHASE_10_OWNER_ACCEPTANCE_PACKAGE.md`; their preparation does not satisfy
+the gates.
 `docs/EXECUTION_STATUS.md` is the live source for the exact current task.

@@ -1,7 +1,7 @@
 # CCIP v1 Phase 10 Completion Review
 
 **Review date:** 2026-08-18  
-**Repository baseline:** `e4adc1e27b23ac5005e38bd174dc852af583571f`  
+**Repository baseline:** `172f8bab1987a5a14bb86bf46b63dcaec8e868c4`
 **Deployed application baseline:** `626ef83668e59c8bd406b3639b34bb410300db93`  
 **Environment:** protected private Preview with separate synthetic-only staging  
 **Decision:** technically usable for continued private staging evaluation;
@@ -156,6 +156,10 @@ measured with an owner-approved sample.
 
 Human judgment cannot be replaced for user research, official catalog
 curation, legal/privacy/SAMA advice, bank contracts, or owner acceptance.
+
+The executable checklists, scripts, scoring sheets, decision questions, and
+evidence register for that work are now consolidated in the
+[Phase 10 owner acceptance package](PHASE_10_OWNER_ACCEPTANCE_PACKAGE.md).
 
 ## Owner handoff
 

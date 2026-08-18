@@ -7,6 +7,11 @@ delivery history remains in Git commits and `docs/EXECUTION_STATUS.md`.
 
 ### Changed
 
+- Added the execution-ready Phase 10 owner acceptance package: official-source
+  catalog provenance and scoring, bilingual moderated-research scripts and
+  acceptance sheets, qualified Saudi legal/privacy/SAMA evidence questions,
+  and protected-Preview alert/rollback rehearsal checklists. All templates
+  remain explicitly pending and do not change the 29/30 completion state.
 - Completed P9.3 private synthetic operational verification and reconciled
   roadmap reporting to **29/30 milestones (97%)**.
 - Recorded the owner-approved administrator bootstrap, revocation test, final
