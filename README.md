@@ -105,6 +105,7 @@ docs/
   PROJECT_CONTEXT.md         What CCIP is, who it's for, MVP scope
   PROJECT_MASTER_PLAN.md     Authoritative CCIP v1 phases and milestones
   PRODUCT_REQUIREMENTS.md    Testable v1 product requirements and exclusions
+  AI_ASSISTANT_PRODUCT_SPEC.md  Proposed post-v1 assistant product and delivery plan
   TECHNICAL_ARCHITECTURE.md  Application stack, boundaries, and operations
   DEFINITION_OF_DONE.md      Milestone, phase, and v1 completion gates
   EXECUTION_STATUS.md        Live autonomous-execution ledger and resume point

@@ -3,6 +3,17 @@
 This changelog records material governance-document changes. Product and code
 delivery history remains in Git commits and `docs/EXECUTION_STATUS.md`.
 
+## Unreleased — 2026-08-18
+
+### Added
+
+- Added `docs/AI_ASSISTANT_PRODUCT_SPEC.md` as the proposed post-v1 contract for
+  a bilingual, publication-grounded conversational assistant, including flows,
+  financial/privacy/prompt-injection safety, architecture, evaluation gates,
+  operations, and a phased roadmap.
+- Kept the assistant outside current v1 completion and production approval;
+  active Phase 10 acceptance and the D-010 regulatory hold remain unchanged.
+
 ## Unreleased — 2026-08-17
 
 ### Changed
