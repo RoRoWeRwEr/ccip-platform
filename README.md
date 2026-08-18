@@ -126,7 +126,8 @@ docs/
   01-brd/BRD.md              Original business requirements
   03-des/                    Decision-engine specification documents
   04-database/               Historical pre-implementation design drafts (superseded — see below)
-  00-overview/, 02-frs/, 05-ui-ux/, 06-admin/, 07-api/, 08-testing/, 09-roadmap/
+  08-testing/                Professional testing, access, NDA, consent, and feedback operations
+  00-overview/, 02-frs/, 05-ui-ux/, 06-admin/, 07-api/, 09-roadmap/
                              Reserved for future work; currently empty placeholders
 decisions/                  Reserved for architecture decision records; currently empty
 glossary/                   Reserved for a project glossary; currently empty

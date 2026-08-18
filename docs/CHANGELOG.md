@@ -18,6 +18,12 @@ delivery history remains in Git commits and `docs/EXECUTION_STATUS.md`.
 
 ### Changed
 
+- Added the Phase 10 professional testing plan, tester-access workflow, NDA
+  requirements checklist, bilingual consent process, and standardized feedback
+  template under `docs/08-testing/`; linked the package without claiming that
+  planning artifacts satisfy research, legal, privacy, SAMA, or Production
+  gates.
+
 - Recorded owner approval of the 12-card catalog for private-staging curation
   only, live verification that the UI lacks the required issuer/card targets,
   and the exact independent-review and DRAFT-only entry workbook. No staging

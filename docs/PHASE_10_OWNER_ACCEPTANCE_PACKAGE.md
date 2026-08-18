@@ -17,7 +17,7 @@ production-readiness statement.
 | Workstream | Execution document | Accountable participant | Automation boundary |
 |---|---|---|---|
 | Official-source launch catalog | [Launch catalog curation](PHASE_10_LAUNCH_CATALOG.md) | Owner-appointed catalog lead and bilingual reviewer | Formulas, completeness checks, and provenance sampling may be automated; source interpretation and acceptance are human |
-| Moderated user research | [Research protocol](PHASE_10_USER_RESEARCH.md) | Human moderator and owner/product reviewer | Score aggregation may be automated; participation, observation, and meaning judgments are human |
+| Moderated user research | [Research protocol](PHASE_10_USER_RESEARCH.md) and [professional testing package](08-testing/PROFESSIONAL_TESTING_PLAN.md) | Human moderator and owner/product reviewer | Access expiry, reminders, and score aggregation may be automated; consent, participation, observation, and meaning judgments are human |
 | Legal, privacy, and SAMA review | [Reviewer evidence package](PHASE_10_REGULATORY_REVIEW.md) | Qualified Saudi counsel, privacy reviewer, SAMA or authorized liaison, and owner | Evidence collation can be automated; opinions and regulator decisions cannot |
 | Alert receiver and rollback rehearsal | [Private staging operations](PHASE_10_STAGING_OPERATIONS.md) | Owner/operations participant with external-account access | Probes and evidence capture may be automated after the owner selects/configures a receiver and creates a second Preview |
 

@@ -1,5 +1,14 @@
 # Phase 10 Moderated Arabic/English User Research
 
+Operationalize this protocol with the linked
+[professional testing plan](08-testing/PROFESSIONAL_TESTING_PLAN.md),
+[tester-access workflow](08-testing/TESTER_ACCESS_WORKFLOW.md),
+[NDA checklist](08-testing/NDA_REQUIREMENTS_CHECKLIST.md),
+[consent process](08-testing/CONSENT_PROCESS.md), and
+[feedback template](08-testing/FEEDBACK_TEMPLATE.md). This protocol remains
+authoritative for the moderator script, scoring formula, and acceptance
+thresholds.
+
 ## Method and participant safety
 
 Run moderated sessions only against protected private staging with synthetic
