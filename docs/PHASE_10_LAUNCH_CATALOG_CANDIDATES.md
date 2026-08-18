@@ -6,7 +6,11 @@
 
 **Independent reviewer:** `INDEPENDENT-BILINGUAL-REVIEWER-01`
 
-**State:** proposed for owner approval; not accepted, staged, or published
+**Owner decision:** approved 2026-08-18 for protected private-staging curation
+only
+
+**State:** `DRAFT_PREPARATION`; not independently reviewed, staged, submitted,
+approved, scheduled, or published
 
 This redacted inventory records only public official-source facts. It contains
 no copied pages, customer information, applicant information, credentials, or
@@ -112,9 +116,21 @@ replaced before acceptance.
 8. Sign only with the reviewer role code, date, result, and redacted evidence
    reference. Personal details must remain outside the repository and chat.
 
-No record may be written to private staging until the owner approves a revised
-list and the independent review is complete. This inventory does not close the
-catalog gate or Phase 10.
+No record may be written to private staging before owner approval and a valid
+target exists. Any prepared record must remain `DRAFT` until independent
+review; it may not be submitted, approved, scheduled, or published. This
+inventory does not close the catalog gate or Phase 10.
+
+The owner subsequently approved this 12-card list for private-staging curation
+only. The live administration interface was inspected after approval. It can
+attach provenance and create publication drafts only for catalog targets that
+already exist; the protected staging target selector currently exposes only
+the P9.3 synthetic banks and cards. No approved issuer/card target therefore
+exists for these records. Reusing a synthetic target would create false
+provenance and is prohibited. No staging write was made. Preparation continues
+in the [independent review workbook](PHASE_10_LAUNCH_CATALOG_INDEPENDENT_REVIEW.md)
+until a separately controlled, schema-valid target-creation operation is
+available.
 
 [arb-terms]: https://www.alrajhibank.com.sa/en/-/media/Project/AlrajhiPWS/Shared/Home/Personal/Cards/Credit-Cards/Credit-Cards-TC-update/Credit-Cards-Eng.pdf
 [arb-charge-terms]: https://www.alrajhibank.com.sa/en/-/media/Project/AlrajhiPWS/Shared/Home/Personal/Cards/Terms-and-Conditions/Charge-Card-Eng.pdf

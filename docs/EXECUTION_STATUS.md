@@ -39,14 +39,17 @@ Phase 10 technical review is complete, but the milestone remains open at
 
 ## Exact next task
 
-Owner review of the proposed 12-card, three-issuer official-source inventory in
-`docs/PHASE_10_LAUNCH_CATALOG_CANDIDATES.md` is the exact next task. Do not
-write any candidate to private staging. After owner approval, the appointed
-`INDEPENDENT-BILINGUAL-REVIEWER-01` must independently verify every source,
-date, bilingual fact, fee, eligibility condition, reward, benefit, limitation,
-and exception. Current prospective both-gates coverage is 6/12 (50%), below
-the 95% threshold; the catalog gate and Phase 10 remain open. Keep Production
-disabled and use no customer, personal, or financial data.
+The owner approved the proposed 12-card, three-issuer list on 2026-08-18 for
+private-staging curation only. The authenticated staging UI was inspected but
+no write was made: it can create provenance/publication drafts only for
+existing targets, and currently offers only P9.3 synthetic banks/cards. The
+exact next task is controlled creation of the three issuer and twelve card
+targets in protected staging without publication, followed by the independent
+review in `docs/PHASE_10_LAUNCH_CATALOG_INDEPENDENT_REVIEW.md`. Do not reuse
+synthetic targets, bypass RLS, submit, approve, schedule, or publish. Current
+prospective coverage remains 6/12 (50%); the catalog gate and Phase 10 remain
+open. Keep Production disabled and use no customer, personal, or financial
+data.
 
 ## Current validation and CI
 

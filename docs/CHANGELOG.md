@@ -7,6 +7,10 @@ delivery history remains in Git commits and `docs/EXECUTION_STATUS.md`.
 
 ### Changed
 
+- Recorded owner approval of the 12-card catalog for private-staging curation
+  only, live verification that the UI lacks the required issuer/card targets,
+  and the exact independent-review and DRAFT-only entry workbook. No staging
+  write, submission, approval, scheduling, or publication occurred.
 - Recorded the owner catalog-lead and redacted independent bilingual reviewer
   role codes, plus a proposed 12-card/three-issuer official-source inventory.
   Conservative prospective provenance/effective-date coverage is 6/12 (50%);

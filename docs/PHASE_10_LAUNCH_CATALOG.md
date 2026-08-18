@@ -104,3 +104,6 @@ regulatory approval.
 
 The current proposed, not-yet-approved research inventory is in
 [Phase 10 launch-catalog candidates](PHASE_10_LAUNCH_CATALOG_CANDIDATES.md).
+The owner approved that list on 2026-08-18 for private-staging curation only.
+The exact reviewer procedure and draft-entry guardrails are in the
+[independent review workbook](PHASE_10_LAUNCH_CATALOG_INDEPENDENT_REVIEW.md).
