@@ -1,6 +1,6 @@
 # CCIP Project Dashboard
 
-**Baseline verified:** 2026-08-17 against deployed `main` at `626ef83`
+**Baseline verified:** 2026-08-18 against deployed application at `626ef83`
 **Evidence boundary:** committed repository state and GitHub checks for that
 commit. Uncommitted governance-document changes are WIP, not completion
 evidence.
@@ -9,12 +9,12 @@ evidence.
 
 | Item | Status |
 |---|---|
-| Current phase | Phase 9 — Staging and Deployment |
-| Current milestone | P9.3 — Operational verification (not started in P9.2 delivery) |
-| Completed | Database Foundation; P2.1–P2.4; P3.1–P3.4; P4.1–P4.3; P5.1–P5.3; P6.1–P6.3; P7.1–P7.4; P8.1–P8.4; P9.1–P9.2 |
-| Overall progress | **28 of 30 milestones complete (93%)**; not an effort-spent measure |
-| Work in progress | P9.2 documentation reconciliation only; P9.3 has not started. |
-| Remaining | P9.3 and the Phase 10 completion milestone (2 of 30) |
+| Current phase | Phase 10 — CCIP v1 Completion |
+| Current milestone | Final completion review |
+| Completed | Database Foundation; P2.1–P2.4; P3.1–P3.4; P4.1–P4.3; P5.1–P5.3; P6.1–P6.3; P7.1–P7.4; P8.1–P8.4; P9.1–P9.3 |
+| Overall progress | **29 of 30 milestones complete (97%)**; not an effort-spent measure |
+| Work in progress | Phase 10 final review |
+| Remaining | Phase 10 completion milestone (1 of 30) |
 | Current branch | `main`; deployed code commit `626ef83668e59c8bd406b3639b34bb410300db93` matches `origin/main` before this documentation reconciliation |
 | Latest delivery commit | `626ef83668e59c8bd406b3639b34bb410300db93` — `fix(security): refresh vulnerable transitive dependencies` |
 | Verified CI | Application CI run 32034124290 and Repository Policy run 32034124293 passed for `626ef83` |
@@ -24,26 +24,24 @@ evidence.
 
 The 30-milestone denominator treats the completed Database Foundation as one
 milestone, Phases 2–9 use their numbered milestones, and Phase 10 is one final
-completion milestone. Twenty-eight are complete. P9.2 is countable because the
+completion milestone. Twenty-nine are complete. P9.3 is countable because the
 protected Preview deploys the exact green `626ef83` commit and its deployment,
-health/readiness, bilingual UI, protection, region, logs, and security audit
-were verified. An unstarted or blocked milestone is not counted as complete.
+health/readiness, administrator lifecycle, synthetic publication, critical
+journeys, bilingual UI, protection, region, logs, and security audit were
+verified. An unstarted or blocked milestone is not counted as complete.
 
 ## Critical path and dependencies
 
 1. P9.2 has deployed the exact green `main` commit to protected synthetic
    staging and recorded non-secret technical-validation evidence.
-2. The owner independently verifies the intended staging administrator without
-   placing its email/UUID in source or chat.
-3. P9.3 verifies health, readiness, critical journeys, observability, and administrator
-   bootstrap in staging.
-4. Phase 10 performs final reviews, full validation, deployed smoke tests, and
+2. The owner-approved P9.3 administrator and operational exercise is complete.
+3. Phase 10 performs final reviews, full validation, deployed smoke tests, and
    the completion report.
 
 The official-source publication model, Supabase Auth/RLS, deterministic
 calculation semantics, bilingual content, accessible interaction patterns,
 deployment contract, and rollback procedure are complete in the repository.
-The remaining administrator identity input blocks only the P9.3 bootstrap path.
+No staging administrator identity blocker remains.
 
 ## Blockers and constraints
 
@@ -54,18 +52,17 @@ The remaining administrator identity input blocks only the P9.3 bootstrap path.
 | Licensing perimeter | Application forwarding plus CPA materially overlaps SAMA aggregation requirements; Sandbox eligibility is unresolved | Obtain qualified Saudi counsel or SAMA advice before relying on a licence or Sandbox path. |
 | Production privacy | Controller/processor roles, lawful bases, transfer mechanism, sensitive-data classification, retention, consent, and production region are unresolved | Qualified Saudi legal/privacy review is a production gate. Frankfurt/Dubai are staging candidates only. |
 | Resolved staging setup | Separate Supabase/Vercel staging projects, scoped deployment authorization, Preview variables, Standard Protection, and `fra1` are verified | P9.2 completed without committing or printing secret values. |
-| Blocking owner setup | An intended staging administrator identity has not been owner-verified | P9.3 cannot safely exercise first-administrator bootstrap. No email or UUID belongs in the repository. |
 | Owner setup | Branch protection/ruleset configuration is not evidenced as complete | Governance risk; does not change the P9.2 blocker. |
 | Owner setup | Dependency graph and `DEPENDENCY_REVIEW_ENABLED=true` are not evidenced | Dependency Review remains skipped. |
 | Optional owner setup | Claude Review secret/variable are not evidenced | Optional review automation remains inactive. |
-| Evidence gap | Initial deployed readiness/protection/UI evidence exists; alert, rollback, administrator-bootstrap, representative-scale, and user-research evidence remains | Must be gathered in P9.3/Phase 10 before completion. |
+| Evidence gap | No alert destination or second immutable rollback target exists; representative-scale and moderated user-research evidence remains | Must be resolved or explicitly classified in Phase 10; it does not authorize Production. |
 
 ## Forecast
 
-The first successful protected staging deployment now exists. A completion
-date still depends on the owner-verified P9.3 administrator identity, the
-operational exercise, and Phase 10 acceptance/research decisions; reforecast
-only after those dependencies are scheduled.
+The protected synthetic staging deployment and P9.3 exercise are complete. A
+completion date still depends on Phase 10 acceptance/research decisions and
+external production gates; reforecast only after those dependencies are
+scheduled.
 
 ## Project health assessment
 
@@ -82,16 +79,16 @@ only after those dependencies are scheduled.
 | Accessibility | 86 | Automated serious-impact checks plus keyboard, zoom, direction, and mobile coverage are complete; deployed/manual assistive-technology evidence remains a release consideration. |
 
 **Weighted project health score: 86/100.** The implemented and locally/CI-
-verified product is strong. The score remains below launch-ready because P9.3
-operational/admin evidence and production legal/privacy, region,
+verified product is strong. The score remains below launch-ready because
+production legal/privacy, region, alert/rollback,
 early-migration coverage, and repository-setting decisions remain.
 
 ## Owner decision batch
 
 The exact blocking batch is authoritative in `docs/EXECUTION_STATUS.md`:
 
-1. Identify and independently verify the intended staging administrator in Supabase without
-   recording personal identifiers in source or chat.
+1. Decide and schedule the remaining Phase 10 research and production-gate
+   actions after reviewing the final completion report.
 
 All staging data must be synthetic/test data. Production hosting/region and
 launch approval remain conditional on qualified Saudi legal/privacy review.
@@ -105,7 +102,6 @@ before Phase 10 completion but do not independently enable a deployment.
 
 ## Exactly one next execution milestone
 
-**P9.3 — operational verification:** begin as a new atomic delivery only after
-the staging administrator identity is independently owner-verified. Exercise
-the full runbook against the existing protected Preview; do not enable
+**Phase 10 — CCIP v1 completion:** conduct the final evidence-based review,
+full validation, deployed smoke checks, and completion report; do not enable
 production or use real personal/financial data.

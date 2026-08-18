@@ -12,9 +12,8 @@ The Database Phase is complete and the owner-authorized CCIP v1 application
 execution program is active. `docs/PROJECT_MASTER_PLAN.md` is the authoritative
 roadmap and `docs/EXECUTION_STATUS.md` is the live milestone ledger.
 
-Program progress is **28 of 30 milestones complete (93%)**. Phases 1–8 and
-P9.1–P9.2 are complete. P9.3 operational verification is the next unfinished
-milestone and remains a separate delivery.
+Program progress is **29 of 30 milestones complete (97%)**. Phases 1–9 are
+complete. The Phase 10 final review is the next unfinished milestone.
 
 Migrations `0001`–`0053` are immutable historical migrations. Migration
 `0051_create_published_card_search_interface.sql` completes the revised
@@ -47,27 +46,26 @@ branch, Draft PR, or manual merge.
 | Frontend | **Phase 8 complete** | Public, comparison/calculation, recommendation, authentication/user, and governed administration phases are complete; P8.1–P8.4 quality, accessibility, responsive, security, performance, and resilience reviews are green. |
 | Recommendation experience | **Phase 5 complete** | Deterministic fixed-valuation ranking, the bilingual guest journey, and the ownership-scoped authenticated history/save boundary are green over migration 0052's publication-safe candidate interface. |
 | Authentication and user features | **Phase 6 complete** | Bilingual identity, profile, collections, saved cards, engine-owned comparisons, bounded recommendation history, lifecycle disclosure, and the phase review are green. |
-| Deployment | **P9.1–P9.2 complete; P9.3 next** | Protected Vercel Preview `ccip-staging-9f4n3bllq-ro-ro4.vercel.app` deploys `626ef83668e59c8bd406b3639b34bb410300db93` in `fra1` against the separate Frankfurt Supabase staging project with synthetic/test data only. Production approval remains pending qualified Saudi legal/privacy review. |
+| Deployment | **Phase 9 complete** | Protected Vercel Preview `ccip-staging-9f4n3bllq-ro-ro4.vercel.app` deploys `626ef83668e59c8bd406b3639b34bb410300db93` in `fra1` against separate synthetic-only staging. P9.3 verified administrator lifecycle, published fixtures, critical journeys, readiness, logs, and UI. Production approval remains pending qualified Saudi legal/privacy review. |
 | Regulatory perimeter | **Production capabilities prohibited pending review** | Application forwarding plus CPA presents a material SAMA aggregation-licensing risk; Sandbox eligibility is unresolved. Real data, document collection, commissions/referrals, and bank integrations remain prohibited. This is AI-generated risk analysis, not legal advice or approval. |
 
 ## Next approved action
 
 Execute the next unfinished application milestone recorded in
 `docs/EXECUTION_STATUS.md`. The Database Phase roadmap is complete through
-`0053`; P9.3 operational verification is the next active delivery and must not
-be folded into the completed P9.2 deployment record.
+`0053`; Phase 10 final review is the next active delivery.
 
 ## Current blockers
 
 - Repository owner must configure branch protection per `docs/BRANCH_PROTECTION.md` for the direct-to-main workflow.
 - Claude Code workflow activation requires verification of `ANTHROPIC_API_KEY`; until then it remains manual and gated.
 - Dependency Review requires enabling GitHub's dependency graph and setting `DEPENDENCY_REVIEW_ENABLED=true`.
-- The first-platform-administrator bootstrap procedure has not been manually exercised against a real local or staging Supabase project.
-- P9.2 deployment inputs are resolved and the protected synthetic staging
-  Preview is verified. P9.3 still requires an independently owner-verified
-  staging administrator identity before the bootstrap exercise. Staging is not
-  production or compliance approval; exact non-secret evidence and the resume
-  point are recorded in `docs/EXECUTION_STATUS.md`.
+- The owner-approved first-platform-administrator bootstrap, revocation test,
+  and final reassignment passed against staging. The alert destination and a
+  second immutable rollback target remain absent.
+- Protected synthetic staging is verified. Staging is not production or
+  compliance approval; exact non-secret evidence and the resume point are
+  recorded in `docs/EXECUTION_STATUS.md`.
 - Qualified Saudi counsel or SAMA must resolve the aggregation licensing and
   Sandbox questions. Qualified Saudi legal/privacy review must resolve
   controller/processor roles, lawful bases, transfers, sensitive-data

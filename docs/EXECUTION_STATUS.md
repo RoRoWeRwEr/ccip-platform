@@ -1,10 +1,10 @@
 # CCIP v1 Execution Status
 
-**Last verified:** 2026-08-17 at P9.2 deployed commit
+**Last verified:** 2026-08-18 during P9.3 against deployed commit
 `626ef83668e59c8bd406b3639b34bb410300db93`. Repository Policy run
-32034124293 and Application CI run 32034124290 passed.
+32034124293 and Application CI run 32034124290 passed for that code baseline.
 
-**Program progress:** 28 of 30 roadmap milestones complete = **93%**.
+**Program progress:** 29 of 30 roadmap milestones complete = **97%**.
 
 This is the authoritative live ledger for autonomous CCIP v1 execution. Update
 it after every completed milestone and before any session handoff. Do not mark a
@@ -29,21 +29,19 @@ are formally resolved. See `docs/DECISION_LOG.md` D-010.
 | 6 — Authentication and User Features | Complete | P6.1–P6.3 and the phase review are complete and green. |
 | 7 — Catalog Administration | Complete | P7.1–P7.4 and the architecture/security/performance/testing review are complete and green. |
 | 8 — Quality and Security | Complete | P8.1–P8.4 and the phase review are complete and green. |
-| 9 — Staging and Deployment | In progress | P9.1 and P9.2 are complete and green. A Vercel Authentication-protected Preview in `fra1` runs the exact green commit against the separate Frankfurt Supabase staging project with synthetic/test data only. P9.3 remains separate and production approval remains pending qualified Saudi legal/privacy review. |
-| 10 — CCIP v1 Completion | Not started | Depends on phases 1–9. |
+| 9 — Staging and Deployment | Complete | P9.1–P9.3 are complete. The protected Preview in `fra1` runs the exact green commit against separate synthetic-only staging; administrator bootstrap/revocation/reassignment, published fixtures, critical public/user/admin journeys, readiness, logs, and browser behavior were verified. |
+| 10 — CCIP v1 Completion | In progress | Final review is the only remaining roadmap milestone; production approval remains gated. |
 
 ## Current task
 
-Execute **P9.3 Operational verification** as the next unfinished milestone.
+Execute the **Phase 10 CCIP v1 completion review** as the next unfinished milestone.
 
 ## Exact next task
 
-Begin P9.3 only as a new atomic delivery. Use the existing protected Preview to
-exercise the full health/readiness, critical-journey, observability, alert,
-rollback, and first-administrator bootstrap runbook. The intended staging
-administrator identity must be independently owner-verified in Supabase; its
-email and UUID must not enter chat, source, logs, or documentation. Do not
-enable production or use real personal/financial data.
+Run the final architecture, security, privacy, UX/accessibility, performance,
+documentation, automated-validation, and deployed-smoke review. Publish the
+completion report with unmet gates clearly classified. Do not enable
+production or use real personal/financial data.
 
 ## Current validation and CI
 
@@ -618,12 +616,13 @@ enable production or use real personal/financial data.
   scoped values, authenticated deployment authorization, protection, region,
   exact commit, and synthetic/test-only boundary were verified without
   committing or printing secret values.
-- **P9.3 remaining owner blocker:** the intended staging administrator account
-  must be independently owner-verified in Supabase before the first-admin
-  bootstrap exercise. No email or UUID belongs in the repository or chat.
-- **Exact resume point:** start P9.3 as a new delivery against the protected
-  Preview; execute health, readiness, critical-journey, observability, alert,
-  rollback, and first-administrator bootstrap verification without real data.
+- **P9.3 result:** the owner-approved staging administrator bootstrap,
+  revocation test, and final reassignment passed without recording an email or
+  UUID. Representative synthetic publication, public, authenticated, and admin
+  journeys passed; see `docs/P9_3_OPERATIONAL_VERIFICATION.md`.
+- **Exact resume point:** execute Phase 10 final review. Treat the absent alert
+  destination, single immutable Preview, representative-scale evidence, and
+  moderated user research as explicit residual gates; do not enable production.
 - Existing repository-settings actions remain: branch protection, dependency
   graph/Dependency Review enablement, and optional Claude Review credentials.
 

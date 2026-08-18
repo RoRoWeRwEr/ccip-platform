@@ -103,9 +103,9 @@ the fact/hypothesis/counsel-question separation.
 
 ## Planning baseline and roadmap logic
 
-As verified on 2026-08-17, 28 of 30 roadmap milestones are complete (Phase 1 as
+As verified on 2026-08-18, 29 of 30 roadmap milestones are complete (Phase 1 as
 one foundation milestone, P2.1–P2.4, P3.1–P3.4, P4.1–P4.3, P5.1–P5.3, and
-P6.1–P6.3, P7.1–P7.4, P8.1–P8.4, and P9.1–P9.2), so milestone-count progress is **93%**. This is a transparent planning
+P6.1–P6.3, P7.1–P7.4, P8.1–P8.4, and P9.1–P9.3), so milestone-count progress is **97%**. This is a transparent planning
 measure, not an effort-spent estimate; milestones vary substantially in size.
 P9.2 deploys `626ef83668e59c8bd406b3639b34bb410300db93`; Application CI run
 32034124290 and Repository Policy run 32034124293 passed.
@@ -283,10 +283,8 @@ server-only and use the anonymous/authenticated clients for RLS-enforced paths.
 
 ## Current next milestone
 
-The next unfinished milestone is **P9.3 operational verification**. P9.1's
-deployment contract and P9.2's protected private Preview deployment are
-complete and green. P9.3 must run as a separate delivery against synthetic/test
-data and still requires an independently owner-verified staging administrator
-identity for the bootstrap exercise. Production approval remains conditional
-on qualified Saudi legal/privacy review.
+P9.3 operational verification is complete against the protected private
+synthetic Preview. The next unfinished milestone is **Phase 10 — CCIP v1
+Completion**. Production approval remains conditional on qualified Saudi
+legal/privacy review and every remaining Definition-of-Done gate.
 `docs/EXECUTION_STATUS.md` is the live source for the exact current task.

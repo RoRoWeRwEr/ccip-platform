@@ -1,11 +1,12 @@
 # CCIP v1 Assurance Dossier
 
-> **Point-in-time review notice (updated 2026-08-17):** This dossier preserves
+> **Point-in-time review notice (updated 2026-08-18):** This dossier preserves
 > the independent repository-only assessment made before a staging environment
 > existed. P9.2 subsequently completed at deployed commit
 > `626ef83668e59c8bd406b3639b34bb410300db93`; the protected Preview,
 > health/readiness, bilingual UI, `fra1`, runtime logs, and zero-vulnerability
-> build were verified. Current progress is 28/30 (93%), and P9.3 is next. Use
+> build were verified. P9.3 subsequently passed; current progress is 29/30
+> (97%), and Phase 10 is next. Use
 > `docs/EXECUTION_STATUS.md` for the authoritative live state; unchecked and
 > blocking statements below describe the original assurance snapshot unless
 > explicitly updated.

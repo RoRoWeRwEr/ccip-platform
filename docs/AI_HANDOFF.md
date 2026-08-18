@@ -24,13 +24,12 @@ Exact next execution work must always be copied from the newest verified
 
 ## Verified current handoff
 
-P9.2 deploys `main` commit
-`626ef83668e59c8bd406b3639b34bb410300db93` to the protected private Preview;
-28 of 30 roadmap milestones are complete (93%). P9.3 operational verification
-is the exact next atomic delivery and requires an independently owner-verified
-staging administrator identity for bootstrap. No email or UUID belongs in
-chat/source. Production approval and Saudi legal/regulatory compliance remain
-explicitly outside this staging decision.
+P9.3 passed against the protected private Preview running
+`626ef83668e59c8bd406b3639b34bb410300db93`; 29 of 30 roadmap milestones are
+complete (97%). The owner-approved administrator lifecycle and representative
+synthetic journeys passed without recording an identifier. Phase 10 final
+review is the exact next atomic delivery. Production approval and Saudi legal/
+regulatory compliance remain explicitly outside this staging decision.
 
 D-010 additionally prohibits production, real personal/financial data,
 application forwarding, bank-document collection, commissions, paid referrals,

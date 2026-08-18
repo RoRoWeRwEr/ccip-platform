@@ -49,13 +49,14 @@ For the CCIP v1 program, complete and publish each milestone, update
 only when an allowed blocker or session boundary prevents continued execution;
 it must identify the exact next task and leave no undocumented local changes.
 
-Current verified resume point: P9.2 deploys green `main` commit
-`626ef83668e59c8bd406b3639b34bb410300db93` to the protected private Preview;
-28 of 30 milestones are complete (93%). P9.3 operational verification is the
-next atomic delivery and has not started. It requires an independently
-owner-verified staging administrator identity for bootstrap; no email or UUID
-belongs in chat or source. This staging approval does not extend to production
-or Saudi legal/regulatory compliance.
+Current verified resume point: P9.3 operational verification passed against the
+protected private Preview running
+`626ef83668e59c8bd406b3639b34bb410300db93`; 29 of 30 milestones are complete
+(97%). The owner-approved administrator bootstrap/revocation/reassignment and
+representative synthetic public, authenticated, publication, and admin
+journeys passed without recording an identifier. Phase 10 final review is the
+next atomic delivery. This staging approval does not extend to production or
+Saudi legal/regulatory compliance.
 
 The regulatory boundary in `docs/DECISION_LOG.md` D-010 is mandatory: do not
 enable production, real personal/financial data, application forwarding, bank-

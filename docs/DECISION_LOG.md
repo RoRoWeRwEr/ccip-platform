@@ -21,14 +21,15 @@ security, cost, or architecture boundaries require the authority defined in
 | D-009 | 2026-08-12 | Approve Vercel and Supabase for a private, non-production staging environment using synthetic/test data only. | Authorizes P9.2 technical validation after provisioning. It is not production approval and makes no claim of Saudi legal or regulatory compliance; production launch remains conditional on qualified Saudi legal/privacy review. | Accepted for staging only |
 | D-010 | 2026-08-14 | Preserve a regulatory hold on production and regulated-adjacent capabilities while treating current findings as AI-generated risk analysis. | Production, real personal/financial data, application forwarding, bank-document collection, commissions, paid referrals, and bank integrations remain prohibited until applicable legal, privacy, contractual, and SAMA requirements are formally resolved. | Accepted risk boundary |
 | D-011 | 2026-08-17 | Count P9.2 complete and report roadmap progress as 28/30 = 93%. | Protected Preview deployment `dpl_EBSvYAnmRR3EJjatNLK38CCLCsEv` runs exact green commit `626ef83` with verified protection, region, health/readiness, bilingual UI, logs, and zero-vulnerability build evidence. P9.3 remains separate. | Accepted for governance reporting |
+| D-012 | 2026-08-18 | Count P9.3 complete and report roadmap progress as 29/30 = 97%. | Owner-approved administrator bootstrap/revocation/reassignment, synthetic controlled publication, critical public/user/admin journeys, readiness, runtime, and browser evidence passed. Alert delivery and a second rollback target remain Phase 10/launch limitations. | Accepted for governance reporting |
 
 ## Planning assumptions
 
 | ID | Assumption | Validation trigger |
 |---|---|---|
-| A-001 | The two remaining milestones can be forecast only after the P9.3 owner-controlled administrator identity and acceptance inputs are scheduled. | Reforecast after P9.3 dependencies are scheduled. |
+| A-001 | The remaining Phase 10 milestone can be forecast only after acceptance/research inputs are scheduled. | Reforecast after Phase 10 dependencies are scheduled. |
 | A-002 | Existing schema supports v1 unless implementation reveals a concrete gap. | Each milestone's design/test work; any gap uses a narrow forward migration. |
-| A-003 | Owner will independently verify the staging administrator identity needed for P9.3; P9.2 accounts, scoped values, and deployment authorization are resolved. | Validate identity out of chat/source against the P9.3 runbook. |
+| A-003 | The staging administrator lifecycle can be verified without recording the identity in chat/source. | Verified during P9.3; retain identifier-minimizing procedure for production. |
 | A-004 | A curated launch catalog is preferable to broad but weakly sourced coverage. | Owner decision and catalog readiness assessment before Phase 10 completion. |
 | A-005 | Public-value targets can be measured in staging with moderated research and acceptance fixtures. | Approve and execute the research method/sample before Phase 10 completion. |
 
@@ -125,9 +126,8 @@ assessment as SAMA, PDPL, legal, privacy, or production approval.
 
 ## Current decision boundary
 
-Routine repository work through P9.2 is complete. D-009 resolves the staging-
-provider and permitted-data decision, and D-011 records the verified protected
-deployment. P9.3 is next and still requires an independently owner-verified
-staging administrator identity. Production hosting/region and legal/privacy
-approval remain unresolved production gates.
+Routine repository work through P9.3 is complete. D-009 resolves the staging-
+provider and permitted-data decision, D-011 records the protected deployment,
+and D-012 records operational verification. Phase 10 is next. Production
+hosting/region and legal/privacy approval remain unresolved production gates.
 `docs/EXECUTION_STATUS.md` contains the exact resume checklist.
