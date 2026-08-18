@@ -34,14 +34,15 @@ are formally resolved. See `docs/DECISION_LOG.md` D-010.
 
 ## Current task
 
-Execute the **Phase 10 CCIP v1 completion review** as the next unfinished milestone.
+Phase 10 technical review is complete, but the milestone remains open at
+**29/30 (97%)** pending owner/human/external acceptance evidence.
 
 ## Exact next task
 
-Run the final architecture, security, privacy, UX/accessibility, performance,
-documentation, automated-validation, and deployed-smoke review. Publish the
-completion report with unmet gates clearly classified. Do not enable
-production or use real personal/financial data.
+Approve and schedule the single Phase 10 owner acceptance package recorded in
+`docs/CCIP_V1_COMPLETION_REPORT.md`: curated official-source launch catalog,
+moderated Arabic/English research, and qualified Saudi legal/privacy/SAMA
+review. Keep Production disabled and continue using synthetic/test data only.
 
 ## Current validation and CI
 

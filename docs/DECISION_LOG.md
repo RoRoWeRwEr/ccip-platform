@@ -128,6 +128,7 @@ assessment as SAMA, PDPL, legal, privacy, or production approval.
 
 Routine repository work through P9.3 is complete. D-009 resolves the staging-
 provider and permitted-data decision, D-011 records the protected deployment,
-and D-012 records operational verification. Phase 10 is next. Production
+and D-012 records operational verification. Phase 10 technical review is
+complete; the O-001–O-003 owner acceptance package remains next. Production
 hosting/region and legal/privacy approval remain unresolved production gates.
 `docs/EXECUTION_STATUS.md` contains the exact resume checklist.

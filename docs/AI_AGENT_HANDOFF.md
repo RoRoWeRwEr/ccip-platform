@@ -54,9 +54,10 @@ protected private Preview running
 `626ef83668e59c8bd406b3639b34bb410300db93`; 29 of 30 milestones are complete
 (97%). The owner-approved administrator bootstrap/revocation/reassignment and
 representative synthetic public, authenticated, publication, and admin
-journeys passed without recording an identifier. Phase 10 final review is the
-next atomic delivery. This staging approval does not extend to production or
-Saudi legal/regulatory compliance.
+journeys passed without recording an identifier. Phase 10 technical review is
+complete, but the milestone remains open pending the owner acceptance package
+in `docs/CCIP_V1_COMPLETION_REPORT.md`. This staging approval does not extend
+to production or Saudi legal/regulatory compliance.
 
 The regulatory boundary in `docs/DECISION_LOG.md` D-010 is mandatory: do not
 enable production, real personal/financial data, application forwarding, bank-

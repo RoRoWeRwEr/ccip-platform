@@ -80,8 +80,9 @@ plus stable list sorting and pagination through migration `0051`'s bounded
 publication-aware list/search interface. Migration `0050` remains the
 single-card detail interface.
 
-CCIP v1 is **29 of 30 roadmap milestones complete (97%)**. The Phase 10 final
-completion review is the exact next unfinished milestone. See
+CCIP v1 is **29 of 30 roadmap milestones complete (97%)**. The Phase 10
+technical review is complete, but curated catalog, moderated research, and
+qualified legal/privacy/SAMA acceptance gates remain. See
 [`docs/EXECUTION_STATUS.md`](docs/EXECUTION_STATUS.md) for the authoritative
 resume point.
 

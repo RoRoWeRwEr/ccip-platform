@@ -13,7 +13,7 @@ evidence.
 | Current milestone | Final completion review |
 | Completed | Database Foundation; P2.1–P2.4; P3.1–P3.4; P4.1–P4.3; P5.1–P5.3; P6.1–P6.3; P7.1–P7.4; P8.1–P8.4; P9.1–P9.3 |
 | Overall progress | **29 of 30 milestones complete (97%)**; not an effort-spent measure |
-| Work in progress | Phase 10 final review |
+| Work in progress | Phase 10 technical review complete; owner acceptance package pending |
 | Remaining | Phase 10 completion milestone (1 of 30) |
 | Current branch | `main`; deployed code commit `626ef83668e59c8bd406b3639b34bb410300db93` matches `origin/main` before this documentation reconciliation |
 | Latest delivery commit | `626ef83668e59c8bd406b3639b34bb410300db93` — `fix(security): refresh vulnerable transitive dependencies` |
@@ -102,6 +102,7 @@ before Phase 10 completion but do not independently enable a deployment.
 
 ## Exactly one next execution milestone
 
-**Phase 10 — CCIP v1 completion:** conduct the final evidence-based review,
-full validation, deployed smoke checks, and completion report; do not enable
-production or use real personal/financial data.
+**Phase 10 — owner acceptance package:** approve and schedule the curated
+official-source launch catalog, moderated Arabic/English research, and
+qualified Saudi legal/privacy/SAMA review defined in the completion report; do
+not enable production or use real personal/financial data.

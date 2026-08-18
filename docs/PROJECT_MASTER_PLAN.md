@@ -284,7 +284,8 @@ server-only and use the anonymous/authenticated clients for RLS-enforced paths.
 ## Current next milestone
 
 P9.3 operational verification is complete against the protected private
-synthetic Preview. The next unfinished milestone is **Phase 10 — CCIP v1
-Completion**. Production approval remains conditional on qualified Saudi
-legal/privacy review and every remaining Definition-of-Done gate.
+synthetic Preview. **Phase 10 — CCIP v1 Completion** remains unfinished: its
+technical review is complete, while curated-catalog, moderated-research, and
+qualified legal/privacy/SAMA acceptance gates remain. Production approval
+remains conditional on every Definition-of-Done gate.
 `docs/EXECUTION_STATUS.md` is the live source for the exact current task.

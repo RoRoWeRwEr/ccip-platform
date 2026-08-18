@@ -13,7 +13,8 @@ execution program is active. `docs/PROJECT_MASTER_PLAN.md` is the authoritative
 roadmap and `docs/EXECUTION_STATUS.md` is the live milestone ledger.
 
 Program progress is **29 of 30 milestones complete (97%)**. Phases 1–9 are
-complete. The Phase 10 final review is the next unfinished milestone.
+complete. Phase 10's technical review is complete, but owner acceptance gates
+remain unfinished.
 
 Migrations `0001`–`0053` are immutable historical migrations. Migration
 `0051_create_published_card_search_interface.sql` completes the revised
@@ -53,7 +54,7 @@ branch, Draft PR, or manual merge.
 
 Execute the next unfinished application milestone recorded in
 `docs/EXECUTION_STATUS.md`. The Database Phase roadmap is complete through
-`0053`; Phase 10 final review is the next active delivery.
+`0053`; the Phase 10 owner acceptance package is the next active delivery.
 
 ## Current blockers
 
